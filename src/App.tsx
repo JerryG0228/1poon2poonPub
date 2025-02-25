@@ -1,7 +1,11 @@
+import GlobalStyle from '@/styles/GlobalStyles';
+import { colors } from '@/styles/colors';
+
 function App() {
   return (
     <>
-      <div>home</div>
+      <GlobalStyle />
+      <div style={{ color: colors.Blue }}>home</div>
     </>
   );
 }
