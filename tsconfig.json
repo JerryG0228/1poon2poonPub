@@ -1,0 +1,26 @@
+{
+  // `files` 배열은 특정 파일만 컴파일할 때 사용됨.
+  // 현재 프로젝트에서는 불필요하여 제거 가능하지만, 유지해도 문제는 없음.
+  "files": [],
+
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+
+  "compilerOptions": {
+    // 절대 경로 import를 위한 기본 경로 설정 (./src 기준)
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"]
+    },
+    "jsx": "react-jsx", // JSX 문법 사용 방식 설정 (React 17+에서는 "react-jsx" 사용)
+    // `jsxImportSource`는 Emotion, Preact 같은 라이브러리와 함께 사용할 때 필요함.
+    "jsxImportSource": "react", // React 기본 사용 시 불필요할 수 있으므로 주석 처리 가능.
+    "module": "ESNext", // ECMAScript 모듈 방식 설정 (최신 ESNext 사용)
+    "target": "ESNext", // 컴파일 대상 (최신 ESNext 사용)
+    "moduleResolution": "node", // "bundler"로 변경 가능, 모듈 해석 방식 (Vite 및 최신 프로젝트에서는 "bundler"를 추천)
+    "esModuleInterop": true, // CommonJS 및 ES 모듈 간의 호환성을 활성화
+    "resolveJsonModule": true, // JSON 파일을 import할 수 있도록 설정
+    "strict": true, // 엄격한 타입 체크 활성화 (권장)
+    "skipLibCheck": true // 라이브러리 타입 체크 생략 (빌드 속도 향상)
+  }
+}
