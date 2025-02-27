@@ -11,15 +11,17 @@ const Box = styled.div`
 `;
 //이미지 감싸는 박스
 const ImageBox = styled.div`
-  background-color: #6e5230;
-  border-radius: 0.3rem;
-  padding: 0.4rem 0.3rem;
-`;
-//이미지
-const Icon = styled.img`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #6e5230;
+  border-radius: 0.3rem;
+  padding: 0.4rem 0.3rem 0.3rem;
+  width: 2rem;
+  height: 2rem;
+`;
+//이미지
+const Icon = styled.img`
   width: 1.2rem;
   height: 1rem;
 `;
