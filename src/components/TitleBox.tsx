@@ -2,7 +2,7 @@ import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  background-color: #6b7683;
+  background-color: #313845;
   border-radius: 1rem;
   padding: 1.2rem;
   display: flex;
