@@ -1,3 +1,7 @@
 export default function DonateMain() {
-  return <div>DonateMain</div>;
+  return (
+    <div>
+      <div></div>
+    </div>
+  );
 }

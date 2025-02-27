@@ -1,3 +1,7 @@
 export default function InvestMain() {
-  return <div>InvestMain</div>;
+  return (
+    <div>
+      <div></div>
+    </div>
+  );
 }
