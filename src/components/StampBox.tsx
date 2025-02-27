@@ -10,11 +10,11 @@ const Box = styled.div`
   width: 2rem;
 `;
 //이미지 감싸는 박스
-const ImageBox = styled.div`
+const ImageBox = styled.div<Props>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6e5230;
+  background-color: ${(props) => props.bgColor || 'transparent'};
   border-radius: 0.3rem;
   padding: 0.4rem 0.3rem 0.3rem;
   width: 2rem;
@@ -33,12 +33,13 @@ const Title = styled.div`
 interface Props {
   icon: string;
   title: string;
+  bgColor: string;
 }
 
-function StampBox({ icon, title }: Props) {
+function StampBox({ icon, title, bgColor }: Props) {
   return (
     <Box>
-      <ImageBox>
+      <ImageBox bgColor={bgColor}>
         <Icon src={icon}></Icon>
       </ImageBox>
       <Title>{title}</Title>
