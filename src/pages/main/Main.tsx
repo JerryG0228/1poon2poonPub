@@ -16,6 +16,9 @@ import investDownImage from '@/assets/investDownIcon.png';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
+import oneCoin from '@/assets/Coin/100coin.png';
+import fiveCoin from '@/assets/Coin/500coin.png';
+
 
 const MainWrap = styled.div`
   display: flex;
@@ -29,11 +32,32 @@ const StampBoxWrap = styled.div`
   justify-content: space-between;
 `;
 
+const StampBoard = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  place-items: center;
+  row-gap: 1rem;
+  column-gap: 1rem;
+  grid-auto-flow: dense;
+`;
+
+const Circle = styled.div<{ index: number }>`
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 3rem;
+  background-color: #ffffff;
+  > img {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+`;
+
 const CashBackWrap = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
+
 const CashBackImageWrap = styled.div`
   display: flex;
   justify-content: center;
@@ -148,6 +172,19 @@ export default function Main() {
               />
             ))}
           </StampBoxWrap>
+        </TitleBox>
+        <TitleBox title="캐시백 스탬프판">
+          <StampBoard>
+            <Circle>
+              <img src={oneCoin} />
+            </Circle>
+            <Circle>
+              <img src={fiveCoin} />
+            </Circle>
+            {[...Array(8)].map((_, index) => (
+              <Circle key={index} />
+            ))}
+          </StampBoard>
         </TitleBox>
         <NonTitleBox>
           <CashBackWrap>
