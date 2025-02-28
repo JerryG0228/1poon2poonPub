@@ -29,6 +29,9 @@ const Icon = styled.img`
 //영역 제목
 const Title = styled.div`
   font-size: 0.5rem;
+  width: 3rem;
+  height: 1rem;
+  text-align: center;
 `;
 
 interface Props {
