@@ -61,11 +61,16 @@ interface Props {
   date: string;
   time: string;
   name: string;
-  point: string;
+  point: number;
   transPoint: number;
 }
 
 function PointBox({ date, time, name, point, transPoint }: Props) {
+  //숫자 1000단위마다 ,추가
+  const formatPrice = (price: number): string => {
+    return price.toLocaleString();
+  };
+
   return (
     <Box>
       <Date>{date}</Date>
@@ -75,12 +80,12 @@ function PointBox({ date, time, name, point, transPoint }: Props) {
           <PointMainContent>
             <PointTitle>{name}</PointTitle>
             <PointRecord transPoint={transPoint}>
-              {transPoint > 0 ? `+${transPoint}` : transPoint}원
+              {transPoint > 0 ? `+${formatPrice(transPoint)}` : formatPrice(transPoint)}원
             </PointRecord>
           </PointMainContent>
           <PointSubContent>
             <PointTime>{time}</PointTime>
-            <PointAcc>{point}원</PointAcc>
+            <PointAcc>{formatPrice(point)}원</PointAcc>
           </PointSubContent>
         </PointContent>
       </ContentBox>
