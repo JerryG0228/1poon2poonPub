@@ -5,6 +5,7 @@ import DonateMain from './pages/donate/DonateMain';
 import InvestMain from './pages/invest/InvestMain';
 import DefaultLayout from './layout/DefaultLayout';
 import PlusLayout from './layout/PlusLayout';
+import PointHistory from './pages/main/PointHistory';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
+          <Route path="/pointhistory" element={<PointHistory />} />
           <Route path="/donate" element={<DonateMain />} /> {/* 기부 페이지 */}
         </Route>
 

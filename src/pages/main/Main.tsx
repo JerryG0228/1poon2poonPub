@@ -20,7 +20,6 @@ import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 import AnimatedComponent from '@/components/CoinRotate';
 
-
 const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -191,20 +190,23 @@ export default function Main() {
             ))}
           </StampBoard>
         </TitleBox>
-        <NonTitleBox>
-          <CashBackWrap>
-            <CashBackImageWrap>
-              <img src={cashbackImage} />{' '}
-            </CashBackImageWrap>
-            <CashBackTextWrap>
-              <Balance>10,000원</Balance>
-              <Point>캐시백 포인트</Point>
-            </CashBackTextWrap>
-            <CashBacArrowWrap>
-              <img src={vectorImage} />
-            </CashBacArrowWrap>
-          </CashBackWrap>
-        </NonTitleBox>
+        <Link to="/pointhistory">
+          <NonTitleBox>
+            <CashBackWrap>
+              <CashBackImageWrap>
+                <img src={cashbackImage} />{' '}
+              </CashBackImageWrap>
+              <CashBackTextWrap>
+                <Balance>10,000원</Balance>
+                <Point>캐시백 포인트</Point>
+              </CashBackTextWrap>
+              <CashBacArrowWrap>
+                <img src={vectorImage} />
+              </CashBacArrowWrap>
+            </CashBackWrap>
+          </NonTitleBox>
+        </Link>
+
         <TitleBox title="캐시백 서비스">
           <Service>
             <Link to="/donate">
