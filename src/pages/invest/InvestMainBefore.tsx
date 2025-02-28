@@ -5,6 +5,7 @@ import PressMotion from '@/components/PressMotion';
 import Lottie from 'lottie-react';
 import InvestAni from '@/assets/InvestPage/Invest.json';
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 
 const Box = styled.div`
   position: absolute; /* 절대 위치 설정 */
@@ -32,9 +33,22 @@ const Text = styled.div`
 `;
 
 export default function InvestMainBefore() {
+  const lottieRef = useRef(null);
+
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.setSpeed(1.5); // 2배속 설정
+    }
+  }, []);
   return (
     <Box>
-      <StyledLottie animationData={InvestAni} loop={true} />
+      <StyledLottie
+        lottieRef={lottieRef}
+        animationData={InvestAni}
+        loop={true}
+        autoplay={true}
+        speed={2}
+      />
       <Text>투자를 시작해볼까요?</Text>
       <Link to="">
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>

@@ -6,6 +6,7 @@ import InvestMain from './pages/invest/InvestMain';
 import DefaultLayout from './layout/DefaultLayout';
 import PlusLayout from './layout/PlusLayout';
 import DonateCategory from './pages/donate/DonateCategory';
+import DonateGoal from './pages/donate/DonateGoal';
 import InvestMainBefore from './pages/invest/InvestMainBefore';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
           <Route path="/donate" element={<DonateMainBefore />} /> {/* 기부 페이지 */}
           <Route path="/donateCategory" element={<DonateCategory />} />
+          <Route path="/donateGoal" element={<DonateGoal />} />
           <Route path="/investBefore" element={<InvestMainBefore />} /> {/* 투자 페이지 */}
         </Route>
 
