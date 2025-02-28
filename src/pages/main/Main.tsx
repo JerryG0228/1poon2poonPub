@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 
+
 const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
