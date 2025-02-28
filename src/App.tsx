@@ -1,10 +1,11 @@
 import GlobalStyle from '@/styles/GlobalStyles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Main from './pages/main/Main';
-import DonateMain from './pages/donate/DonateMain';
+import DonateMainBefore from './pages/donate/DonateMainBefore';
 import InvestMain from './pages/invest/InvestMain';
 import DefaultLayout from './layout/DefaultLayout';
 import PlusLayout from './layout/PlusLayout';
+import DonateCategory from './pages/donate/DonateCategory';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       <Routes>
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
-          <Route path="/donate" element={<DonateMain />} /> {/* 기부 페이지 */}
+          <Route path="/donate" element={<DonateMainBefore />} /> {/* 기부 페이지 */}
+          <Route path="/donateCategory" element={<DonateCategory />} />
         </Route>
 
         <Route element={<PlusLayout />}>
