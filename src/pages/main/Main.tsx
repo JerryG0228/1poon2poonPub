@@ -20,6 +20,7 @@ import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 import AnimatedComponent from '@/components/CoinRotate';
 
+
 const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
