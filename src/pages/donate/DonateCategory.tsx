@@ -55,6 +55,15 @@ export default function DonateCategory() {
     setSelectedCategory((prev) => (prev === item ? null : item));
   };
 
+  // 다음 버튼 클릭 핸들러러
+  const handleBtn = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    // 카테고리를 선택하지 않으면 다음으로 넘어가지 않음.
+    if (selectedCategory == null) {
+      event.preventDefault();
+      alert('기부 할 카테고리를 선택해 주세요!');
+    }
+  };
+
   return (
     <Box>
       <Title>
@@ -73,7 +82,7 @@ export default function DonateCategory() {
           />
         ))}
       </DonateCategoryBox>
-      <Link to="/donateGoal" state={{ selectedCategory }}>
+      <Link to="/donateGoal" state={{ selectedCategory }} onClick={handleBtn}>
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>다음</div>

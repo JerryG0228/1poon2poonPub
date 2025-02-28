@@ -42,8 +42,6 @@ const ContentTitle = styled.div`
 `;
 
 const categoryImages = {
-  //기부 카테고리
-
   //투자 카테고리
   '기술 & AI 관련': computerImage,
   '금융 & 경제 성장 관련': moneyImage,
@@ -65,8 +63,6 @@ interface Props {
 }
 
 export default function CategoryBox({ title, imageSrc, active, onClick }: Props) {
-  //title이 categoryImages의 키 값들 중 하나라는 것을 명확하게 명시
-
   return (
     <>
       <Wrapper active={active} onClick={onClick}>

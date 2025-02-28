@@ -16,9 +16,9 @@ function App() {
       <Routes>
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
-          <Route path="/donate" element={<DonateMainBefore />} /> {/* 기부 페이지 */}
-          <Route path="/donateCategory" element={<DonateCategory />} />
-          <Route path="/donateGoal" element={<DonateGoal />} />
+          <Route path="/donateBefore" element={<DonateMainBefore />} /> {/* 기부 초기 페이지 */}
+          <Route path="/donateCategory" element={<DonateCategory />} /> {/* 기부 카테고리 페이지 */}
+          <Route path="/donateGoal" element={<DonateGoal />} /> {/* 기부 목표 금액 설정 페이지 */}
           <Route path="/investBefore" element={<InvestMainBefore />} /> {/* 투자 페이지 */}
         </Route>
 

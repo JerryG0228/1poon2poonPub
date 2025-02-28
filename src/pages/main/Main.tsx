@@ -201,7 +201,7 @@ export default function Main() {
         </NonTitleBox>
         <TitleBox title="캐시백 서비스">
           <Service>
-            <Link to="/donate">
+            <Link to="/donateBefore">
               <PressMotion>
                 <Button varient="donate">
                   <img src={donateImage} />
