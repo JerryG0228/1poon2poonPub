@@ -10,6 +10,12 @@ import styled from 'styled-components';
 import NonTitleBox from '@/components/NonTitleBox';
 import cashbackImage from '@/assets/CashbackIcon.png';
 import vectorImage from '@/assets/Vector.png';
+import donateImage from '@/assets/donateIcon.png';
+import investUpImage from '@/assets/investUpIcon.png';
+import investDownImage from '@/assets/investDownIcon.png';
+import PressMotion from '@/components/PressMotion';
+import { colors } from '@/styles/colors';
+import { Link } from 'react-router-dom';
 
 const MainWrap = styled.div`
   display: flex;
@@ -69,6 +75,54 @@ const CashBacArrowWrap = styled.div`
   }
 `;
 
+const Service = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const VerticalLine = styled.div`
+  display: flex;
+  width: 1px;
+  height: 100px;
+  background: linear-gradient(to bottom, #313845 0%, #4d596e 24%, #4d596e 73%, #313845 100%);
+`;
+
+const Button = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px sollid red;
+  width: 7rem;
+  justify-content: center;
+  align-items: center;
+  > img {
+    width: 4rem;
+    height: 4rem;
+  }
+`;
+
+const ServiceTitle = styled.div`
+  font-size: 1em;
+  color: #b2b2b2;
+  margin-top: 0.8rem;
+`;
+
+const DonateProgressRate = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 0.2rem;
+  color: ${colors.Green};
+`;
+
+const InvestProgressRate = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 0.2rem;
+  color: ${colors.Red};
+`;
+
 export default function Main() {
   const stampItem = [
     { title: '대중교통', img: busImage, bgColor: '#6E5230' },
@@ -109,6 +163,29 @@ export default function Main() {
             </CashBacArrowWrap>
           </CashBackWrap>
         </NonTitleBox>
+        <TitleBox title="캐시백 서비스">
+          <Service>
+            <Link to="/donate">
+              <PressMotion>
+                <Button varient="donate">
+                  <img src={donateImage} />
+                  <ServiceTitle>기부</ServiceTitle>
+                  <DonateProgressRate>60%</DonateProgressRate>
+                </Button>
+              </PressMotion>
+            </Link>
+            <VerticalLine></VerticalLine>
+            <Link to="/invest">
+              <PressMotion>
+                <Button varient="invest">
+                  <img src={investUpImage} />
+                  <ServiceTitle>투자</ServiceTitle>
+                  <InvestProgressRate varient="invest">+1.2%</InvestProgressRate>
+                </Button>
+              </PressMotion>
+            </Link>
+          </Service>
+        </TitleBox>
       </MainWrap>
     </>
   );
