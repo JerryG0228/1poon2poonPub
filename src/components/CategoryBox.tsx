@@ -63,6 +63,7 @@ const categoryImages = {
   '리츠 & 인프라': buildingImage,
   '소비 & 리테일': shoppingImage,
 };
+
 // type CategoryBoxProps = {
 //   title: string;
 // };
