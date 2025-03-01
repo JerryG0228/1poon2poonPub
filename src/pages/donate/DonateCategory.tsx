@@ -83,7 +83,7 @@ export default function DonateCategory() {
         ))}
       </DonateCategoryBox>
       <Link to="/donateGoal" state={{ selectedCategory }} onClick={handleBtn}>
-        <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
+        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>다음</div>
           </PressMotion>

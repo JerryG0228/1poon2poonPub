@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
-import { HtmlHTMLAttributes, useState } from 'react';
+import { useState } from 'react';
 
 const Box = styled.div`
   display: flex;
@@ -27,6 +27,7 @@ const InputWrapper = styled.div`
 const InputAmout = styled.input<{ hasValue: Boolean }>`
   font-size: 1.55rem;
   border: none;
+  /* 금액 입력 되어 있으면 글자 흰색, 밑줄 파란색 */
   border-bottom: ${(props) =>
     props.hasValue ? `1px solid ${colors.Blue}` : `1px solid ${colors.Grey}`};
   color: ${(props) => (props.hasValue ? 'white' : colors.Grey)};
@@ -45,19 +46,19 @@ const Unit = styled.span<{ hasValue: Boolean }>`
   right: 0.5rem;
   bottom: 0.7rem;
   font-size: 1.55rem;
+  /* 금액 입력 되어 있으면 글자 흰색 */
   color: ${(props) => (props.hasValue ? 'white' : colors.Grey)};
 `;
 
 export default function DonateGoal() {
   const [price, setPrice] = useState<number | null>(null);
-
+  const [data, setData] = useState<Object>({});
   const location = useLocation();
-  console.log(location);
 
   // 다음 버튼 클릭 핸들러
   const handleBtn = (event: React.MouseEvent<HTMLAnchorElement>) => {
     // 카테고리를 선택하지 않으면 다음으로 넘어가지 않음.
-    if (true) {
+    if (price == null) {
       event.preventDefault();
       alert('기부 목표 금액을을 설정해 주세요!');
     }
@@ -67,6 +68,7 @@ export default function DonateGoal() {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
     setPrice(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
+    setData({ ...location.state.selectedCategory, price: value });
   };
 
   return (
@@ -86,8 +88,8 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit hasValue={Boolean(price)}>원</Unit>
       </InputWrapper>
-      <Link to="/donateGoal" state={{}} onClick={handleBtn}>
-        <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
+      <Link to="/donateHome" state={{ data }} onClick={handleBtn}>
+        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>설정하기</div>
           </PressMotion>
