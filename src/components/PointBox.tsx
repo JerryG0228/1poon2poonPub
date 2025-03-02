@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Point from '@/assets/PointBox/PointImg.png';
+import { colors } from '@/styles/colors';
 
 const Box = styled.div`
   display: flex;
@@ -40,7 +41,7 @@ const PointTitle = styled.div`
 const PointRecord = styled.div<{ transPoint: number }>`
   font-size: 1rem;
   color: ${(props) => {
-    return props.transPoint && props.transPoint > 0 ? '#FF0000' : '#0064FF';
+    return props.transPoint && props.transPoint > 0 ? colors.Red : colors.Blue;
   }};
 `;
 const PointSubContent = styled.div`
