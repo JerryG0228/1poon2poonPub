@@ -18,6 +18,7 @@ import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
+import AnimatedComponent from '@/components/CoinRotate';
 
 const MainWrap = styled.div`
   display: flex;
@@ -174,31 +175,38 @@ export default function Main() {
         </TitleBox>
         <TitleBox title="캐시백 스탬프판">
           <StampBoard>
-            <Circle>
-              <img src={oneCoin} />
-            </Circle>
-            <Circle>
-              <img src={fiveCoin} />
-            </Circle>
+            <AnimatedComponent>
+              <Circle>
+                <img src={oneCoin} />
+              </Circle>
+            </AnimatedComponent>
+            <AnimatedComponent>
+              <Circle>
+                <img src={fiveCoin} />
+              </Circle>
+            </AnimatedComponent>
             {[...Array(8)].map((_, index) => (
               <Circle key={index} />
             ))}
           </StampBoard>
         </TitleBox>
-        <NonTitleBox>
-          <CashBackWrap>
-            <CashBackImageWrap>
-              <img src={cashbackImage} />{' '}
-            </CashBackImageWrap>
-            <CashBackTextWrap>
-              <Balance>10,000원</Balance>
-              <Point>캐시백 포인트</Point>
-            </CashBackTextWrap>
-            <CashBacArrowWrap>
-              <img src={vectorImage} />
-            </CashBacArrowWrap>
-          </CashBackWrap>
-        </NonTitleBox>
+        <Link to="/pointhistory">
+          <NonTitleBox>
+            <CashBackWrap>
+              <CashBackImageWrap>
+                <img src={cashbackImage} />{' '}
+              </CashBackImageWrap>
+              <CashBackTextWrap>
+                <Balance>10,000원</Balance>
+                <Point>캐시백 포인트</Point>
+              </CashBackTextWrap>
+              <CashBacArrowWrap>
+                <img src={vectorImage} />
+              </CashBacArrowWrap>
+            </CashBackWrap>
+          </NonTitleBox>
+        </Link>
+
         <TitleBox title="캐시백 서비스">
           <Service>
             <Link to="/donateBefore">
