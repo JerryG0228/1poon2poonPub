@@ -19,7 +19,6 @@ import { Link } from 'react-router-dom';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 
-
 const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -202,7 +201,7 @@ export default function Main() {
         </NonTitleBox>
         <TitleBox title="캐시백 서비스">
           <Service>
-            <Link to="/donate">
+            <Link to="/donateBefore">
               <PressMotion>
                 <Button varient="donate">
                   <img src={donateImage} />
@@ -212,7 +211,7 @@ export default function Main() {
               </PressMotion>
             </Link>
             <VerticalLine></VerticalLine>
-            <Link to="/invest">
+            <Link to="/investBefore">
               <PressMotion>
                 <Button varient="invest">
                   <img src={investUpImage} />
