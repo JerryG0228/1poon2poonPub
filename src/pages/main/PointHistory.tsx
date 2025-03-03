@@ -5,10 +5,18 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import downArrowImage from '@/assets/DownArrow.png';
 import usageIcon from '@/assets/UsageIcon.png';
+import { useState } from 'react';
+import { color } from 'framer-motion';
+import blueCheckImage from '@/assets/check_blue.png';
+import greyCheckImage from '@/assets/check_grey.png';
 
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
+  height: 90vh;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 `;
 
 const HistoryTop = styled.div`
@@ -39,9 +47,8 @@ const EmptySpace = styled.div`
   display: flex;
   //임의로 우선 설정
   position: absolute;
-  top: 20rem;
-  width: 45rem;
-  right: 0.2rem;
+  top: 16rem;
+  width: 100%;
   height: 1rem;
   background-color: #ffffff;
 `;
@@ -51,26 +58,74 @@ const PointFilter = styled.div`
   flex-direction: row;
   height: 2rem;
   margin: 2rem 0 1rem 0;
-  align-items: center;
-  overflow: hidden;
 `;
 
 const PointNav = styled.div`
   display: flex;
   font-size: 1rem;
   height: 2rem;
-  align-items: start;
-  > ul > li {
-    height: 2rem;
-    line-height: 2rem;
-  }
-`;
-
-const DownArrow = styled.div`
-  display: flex;
+  align-items: center;
+  gap: 1rem;
   > img {
     width: 1rem;
     height: 0.6rem;
+  }
+`;
+
+const CurrentNav = styled.div`
+  height: 2rem;
+  line-height: 2rem;
+`;
+
+interface FilterListProps {
+  clicked: boolean;
+}
+
+//오버레이
+const Overlay = styled.div<FilterListProps>`
+  display: ${({ clicked }) => (clicked ? 'block' : 'none')};
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  position: fixed;
+`;
+
+//필터 리스트
+const FilterList = styled.div<FilterListProps>`
+  display: ${({ clicked }) => (clicked ? 'flex' : 'none')};
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  background-color: ${colors.Navy};
+  width: 100%;
+  border-radius: 1.2rem;
+  padding: 1rem;
+  border: 1px solid pink;
+  z-index: 10;
+`;
+
+const SelectTitle = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem 0;
+`;
+
+const SelectMenu = styled.ul`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SelectItem = styled.li<{ isSelected: boolean }>`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: ${({ isSelected }) => (isSelected ? colors.White : colors.Grey)};
+  padding: 1rem 0;
+  > img {
+    width: 1rem;
+    height: 1rem;
   }
 `;
 
@@ -132,6 +187,22 @@ const CurrentPoint = styled.div`
 `;
 
 export default function PointHistory() {
+  const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
+  //클릭 됐는지 안됐는지
+  const [clicked, setClicked] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('전체');
+
+  const handleClick = () => {
+    setClicked(!clicked);
+    console.log(clicked);
+  };
+
+  //클릭한 값으로 값이 바뀜
+  const handleSelect = (filter: string) => {
+    setSelectedValue(filter);
+    setClicked(!clicked);
+  };
+
   return (
     <>
       <Wrap>
@@ -160,16 +231,28 @@ export default function PointHistory() {
         <EmptySpace />
         <PointFilter>
           <PointNav>
-            <ul>
-              <li>전체</li>
-              <li>적립 내역</li>
-              <li>사용 내역</li>
-            </ul>
-          </PointNav>
-          <DownArrow>
+            <CurrentNav onClick={handleClick}>{selectedValue}</CurrentNav>
             <img src={downArrowImage} />
-          </DownArrow>
+          </PointNav>
         </PointFilter>
+        <Overlay clicked={clicked}></Overlay>
+        <FilterList clicked={clicked}>
+          <SelectTitle>내역 선택</SelectTitle>
+          <SelectMenu>
+            {filterOptions.map((item) => {
+              return (
+                <SelectItem
+                  key={item}
+                  onClick={() => handleSelect(item)}
+                  isSelected={selectedValue === item}
+                >
+                  <div>{item}</div>
+                  <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />
+                </SelectItem>
+              );
+            })}
+          </SelectMenu>
+        </FilterList>
         <PointUsage>
           <PointDate>2월 17일</PointDate>
           <PointUsageItem>
