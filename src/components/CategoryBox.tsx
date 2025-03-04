@@ -11,12 +11,15 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 
-const Wrapper = styled.div<{ active: boolean }>`
+const Wrapper = styled.div<{ $active: boolean }>`
+  // "$active"로 변경하여 DOM 전달 방지!
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: ${(props) => (props.active ? 1.0 : 0.5)};
+  opacity: ${({ $active }) => ($active ? 1.0 : 0.5)};
+  cursor: pointer; // 클릭 가능하게 변경!
+  transition: opacity 0.3s;
 `;
 
 const ImageWrapper = styled.div`
@@ -25,6 +28,7 @@ const ImageWrapper = styled.div`
   padding: 2rem;
   border-radius: 1rem;
 `;
+
 const ContentImg = styled.img`
   display: flex;
   width: 3rem;
@@ -33,7 +37,6 @@ const ContentImg = styled.img`
 const TitleBox = styled.div`
   width: 6rem;
   height: 4rem;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,29 +66,26 @@ const categoryImages = {
   '리츠 & 인프라': buildingImage,
   '소비 & 리테일': shoppingImage,
 };
-// type CategoryBoxProps = {
-//   title: string;
-// };
 
 interface Props {
   title: string;
   active: boolean;
+  onClick: () => void; // 클릭 이벤트 추가!
 }
 
-export default function CategoryBox({ title, active }: Props) {
-  //title이 categoryImages의 키 값들 중 하나라는 것을 명확하게 명시
+export default function CategoryBox({ title, active, onClick }: Props) {
   const imageSrc = categoryImages[title as keyof typeof categoryImages];
 
   return (
-    <>
-      <Wrapper active={active}>
-        <ImageWrapper>
-          <ContentImg src={imageSrc} />
-        </ImageWrapper>
-        <TitleBox>
-          <ContentTitle>{title}</ContentTitle>
-        </TitleBox>
-      </Wrapper>
-    </>
+    <Wrapper $active={active} onClick={onClick}>
+      {' '}
+      {/* "$active"로 변경 */}
+      <ImageWrapper>
+        <ContentImg src={imageSrc} alt={title} />
+      </ImageWrapper>
+      <TitleBox>
+        <ContentTitle>{title}</ContentTitle>
+      </TitleBox>
+    </Wrapper>
   );
 }

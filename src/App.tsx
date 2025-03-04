@@ -8,7 +8,7 @@ import PlusLayout from './layout/PlusLayout';
 import InvestCategory from '@/pages/invest/Category'; // 투자 카테고리 선택
 import ETFList from '@/pages/invest/ETFList'; // ETF 목록
 import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
-
+import ETFCategoryList from '@/pages/invest/ETFCategoryList';
 function App() {
   return (
     <BrowserRouter>
@@ -22,7 +22,10 @@ function App() {
         <Route element={<PlusLayout />}>
           <Route path="/invest" element={<InvestMain />} /> {/* 투자 페이지 */}
           <Route path="/investCategory" element={<InvestCategory />} /> {/* 투자 카테고리 페이지 */}
-          <Route path="/etf-list/:category" element={<ETFList />} /> {/* ETF 목록 */}
+          <Route path="/etf-list" element={<ETFList />} /> {/* ETF 목록 */}
+          <Route path="/etf-category/:category" element={<ETFCategoryList />} />{' '}
+          {/* ✅ ETF 상세 페이지 */}
+          {/* <Route path="/etf-list/:category" element={<ETFList />} /> ETF 목록 */}
           <Route path="/etf-detail/:symbol" element={<ETFDetail />} /> {/* ETF 상세 */}
         </Route>
       </Routes>
