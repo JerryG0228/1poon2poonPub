@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import CandlestickChart from '@/components/CandlestickChart';
+import { colors } from '@/styles/colors';
 
 const Container = styled.div`
   margin-left: 0.5rem;
@@ -145,7 +146,7 @@ const BtnBox = styled.div`
   display: flex;
   justify-content: center; /* ✅ 버튼을 중앙 정렬 */
   gap: 1rem; /* ✅ 버튼 사이 간격 */
-  margin-top: 3rem;
+  margin-top: 2.5rem;
 `;
 
 const LargeBtn1 = styled.button`
@@ -160,7 +161,7 @@ const LargeBtn2 = styled.button`
   height: 4rem; /* ✅ 버튼 높이 */
   font-size: 1.2rem; /* ✅ 글자 크기 */
   border-radius: 1.3rem; /* ✅ 버튼 둥글게 */
-  background-color: #3182f6;
+  background-color: ${colors.LightBlue};
 `;
 
 function ETFDetail() {

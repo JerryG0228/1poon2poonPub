@@ -50,7 +50,7 @@ export default function InvestMainBefore() {
         speed={2}
       />
       <Text>투자를 시작해볼까요?</Text>
-      <Link to="">
+      <Link to="/investCategory">
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '7rem' }}>선택하러 가기</div>

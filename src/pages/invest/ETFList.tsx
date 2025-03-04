@@ -2,8 +2,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import EtfCategoryBox from '@/components/EtfCategoryBox';
 import ETFBox from '@/components/ETFBox';
-import CategoryBox from '@/components/CategoryBox';
+import buildingImage from '@/assets/categorybox/building_image.png';
+import computerImage from '@/assets/categorybox/computer_image.png';
+import moneyImage from '@/assets/categorybox/money_image.png';
+import shoppingImage from '@/assets/categorybox/shopping_image.png';
+import earthImage from '@/assets/categorybox/earth_image.png';
+import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import etfData from '@/data/etfData';
 
 const Container = styled.div`
@@ -21,6 +27,7 @@ const CategoryList = styled.div`
   justify-content: flex-start;
   gap: 10px;
   margin-top: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 const CategoryHeader = styled.div<{ $active: boolean }>`
@@ -28,8 +35,8 @@ const CategoryHeader = styled.div<{ $active: boolean }>`
   font-weight: bold;
   padding: 10px 0;
   display: flex;
-  align-items: center;
-  opacity: ${({ $active }) => ($active ? 1 : 0.6)}; /* 활성 상태 시 불투명도 조정 */
+  justify-content: space-between;
+  opacity: ${({ $active }) => ($active ? 1 : 1)}; /* 활성 상태 시 불투명도 조정 */
   cursor: pointer;
 `;
 
@@ -46,11 +53,19 @@ const ETFTitle1 = styled.h2`
 const MoreButton = styled.button`
   background: none;
   border: none;
-  color: #007bff;
-  font-size: 1rem;
+  color: #ffffff;
+  font-size: 2rem;
   cursor: pointer;
-  margin-left: 5px;
+
   font-weight: bold;
+`;
+
+const Divider = styled.hr`
+  width: 100%;
+  height: 1px;
+  background-color: #4a4a4a;
+  border: none;
+  margin: 1rem 0;
 `;
 
 const categoryMapping: { [key: string]: string } = {
@@ -60,6 +75,15 @@ const categoryMapping: { [key: string]: string } = {
   '헬스케어 & 바이오': 'healthcare',
   '리츠 & 인프라': 'reit',
   '소비 & 리테일': 'consumer',
+};
+
+const categoryImages: { [key: string]: string } = {
+  '기술 & AI 관련': computerImage,
+  '금융 & 경제 성장 관련': moneyImage,
+  '사회적 가치 & ESG 투자': earthImage,
+  '헬스케어 & 바이오': hospitalImage,
+  '리츠 & 인프라': buildingImage,
+  '소비 & 리테일': shoppingImage,
 };
 
 function ETFList() {
@@ -140,9 +164,10 @@ function ETFList() {
         <ETFTitle1>관심 ETF 카테고리</ETFTitle1>
         <CategoryList>
           {selectedCategories.map((category) => (
-            <CategoryBox
+            <EtfCategoryBox
               key={category}
               title={category}
+              imageSrc={categoryImages[category]} // ✅ 이미지 추가
               active={true} // ✅ 선택된 카테고리는 항상 활성화된 상태
               onClick={() => console.log(`${category} 클릭됨`)}
             />
@@ -150,13 +175,16 @@ function ETFList() {
         </CategoryList>
       </Section>
 
+      <Divider />
+
       <Section>
-        <h2>추천 ETF</h2>
+        <ETFTitle1>추천 ETF</ETFTitle1>
         {selectedCategories.map((category) => (
           <ETFSection key={category}>
             <CategoryHeader>
-              <CategoryBox
+              <EtfCategoryBox
                 title={category}
+                imageSrc={categoryImages[category]} // ✅ 이미지 추가
                 active={true} // ✅ 선택된 카테고리는 항상 활성화된 상태
                 onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
               />

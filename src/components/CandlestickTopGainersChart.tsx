@@ -55,7 +55,7 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
 
     const chart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
-      height: 250,
+      height: 160,
       layout: { background: { color: 'transparent' }, textColor: '#FFFFFF' }, // ✅ 배경 투명 처리
       grid: {
         vertLines: { visible: false }, // ✅ 세로선 제거
@@ -95,7 +95,7 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
   return (
     <div
       ref={chartContainerRef}
-      style={{ width: '100%', height: '50%', background: 'transparent' }}
+      style={{ width: '100%', height: '40%', background: 'transparent' }}
     />
   );
 };
