@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import CashbackSection from '@/components/CashbackSection';
-import StampBoardSection from '@/components/StampBoardSection';
-import PointHistorySection from '@/components/PointHistorySection';
-import CashbackServiceSection from '@/components/CashbackServiceSection';
+import CashbackSection from '@/components/Main/CashbackSection';
+import StampBoardSection from '@/components/Main/StampBoardSection';
+import PointHistorySection from '@/components/Main/PointHistorySection';
+import CashbackServiceSection from '@/components/Main/CashbackServiceSection';
+import AdBanner from '@/components/Main/AdBanner';
+import NonTitleBox from '@/components/NonTitleBox';
 
 const MainWrap = styled.div`
   display: flex;
@@ -95,6 +97,7 @@ export default function Main() {
           <PointHistorySection point={point} />
         </Link>
         <CashbackServiceSection />
+        <AdBanner />
       </MainWrap>
     </>
   );
