@@ -10,40 +10,36 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 const Wrapper = styled.div<{ $active: boolean }>`
   // "$active"로 변경하여 DOM 전달 방지!
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
   opacity: ${({ $active }) => ($active ? 1.0 : 0.5)};
   cursor: pointer; // 클릭 가능하게 변경!
   transition: opacity 0.3s;
+  margin-bottom: 0.3rem;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
   background-color: #313845;
-  padding: 2rem;
-  border-radius: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 `;
 
 const ContentImg = styled.img`
   display: flex;
-  width: 2.7rem;
-  height: 2.7rem;
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 const TitleBox = styled.div`
-  width: 6rem;
-  height: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-left: 1rem;
 `;
 
 const ContentTitle = styled.div`
   display: flex;
-  font-size: 1rem;
+  font-size: 1.02rem;
   color: ${colors.White};
   margin: 0.5rem 0;
+  font-weight: bold;
   text-align: center;
 `;
 
@@ -64,7 +60,7 @@ interface Props {
   onClick: () => void; // 클릭 이벤트 추가!
 }
 
-export default function CategoryBox({ title, imageSrc, active, onClick }: Props) {
+export default function EtfCategoryBox({ title, imageSrc, active, onClick }: Props) {
   return (
     <>
       <Wrapper $active={active} onClick={onClick}>
