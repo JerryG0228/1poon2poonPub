@@ -1,18 +1,22 @@
 import styled from 'styled-components';
 import ETFIcon from '@/assets/ETFBox/ETFIcon.png';
 
-const Box = styled.div<{ isRecommend: boolean }>`
+const Box = styled.div<{ $isRecommend: boolean }>`
   display: flex;
+  align-items: center;
   gap: 0.8rem;
-  margin-left: ${(props) => (props.isRecommend ? '3.5rem' : '1rem')};
+  margin-left: ${({ $isRecommend }) => ($isRecommend ? '3.5rem' : '1rem')};
   margin-right: 1rem;
   font-weight: bold;
+  padding: 10px;
+  border-radius: 8px;
 `;
 
 const ETFImg = styled.img`
   width: 2.4rem;
   height: 2.4rem;
 `;
+
 const ETFContentBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -22,50 +26,68 @@ const ETFContentBox = styled.div`
 
 const ETFTitle = styled.div`
   font-size: 1.1rem;
+  color: white;
 `;
 
 const ETFContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-end;
   gap: 0.1rem;
-  flex-grow: 1;
 `;
+
 const ETFPrice = styled.div`
   font-size: 1.1rem;
+  color: white;
 `;
-const ETFTransPrice = styled.div<{ transPrice: number }>`
+
+const ETFTransPrice = styled.div<{ $transPrice?: number }>`
   font-size: 0.8rem;
-  color: ${(props) => {
-    return props.transPrice && props.transPrice > 0 ? '#FF0000' : '#0064FF';
-  }};
+  color: ${({ $transPrice }) => ($transPrice && $transPrice > 0 ? '#FF0000' : '#0064FF')};
+  font-weight: lighter;
+`;
+
+const ETFChangePercent = styled.div<{ $changePercent?: string }>`
+  font-size: 0.8rem;
+  color: ${({ $changePercent }) =>
+    $changePercent && parseFloat($changePercent) > 0 ? '#FF0000' : '#0064FF'};
   font-weight: lighter;
 `;
 
 interface Props {
   name: string;
   price: number;
-  transPrice: number;
+  transPrice?: number;
+  changePercent?: string;
   isRecommend: boolean;
+  isImageVisible?: boolean;
+  onClick?: () => void; // ✅ 클릭 이벤트 추가
 }
 
-function ETFBox({ name, price, transPrice, isRecommend }: Props) {
-  //숫자 1000단위마다 ,추가
-  const formatPrice = (price: number): string => {
-    return price.toLocaleString();
-  };
-
+function ETFBox({
+  name,
+  price,
+  transPrice = 0,
+  changePercent,
+  isRecommend,
+  isImageVisible = true,
+  onClick,
+}: Props) {
   return (
-    <Box isRecommend={isRecommend}>
-      <ETFImg src={ETFIcon}></ETFImg>
+    <Box $isRecommend={isRecommend} onClick={onClick}>
+      {' '}
+      {isImageVisible && <ETFImg src={ETFIcon} alt="ETF Icon" />}
+      {/* ✅ 클릭 이벤트 적용 */}
       <ETFContentBox>
         <ETFTitle>{name}</ETFTitle>
         <ETFContent>
-          <ETFPrice>{formatPrice(price)}원</ETFPrice>
-          <ETFTransPrice transPrice={transPrice}>
-            {transPrice > 0 ? `+${formatPrice(transPrice)}` : formatPrice(transPrice)}
+          <ETFPrice>{price.toLocaleString()}USD</ETFPrice>
+          <ETFTransPrice $transPrice={transPrice}>
+            {transPrice > 0
+              ? `+${transPrice.toLocaleString()}USD`
+              : `${transPrice.toLocaleString()}USD`}
           </ETFTransPrice>
+          <span style={{ color: transPrice > 0 ? 'red' : 'blue' }}>{changePercent}%</span>
         </ETFContent>
       </ETFContentBox>
     </Box>

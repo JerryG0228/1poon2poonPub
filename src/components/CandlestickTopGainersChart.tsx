@@ -1,0 +1,103 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { createChart, CrosshairMode } from 'lightweight-charts';
+import axios from 'axios';
+
+type CandlestickChartProps = {
+  symbol: string;
+  timeRange: '1d' | '1w' | '1mo' | '1y';
+};
+
+const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps) => {
+  const chartContainerRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<any>(null);
+  const seriesRef = useRef<any>(null);
+  const [chartData, setChartData] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchChartData() {
+      if (!symbol) return;
+
+      try {
+        const res = await axios.get(`http://localhost:5001/api/etf/${symbol}?range=${timeRange}`);
+        console.log('📊 차트 데이터:', res.data);
+
+        const quote = res.data?.chart?.result?.[0]?.indicators?.quote?.[0];
+        const timestamps = res.data?.chart?.result?.[0]?.timestamp;
+
+        if (!quote || !timestamps) {
+          console.error('❌ 데이터 형식 오류');
+          return;
+        }
+
+        const formattedData = timestamps.map((ts: number, idx: number) => ({
+          time: ts,
+          open: quote.open?.[idx] ?? 0,
+          high: quote.high?.[idx] ?? 0,
+          low: quote.low?.[idx] ?? 0,
+          close: quote.close?.[idx] ?? 0,
+        }));
+
+        setChartData(formattedData);
+      } catch (err) {
+        console.error('❌ 데이터 가져오기 실패:', err);
+      }
+    }
+
+    fetchChartData();
+  }, [symbol, timeRange]);
+
+  useEffect(() => {
+    if (!chartContainerRef.current || chartData.length === 0) return;
+
+    if (chartRef.current) {
+      chartRef.current.remove();
+    }
+
+    const chart = createChart(chartContainerRef.current, {
+      width: chartContainerRef.current.clientWidth,
+      height: 250,
+      layout: { background: { color: 'transparent' }, textColor: '#FFFFFF' }, // ✅ 배경 투명 처리
+      grid: {
+        vertLines: { visible: false }, // ✅ 세로선 제거
+        horzLines: { visible: false }, // ✅ 가로선 제거
+      },
+      crosshair: { mode: CrosshairMode.Normal },
+      timeScale: {
+        visible: false, // ✅ X축 눈금 제거
+        borderVisible: false, // ✅ X축 경계선 제거
+      },
+      rightPriceScale: {
+        visible: false, // ✅ 오른쪽 가격 눈금 제거
+        borderVisible: false, // ✅ 가격 축 경계선 제거
+      },
+      leftPriceScale: {
+        visible: false, // ✅ 왼쪽 가격 눈금 제거
+        borderVisible: false, // ✅ 가격 축 경계선 제거
+      },
+      watermark: { visible: false }, // ✅ 워터마크 제거
+    });
+
+    const candleSeries = chart.addCandlestickSeries({
+      upColor: '#0064FF',
+      downColor: '#FF0000',
+      borderUpColor: '#0064FF',
+      borderDownColor: '#FF0000',
+      wickUpColor: '#0064FF',
+      wickDownColor: '#FF0000',
+      priceLineVisible: false, // ✅ 가격 라벨 제거
+    });
+
+    candleSeries.setData(chartData);
+    seriesRef.current = candleSeries;
+    chartRef.current = chart;
+  }, [chartData]);
+
+  return (
+    <div
+      ref={chartContainerRef}
+      style={{ width: '100%', height: '50%', background: 'transparent' }}
+    />
+  );
+};
+
+export default CandlestickTopGainersChart;
