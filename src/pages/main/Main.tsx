@@ -209,7 +209,7 @@ export default function Main() {
 
         <TitleBox title="캐시백 서비스">
           <Service>
-            <Link to="/donateBefore">
+            <Link to="/donatebefore">
               <PressMotion>
                 <Button varient="donate">
                   <img src={donateImage} />
@@ -219,7 +219,7 @@ export default function Main() {
               </PressMotion>
             </Link>
             <VerticalLine></VerticalLine>
-            <Link to="/investBefore">
+            <Link to="/investbefore">
               <PressMotion>
                 <Button varient="invest">
                   <img src={investUpImage} />
