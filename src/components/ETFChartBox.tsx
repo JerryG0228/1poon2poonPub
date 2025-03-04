@@ -17,7 +17,7 @@ const ETFImg = styled.img`
 const ETFContentBox = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  justify-content: flex-start;
   gap: 0.3rem;
 `;
 

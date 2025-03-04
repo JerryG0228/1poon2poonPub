@@ -14,12 +14,12 @@ const ChartBox = styled.div`
   background-color: #ffffff;
   padding: 0.5rem;
   border-radius: 10px;
-  min-width: 11rem;
-  max-width: 11rem;
+  min-width: 10rem;
+  max-width: 10rem;
   min-height: 10rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 `;
 
 interface TopGainersChartProps {

@@ -28,8 +28,8 @@ const categoryImages: { [key: string]: string } = {
 };
 
 const Container = styled.div`
-  padding: 0 0.7rem;
-  min-height: 100vh;
+  /* padding: 0 0.7rem;
+  min-height: 100vh; */
   color: white;
 `;
 

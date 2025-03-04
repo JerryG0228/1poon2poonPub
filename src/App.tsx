@@ -14,6 +14,8 @@ import DonateGoal from './pages/donate/DonateGoal';
 import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from './pages/donate/DonateHome';
 import Invest from '@/pages/invest/InvestMainBefore';
+import ETFBuy from '@/pages/invest/ETFBuy';
+import ETFSell from '@/pages/invest/ETFSell';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <Route path="/etf-list" element={<ETFList />} /> {/* ETF 목록 */}
           <Route path="/etf-category/:category" element={<ETFCategoryList />} />{' '}
           <Route path="/etf-detail/:symbol" element={<ETFDetail />} /> {/* ETF 상세 */}
+          <Route path="/etf-buy/:symbol" element={<ETFBuy />} /> {/* ETF 구매 */}
+          <Route path="/etf-sell/:symbol" element={<ETFSell />} /> {/* ETF 판매 */}
         </Route>
       </Routes>
     </BrowserRouter>

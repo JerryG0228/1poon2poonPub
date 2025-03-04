@@ -3,11 +3,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import CandlestickChart from '@/components/CandlestickChart';
-import { colors } from '@/styles/colors';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
-  margin-left: 0.5rem;
-  min-height: 100vh;
+  /* margin-left: 0.5rem; */
   color: white;
 `;
 
@@ -150,21 +149,22 @@ const BtnBox = styled.div`
 `;
 
 const LargeBtn1 = styled.button`
-  width: 14rem; /* ✅ 버튼 너비 */
+  width: 11rem; /* ✅ 버튼 너비 */
   height: 4rem; /* ✅ 버튼 높이 */
   font-size: 1.2rem; /* ✅ 글자 크기 */
   border-radius: 1.3rem; /* ✅ 버튼 둥글게 */
   background-color: #ef4452;
 `;
 const LargeBtn2 = styled.button`
-  width: 14rem; /* ✅ 버튼 너비 */
+  width: 11rem; /* ✅ 버튼 너비 */
   height: 4rem; /* ✅ 버튼 높이 */
   font-size: 1.2rem; /* ✅ 글자 크기 */
   border-radius: 1.3rem; /* ✅ 버튼 둥글게 */
-  background-color: ${colors.LightBlue};
+  background-color: #0064ff;
 `;
 
 function ETFDetail() {
+  const navigate = useNavigate();
   const { symbol } = useParams<{ symbol: string }>();
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState('');
@@ -325,8 +325,24 @@ function ETFDetail() {
       </GaugeContainer>
 
       <BtnBox>
-        <LargeBtn1>구매하기</LargeBtn1>
-        <LargeBtn2>판매하기</LargeBtn2>
+        <LargeBtn1
+          onClick={() =>
+            navigate(`/etf-buy/${symbol}`, {
+              state: { symbol, currentPrice, priceChange, changePercent },
+            })
+          }
+        >
+          구매하기
+        </LargeBtn1>
+        <LargeBtn2
+          onClick={() =>
+            navigate(`/etf-sell/${symbol}`, {
+              state: { symbol, currentPrice, priceChange, changePercent },
+            })
+          }
+        >
+          판매하기
+        </LargeBtn2>
       </BtnBox>
     </Container>
   );

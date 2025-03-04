@@ -14,9 +14,7 @@ import etfData from '@/data/etfData';
 
 const Container = styled.div`
   padding: 0 0.7rem;
-  min-height: 100vh;
-  max-height: 100vh; /* ✅ 화면 높이를 벗어나면 스크롤 가능 */
-  overflow-y: auto; /* ✅ 세로 스크롤 활성화 */
+  padding-bottom: 2rem;
   color: white;
 `;
 
@@ -27,7 +25,6 @@ const CategoryList = styled.div`
   justify-content: flex-start;
   gap: 10px;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
 `;
 
 const CategoryHeader = styled.div<{ $active: boolean }>`
@@ -56,7 +53,6 @@ const MoreButton = styled.button`
   color: #ffffff;
   font-size: 2rem;
   cursor: pointer;
-
   font-weight: bold;
 `;
 

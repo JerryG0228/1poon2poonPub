@@ -54,8 +54,8 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
     }
 
     const chart = createChart(chartContainerRef.current, {
-      width: chartContainerRef.current.clientWidth,
-      height: 160,
+      width: 140,
+      height: 100,
       layout: { background: { color: 'transparent' }, textColor: '#FFFFFF' }, // ✅ 배경 투명 처리
       grid: {
         vertLines: { visible: false }, // ✅ 세로선 제거
@@ -65,6 +65,9 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
       timeScale: {
         visible: false, // ✅ X축 눈금 제거
         borderVisible: false, // ✅ X축 경계선 제거
+        fixLeftEdge: true, // ✅ 왼쪽 경계 고정
+        fixRightEdge: true, // ✅ 오른쪽 경계 고정
+        lockVisibleTimeRangeOnResize: true,
       },
       rightPriceScale: {
         visible: false, // ✅ 오른쪽 가격 눈금 제거
@@ -74,6 +77,8 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
         visible: false, // ✅ 왼쪽 가격 눈금 제거
         borderVisible: false, // ✅ 가격 축 경계선 제거
       },
+      handleScroll: false, // ✅ 차트 스크롤 방지
+      handleScale: false, // ✅ 차트 확대/축소 방지
       watermark: { visible: false }, // ✅ 워터마크 제거
     });
 

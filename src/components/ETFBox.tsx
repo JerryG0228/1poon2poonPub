@@ -95,7 +95,7 @@ function ETFBox({
                 ? `+${transPrice.toLocaleString()}`
                 : `${transPrice.toLocaleString()}`}
             </ETFTransPrice>
-            <ETFChangePercent style={{ color: transPrice > 0 ? 'red' : 'blue' }}>
+            <ETFChangePercent style={{ color: transPrice > 0 ? '#FF0000' : '#0064FF' }}>
               ({changePercent}%)
             </ETFChangePercent>
           </EtfPriceContent>

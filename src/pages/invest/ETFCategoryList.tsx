@@ -7,8 +7,8 @@ import TopGainersChart from '@/components/TopGainersChart'; // ✅ 신규 차트
 import etfData from '@/data/etfData'; // ✅ etfData 가져오기
 
 const Container = styled.div`
-  padding: 1rem 0.7rem;
-  min-height: 100vh;
+  /* padding: 1rem 0.7rem; */
+  padding-bottom: 2rem;
 `;
 
 const Header1 = styled.div`
@@ -175,7 +175,7 @@ function ETFCategoryList() {
               price={currentPrice}
               transPrice={priceChange}
               changePercent={changePercent}
-              isRecommend={true}
+              isRecommend={false}
               onClick={() => navigate(`/etf-detail/${etf}`)}
             />
           );
