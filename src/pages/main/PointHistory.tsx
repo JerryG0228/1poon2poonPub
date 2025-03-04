@@ -3,12 +3,11 @@ import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import downArrowImage from '@/assets/DownArrow.png';
-import usageIcon from '@/assets/UsageIcon.png';
+import downArrowImage from '@/assets/Main/DownArrow.png';
+import usageIcon from '@/assets/Main/UsageIcon.png';
 import { useState } from 'react';
-import { color } from 'framer-motion';
-import blueCheckImage from '@/assets/check_blue.png';
-import greyCheckImage from '@/assets/check_grey.png';
+import blueCheckImage from '@/assets/Main/check_blue.png';
+import greyCheckImage from '@/assets/Main/check_grey.png';
 
 const Wrap = styled.div`
   display: flex;
@@ -41,16 +40,6 @@ const Button = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const EmptySpace = styled.div`
-  display: flex;
-  //임의로 우선 설정
-  position: absolute;
-  top: 16rem;
-  width: 100%;
-  height: 1rem;
-  background-color: #ffffff;
 `;
 
 const PointFilter = styled.div`
@@ -212,14 +201,14 @@ export default function PointHistory() {
             <Balance>10,000원</Balance>
           </TopText>
           <Button>
-            <Link to={'/donate'}>
+            <Link to={'/donatebefore'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
                   <div style={{ width: '9rem' }}>기부하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
-            <Link to={'/invest'}>
+            <Link to={'/investbefore'}>
               <Btn bgColor={colors.Navy} handleBtn={() => {}}>
                 <PressMotion>
                   <div style={{ width: '9rem' }}>투자하러 가기</div>
@@ -228,7 +217,6 @@ export default function PointHistory() {
             </Link>
           </Button>
         </HistoryTop>
-        <EmptySpace />
         <PointFilter>
           <PointNav>
             <CurrentNav onClick={handleClick}>{selectedValue}</CurrentNav>

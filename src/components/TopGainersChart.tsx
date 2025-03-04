@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CandlestickTopGainersChart from '@/components/CandlestickTopGainersChart';
-import ETFBox from '@/components/ETFBox';
+import ETFChartBox from '@/components/ETFChartBox';
 
 const ChartContainer = styled.div`
   display: flex;
@@ -11,8 +11,7 @@ const ChartContainer = styled.div`
 `;
 
 const ChartBox = styled.div`
-  /* background-color: #ffffff; */
-  background-color: #313845;
+  background-color: #ffffff;
   padding: 0.5rem;
   border-radius: 10px;
   min-width: 10rem;
@@ -20,7 +19,7 @@ const ChartBox = styled.div`
   min-height: 10rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 `;
 
 interface TopGainersChartProps {
@@ -42,7 +41,7 @@ const TopGainersChart: React.FC<TopGainersChartProps> = ({ topETFs }) => {
         return (
           <ChartBox key={etf.name}>
             {/* ✅ ETFBox 사용 (이미지 제거된 버전) */}
-            <ETFBox
+            <ETFChartBox
               name={etf.name}
               price={etf.price}
               transPrice={etf.transPrice}

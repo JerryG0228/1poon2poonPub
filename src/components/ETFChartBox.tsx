@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import ETFIcon from '@/assets/ETFBox/ETFIcon.png';
+import { colors } from '@/styles/colors';
 
 const Box = styled.div<{ $isRecommend: boolean }>`
   display: flex;
-  align-items: center;
   gap: 0.8rem;
-  margin-left: ${({ $isRecommend }) => ($isRecommend ? '3rem' : '0.7rem')};
-  margin-right: 0.3rem;
   font-weight: bold;
-  padding: 1rme;
   border-radius: 8px;
 `;
 
@@ -19,27 +16,27 @@ const ETFImg = styled.img`
 
 const ETFContentBox = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
-  margin-bottom: 0.3rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.3rem;
 `;
 
 const ETFTitle = styled.div`
   font-size: 1.1rem;
-  color: white;
+  font-weight: bold;
+  color: ${colors.Black};
 `;
 
 const ETFContent = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 0.1rem;
 `;
 
 const ETFPrice = styled.div`
-  font-size: 1.1rem;
-  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: ${colors.Black};
 `;
 
 const ETFTransPrice = styled.div<{ $transPrice?: number }>`
@@ -71,7 +68,7 @@ interface Props {
   onClick?: () => void; // ✅ 클릭 이벤트 추가
 }
 
-function ETFBox({
+function ETFChartBox({
   name,
   price,
   transPrice = 0,
@@ -95,7 +92,7 @@ function ETFBox({
                 ? `+${transPrice.toLocaleString()}`
                 : `${transPrice.toLocaleString()}`}
             </ETFTransPrice>
-            <ETFChangePercent style={{ color: transPrice > 0 ? '#FF0000' : '#0064FF' }}>
+            <ETFChangePercent style={{ color: transPrice > 0 ? 'red' : 'blue' }}>
               ({changePercent}%)
             </ETFChangePercent>
           </EtfPriceContent>
@@ -105,4 +102,4 @@ function ETFBox({
   );
 }
 
-export default ETFBox;
+export default ETFChartBox;

@@ -7,30 +7,57 @@ import TopGainersChart from '@/components/TopGainersChart'; // ✅ 신규 차트
 import etfData from '@/data/etfData'; // ✅ etfData 가져오기
 
 const Container = styled.div`
-  padding: 20px;
-  min-height: 100vh;
-  color: white;
-  max-height: 100vh;
-  overflow-y: auto; /* ✅ 세로 스크롤 활성화 */
+  /* padding: 1rem 0.7rem; */
+  padding-bottom: 2rem;
 `;
 
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
+const Header1 = styled.div`
+  font-size: 1.1rem;
   font-weight: bold;
-  color: white;
-  margin-bottom: 1rem;
+  letter-spacing: 0.25rem;
+`;
+
+const Header2 = styled.div`
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 0.25rem;
+  margin-top: 1.3rem;
+  margin-bottom: 0.3rem;
 `;
 
 const ChartWrapper = styled.div`
-  margin: 1rem 0;
+  padding: 1rem;
+  padding-bottom: 0.2rem;
+  background-color: #313845;
+  border-radius: 0.5rem;
 `;
 
 const ETFListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+`;
+
+const DividerWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  margin-bottom: 1rem;
+`;
+
+const Divider = styled.div`
+  position: absolute;
+  width: 100%; /* ✅ 선의 길이 조절 */
+  height: 0.15rem;
+  background-color: #555; /* ✅ 어두운 배경 선 */
+  top: 50%;
+  transform: translateY(-50%);
+
+  &:nth-child(2) {
+    width: 60%; /* ✅ 위에 덮을 선을 조금 짧게 설정 */
+    height: 0.15rem;
+    background-color: white; /* ✅ 밝은 색상으로 겹치게 */
+  }
 `;
 
 function ETFCategoryList() {
@@ -119,10 +146,18 @@ function ETFCategoryList() {
   return (
     <Container>
       {/* ✅ 헤더 */}
-      <Header>{category} ETF</Header>
 
       {/* ✅ 상승률 높은 5개 ETF 차트 */}
-      <ChartWrapper>{topETFs.length > 0 && <TopGainersChart topETFs={topETFs} />}</ChartWrapper>
+      <ChartWrapper>
+        <Header1>{category} 차트 상위 5개</Header1>
+        {topETFs.length > 0 && <TopGainersChart topETFs={topETFs} />}
+      </ChartWrapper>
+
+      <Header2>{category} ETF</Header2>
+      <DividerWrapper>
+        <Divider />
+        <Divider />
+      </DividerWrapper>
 
       {/* ✅ ETF 리스트 */}
       <ETFListContainer>
@@ -140,7 +175,7 @@ function ETFCategoryList() {
               price={currentPrice}
               transPrice={priceChange}
               changePercent={changePercent}
-              isRecommend={true}
+              isRecommend={false}
               onClick={() => navigate(`/etf-detail/${etf}`)}
             />
           );
