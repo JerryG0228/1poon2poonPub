@@ -17,9 +17,9 @@ export default function DonateHome() {
 
   return (
     <Box>
-      <CharacterBox currDonate={1000} targetDonate={target}></CharacterBox>
+      <CharacterBox currDonate={40000} targetDonate={target}></CharacterBox>
 
-      <Guage currDonate={1000} targetDonate={target}></Guage>
+      <Guage currDonate={10000} targetDonate={target}></Guage>
     </Box>
   );
 }
