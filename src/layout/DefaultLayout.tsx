@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
@@ -23,10 +23,16 @@ const Icon = styled.div`
 `;
 
 export default function DefaultLayout() {
+  const navigate = useNavigate();
+
+  const HandleIcon = () => {
+    navigate(-1);
+  };
+
   return (
     <div>
       <Top>
-        <Icon>
+        <Icon onClick={HandleIcon}>
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
         </Icon>
       </Top>
