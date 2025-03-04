@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Box = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ const InputAmout = styled.input`
   /* 금액 입력 되어 있으면 글자 흰색, 밑줄 파란색 */
   &:focus {
     outline: none;
-    border-bottom: 1px solid ${colors.Blue};
+    border-bottom: 1px solid ${colors.LightBlue};
     color: white;
   }
 
@@ -54,6 +54,7 @@ const InputAmout = styled.input`
     margin: 0;
   }
 `;
+
 //input 끝에 '원' 글자 고정
 const Unit = styled.label`
   position: absolute;
@@ -63,19 +64,15 @@ const Unit = styled.label`
   color: ${colors.Grey};
 `;
 
+const CustomLink = styled(Link)<{ disabled?: boolean }>`
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+`;
+
 export default function DonateGoal() {
   const [price, setPrice] = useState<number | null>(null);
   const [data, setData] = useState<Object>({});
+  const [bgColor, setBgColor] = useState(colors.Grey);
   const location = useLocation();
-
-  // 다음 버튼 클릭 핸들러
-  const handleBtn = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    // 카테고리를 선택하지 않으면 다음으로 넘어가지 않음.
-    if (price == null) {
-      event.preventDefault();
-      alert('기부 목표 금액을을 설정해 주세요!');
-    }
-  };
 
   //input onChange 핸들러러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +80,10 @@ export default function DonateGoal() {
     setPrice(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
     setData({ ...location.state.selectedCategory, price: value });
   };
+
+  useEffect(() => {
+    setBgColor(price == null ? colors.Grey : colors.LightBlue);
+  }, [price]);
 
   return (
     <Box>
@@ -101,13 +102,13 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <Link to="/donateHome" state={{ data }} onClick={handleBtn}>
-        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+      <CustomLink to="/donateHome" state={{ data }} disabled={price == null}>
+        <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>설정하기</div>
           </PressMotion>
         </Btn>
-      </Link>
+      </CustomLink>
     </Box>
   );
 }

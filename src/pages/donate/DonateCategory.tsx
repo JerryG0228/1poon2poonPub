@@ -10,7 +10,7 @@ import dogImage from '@/assets/categorybox/dog_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import homeImage from '@/assets/categorybox/home_img.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Box = styled.div`
   display: flex;
@@ -37,6 +37,14 @@ const DonateCategoryBox = styled.div`
   row-gap: 1rem;
 `;
 
+const CustomLink = styled(Link)<{ disabled?: boolean }>`
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+`;
+
+const CustomBtn = styled(Btn)<{ disabled?: boolean }>`
+  background-color: ${(props) => (props.disabled ? 'grey' : 'blue')};
+`;
+
 const categoryList = [
   { name: '교육·문화', image: booksImage },
   { name: '공익·인권', image: doveImage },
@@ -45,9 +53,11 @@ const categoryList = [
   { name: '의료·건강', image: hospitalImage },
   { name: '환경·동물', image: dogImage },
 ];
+
 export default function DonateCategory() {
   //active적용. 처음엔 선택안함. 다음 페이지에 데이터 전송
   const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
+  const [bgColor, setBgColor] = useState(colors.Grey);
 
   // 카테고리 클릭 핸들러
   const handleClick = (item: Object) => {
@@ -55,14 +65,10 @@ export default function DonateCategory() {
     setSelectedCategory((prev) => (prev === item ? null : item));
   };
 
-  // 다음 버튼 클릭 핸들러
-  const handleBtn = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    // 카테고리를 선택하지 않으면 다음으로 넘어가지 않음.
-    if (selectedCategory == null) {
-      event.preventDefault();
-      alert('기부 할 카테고리를 선택해 주세요!');
-    }
-  };
+  useEffect(() => {
+    // selectedCategory가 null이면 회색, 아니면 파란색
+    setBgColor(selectedCategory == null ? colors.Grey : colors.LightBlue);
+  }, [selectedCategory]); // selectedCategory가 변경될 때마다 실행
 
   return (
     <Box>
@@ -82,13 +88,13 @@ export default function DonateCategory() {
           />
         ))}
       </DonateCategoryBox>
-      <Link to="/donateGoal" state={{ selectedCategory }} onClick={handleBtn}>
-        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+      <CustomLink to="/donateGoal" state={{ selectedCategory }} disabled={selectedCategory == null}>
+        <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>다음</div>
           </PressMotion>
         </Btn>
-      </Link>
+      </CustomLink>
     </Box>
   );
 }
