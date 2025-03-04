@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Box = styled.div`
   display: flex;
@@ -22,47 +22,57 @@ const InputWrapper = styled.div`
   position: relative;
   display: inline-block;
   margin-bottom: 19.45rem;
+  &:focus-within label {
+    color: white;
+  }
 `;
 
-const InputAmout = styled.input<{ hasValue: Boolean }>`
+const InputAmout = styled.input`
   font-size: 1.55rem;
   border: none;
-  /* 금액 입력 되어 있으면 글자 흰색, 밑줄 파란색 */
-  border-bottom: ${(props) =>
-    props.hasValue ? `1px solid ${colors.Blue}` : `1px solid ${colors.Grey}`};
-  color: ${(props) => (props.hasValue ? 'white' : colors.Grey)};
+  border-bottom: 1px solid ${colors.Grey};
+  color: ${colors.Grey};
   background-color: transparent;
   padding: 0.7rem 2rem 0.7rem 0.3rem;
   width: 100%;
   font-weight: bold;
   /* 기본 포커스 아웃라인 제거 */
+  /* 금액 입력 되어 있으면 글자 흰색, 밑줄 파란색 */
   &:focus {
     outline: none;
+    border-bottom: 1px solid ${colors.LightBlue};
+    color: white;
+  }
+
+  /* 파이어폭스 스핀 버튼 숨기기 */
+  -moz-appearance: textfield;
+
+  /* 웹킷 브라우저(크롬, 사파리, 엣지,  오페라)에서 스핀 버튼 숨기기 */
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;
+
 //input 끝에 '원' 글자 고정
-const Unit = styled.span<{ hasValue: Boolean }>`
+const Unit = styled.label`
   position: absolute;
   right: 0.5rem;
   bottom: 0.7rem;
   font-size: 1.55rem;
-  /* 금액 입력 되어 있으면 글자 흰색 */
-  color: ${(props) => (props.hasValue ? 'white' : colors.Grey)};
+  color: ${colors.Grey};
+`;
+
+const CustomLink = styled(Link)<{ disabled?: boolean }>`
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
 `;
 
 export default function DonateGoal() {
   const [price, setPrice] = useState<number | null>(null);
   const [data, setData] = useState<Object>({});
+  const [bgColor, setBgColor] = useState(colors.Grey);
   const location = useLocation();
-
-  // 다음 버튼 클릭 핸들러
-  const handleBtn = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    // 카테고리를 선택하지 않으면 다음으로 넘어가지 않음.
-    if (price == null) {
-      event.preventDefault();
-      alert('기부 목표 금액을을 설정해 주세요!');
-    }
-  };
 
   //input onChange 핸들러러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +80,10 @@ export default function DonateGoal() {
     setPrice(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
     setData({ ...location.state.selectedCategory, price: value });
   };
+
+  useEffect(() => {
+    setBgColor(price == null ? colors.Grey : colors.LightBlue);
+  }, [price]);
 
   return (
     <Box>
@@ -80,21 +94,21 @@ export default function DonateGoal() {
       </Title>
       <InputWrapper>
         <InputAmout
+          id="inputAmount"
           type="number"
           value={price}
           placeholder="금액"
           onChange={handleInput}
-          hasValue={Boolean(price)}
         ></InputAmout>
-        <Unit hasValue={Boolean(price)}>원</Unit>
+        <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <Link to="/donateHome" state={{ data }} onClick={handleBtn}>
-        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+      <CustomLink to="/donateHome" state={{ data }} disabled={price == null}>
+        <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>설정하기</div>
           </PressMotion>
         </Btn>
-      </Link>
+      </CustomLink>
     </Box>
   );
 }
