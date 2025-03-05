@@ -6,7 +6,6 @@ import StampBoardSection from '@/components/Main/StampBoardSection';
 import PointHistorySection from '@/components/Main/PointHistorySection';
 import CashbackServiceSection from '@/components/Main/CashbackServiceSection';
 import AdBanner from '@/components/Main/AdBanner';
-import NonTitleBox from '@/components/NonTitleBox';
 
 const MainWrap = styled.div`
   display: flex;

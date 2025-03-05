@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import TitleBox from '@components/TitleBox';
 import { Link } from 'react-router-dom';
-import PressMotion from '@components/PressMotion';
+import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import donateImage from '@/assets/Main/donateIcon.png';
 import investUpImage from '@/assets/Main/investUpIcon.png';
 import investDownImage from '@/assets/Main/investDownIcon.png';
+import TitleBox from '@/components/TitleBox';
 
 const Service = styled.div`
   display: flex;

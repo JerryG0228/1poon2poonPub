@@ -40,7 +40,7 @@ export default function DonateMainBefore() {
     <Box>
       <StyledLottie animationData={DonationAni} loop={true} />
       <Text>목표 금액을 설정하고 기부를 시작해볼까요?</Text>
-      <Link to="/donateCategory">
+      <Link to="/donatecategory">
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '7rem' }}>설정하러 가기</div>
