@@ -78,19 +78,20 @@ export default function StampBoardSection({
                 (
                   _, //빈 배열 생성했으므로 명시
                   index: number, // index 추가
-                ) => (
-                  <AnimatedComponent key={index}>
-                    <Circle>
-                      {coins[index] ? ( // 값이 있는 경우에만 이미지 표시
-                        coins[index] === 500 ? (
+                ) =>
+                  coins[index] ? (
+                    <AnimatedComponent key={index}>
+                      <Circle>
+                        {coins[index] === 500 ? (
                           <img src={fiveCoin} alt="500원 동전" />
                         ) : (
                           <img src={oneCoin} alt="100원 동전" />
-                        )
-                      ) : null}
-                    </Circle>
-                  </AnimatedComponent>
-                ),
+                        )}
+                      </Circle>
+                    </AnimatedComponent>
+                  ) : (
+                    <Circle key={index} />
+                  ),
               )}
             </Board>
           )}
