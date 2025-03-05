@@ -184,7 +184,7 @@ const InvestmentHome = () => {
         <ChartWrapper>
           <Title>내 ETF 차트</Title>
           <EmptyStateBox>
-            <BuyButton onClick={() => navigate('/')}>내 첫 주식을 가져볼까요?</BuyButton>
+            <BuyButton onClick={() => navigate('/etf-list')}>내 첫 주식을 가져볼까요?</BuyButton>
           </EmptyStateBox>
         </ChartWrapper>
       )}

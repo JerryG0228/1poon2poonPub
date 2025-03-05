@@ -85,7 +85,9 @@ const categoryImages: { [key: string]: string } = {
 function ETFList() {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectedCategories: string[] = location.state?.selectedCategories ?? [];
+  const storedCategories = JSON.parse(localStorage.getItem('selectedCategories') || '[]');
+
+  const selectedCategories: string[] = location.state?.selectedCategories ?? storedCategories;
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
   const [previousCloseData, setPreviousCloseData] = useState<{ [key: string]: number }>({});
@@ -114,8 +116,13 @@ function ETFList() {
   }, [watchlist]);
 
   useEffect(() => {
+    if (Object.keys(randomETFs).length > 0) return;
     console.log('📢 etfData 확인:', etfData);
     console.log('📢 선택된 카테고리:', selectedCategories);
+
+    if (selectedCategories.length > 0) {
+      localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+    }
 
     const selectedETFData: { [key: string]: any[] } = {};
 
