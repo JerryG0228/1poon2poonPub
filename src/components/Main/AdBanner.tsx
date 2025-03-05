@@ -16,10 +16,10 @@ const SlideItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: lightgray;
   font-size: 20px;
   font-weight: bold;
   border-radius: 1rem;
+  margin-right: 10px;
   > img {
     height: 5rem;
     border-radius: 1rem;
@@ -32,10 +32,11 @@ function AutoPlaySlider() {
     slidesToShow: 1, // 한 번에 보이는 슬라이드 개수 줄이기
     slidesToScroll: 1,
     autoplay: true,
-    speed: 2000,
+    speed: 1000,
     autoplaySpeed: 4000,
     cssEase: 'linear',
     arrows: false,
+    variableWidth: true,
   };
 
   return (

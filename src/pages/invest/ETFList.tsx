@@ -85,15 +85,44 @@ const categoryImages: { [key: string]: string } = {
 function ETFList() {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectedCategories: string[] = location.state?.selectedCategories ?? [];
+  const storedCategories = JSON.parse(localStorage.getItem('selectedCategories') || '[]');
+
+  const selectedCategories: string[] = location.state?.selectedCategories ?? storedCategories;
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
   const [previousCloseData, setPreviousCloseData] = useState<{ [key: string]: number }>({});
   const [randomETFs, setRandomETFs] = useState<{ [key: string]: any[] }>({});
 
+  const [watchlist, setWatchlist] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
+  });
+
+  // ✅ 관심 ETF 추가/삭제 함수
+  const toggleFavorite = (etfName: string) => {
+    setWatchlist((prevWatchlist) => {
+      const updatedWatchlist = prevWatchlist.includes(etfName)
+        ? prevWatchlist.filter((name) => name !== etfName)
+        : [...prevWatchlist, etfName];
+
+      localStorage.setItem('favoriteETFs', JSON.stringify(updatedWatchlist));
+
+      console.log('✅ 관심 ETF 업데이트됨:', updatedWatchlist); // 🚀 콘솔 확인
+      return updatedWatchlist;
+    });
+  };
+
   useEffect(() => {
+    localStorage.setItem('favoriteETFs', JSON.stringify(watchlist));
+  }, [watchlist]);
+
+  useEffect(() => {
+    if (Object.keys(randomETFs).length > 0) return;
     console.log('📢 etfData 확인:', etfData);
     console.log('📢 선택된 카테고리:', selectedCategories);
+
+    if (selectedCategories.length > 0) {
+      localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+    }
 
     const selectedETFData: { [key: string]: any[] } = {};
 
@@ -214,6 +243,8 @@ function ETFList() {
                   changePercent={changePercent}
                   isRecommend={true}
                   onClick={() => navigate(`/etf-detail/${etf}`)} // ✅ 클릭 시 이동
+                  onFavoriteToggle={toggleFavorite} // ✅ 관심 ETF 토글
+                  isFavorite={watchlist.includes(etf)} // ✅ 현재 ETF가 관심 ETF인지 여부
                 />
               );
             })}

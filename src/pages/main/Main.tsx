@@ -28,10 +28,10 @@ const dummyData: Payment[] = [
   { id: 4, amount: 1200, category: '대중교통', date: '2025-03-04' },
   { id: 5, amount: 800, category: '편의점', date: '2025-03-04' },
   { id: 6, amount: 20000, category: '영화관', date: '2025-03-04' },
-  { id: 7, amount: 20000, category: '영화관', date: '2025-03-04' },
-  { id: 8, amount: 20000, category: '영화관', date: '2025-03-04' },
-  { id: 9, amount: 20000, category: '영화관', date: '2025-03-04' },
-  { id: 10, amount: 20000, category: '영화관', date: '2025-03-04' },
+  { id: 7, amount: 9000, category: '카페', date: '2025-03-05' },
+  { id: 8, amount: 1200, category: '대중교통', date: '2025-03-05' },
+  { id: 9, amount: 800, category: '편의점', date: '2025-03-05' },
+  // { id: 10, amount: 20000, category: '영화관', date: '2025-03-05' },
 ];
 
 export default function Main() {

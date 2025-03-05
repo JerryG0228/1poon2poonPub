@@ -12,10 +12,9 @@ import greyCheckImage from '@/assets/Main/check_grey.png';
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
-  height: 90vh;
-  flex-direction: column;
   position: relative;
   overflow: hidden;
+  min-height: 100vh;
 `;
 
 const HistoryTop = styled.div`
@@ -46,7 +45,7 @@ const PointFilter = styled.div`
   display: flex;
   flex-direction: row;
   height: 2rem;
-  margin: 2rem 0 1rem 0;
+  margin: 2rem 0 0.5rem 0;
 `;
 
 const PointNav = styled.div`
@@ -85,14 +84,15 @@ const Overlay = styled.div<FilterListProps>`
 const FilterList = styled.div<FilterListProps>`
   display: ${({ clicked }) => (clicked ? 'flex' : 'none')};
   flex-direction: column;
-  position: absolute;
-  bottom: 0;
+  position: fixed;
   background-color: ${colors.Navy};
   width: 100%;
+  max-width: 92%;
   border-radius: 1.2rem;
   padding: 1rem;
-  border: 1px solid pink;
   z-index: 10;
+  bottom: 1rem;
+  left: 1rem;
 `;
 
 const SelectTitle = styled.div`
@@ -121,7 +121,7 @@ const SelectItem = styled.li<{ isSelected: boolean }>`
 const PointUsage = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.4rem;
   margin: 1rem 0;
 `;
 
@@ -133,7 +133,8 @@ const PointDate = styled.div`
 const PointUsageItem = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 1.2rem;
+  align-items: center;
 `;
 
 const UsageIcon = styled.div`
@@ -148,6 +149,7 @@ const UsageText = styled.div`
   display: flex;
   flex-direction: column;
   width: 14rem;
+  gap: 0.2rem;
 `;
 
 const Time = styled.div`
@@ -161,7 +163,8 @@ const UsagePoint = styled.div`
   flex-direction: column;
   font-weight: bold;
   align-items: flex-end;
-  width: 5rem;
+  gap: 0.2rem;
+  width: 6rem;
 `;
 
 const NewPoint = styled.div`
@@ -175,12 +178,117 @@ const CurrentPoint = styled.div`
   font-size: 0.8rem;
 `;
 
+interface dummyPointHistoryProps {
+  id: number;
+  icon: string;
+  name: string;
+  date: string;
+  time: string;
+  newPoint: number;
+  currentPoint: number;
+  type: string;
+}
+
+const dummyPointHistory = [
+  {
+    id: 1,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-03',
+    time: '10:59',
+    newPoint: 1,
+    currentPoint: 1,
+    type: 'earned',
+  },
+  {
+    id: 2,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-03',
+    time: '11:30',
+    newPoint: 500,
+    currentPoint: 501,
+    type: 'earned',
+  },
+  {
+    id: 3,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-04',
+    time: '14:20',
+    newPoint: 3500,
+    currentPoint: 4001,
+    type: 'earned',
+  },
+  {
+    id: 4,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-04',
+    time: '16:45',
+    newPoint: 10000,
+    currentPoint: 14001,
+    type: 'earned',
+  },
+  {
+    id: 5,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-04',
+    time: '19:10',
+    newPoint: 2000,
+    currentPoint: 12001,
+    type: 'spent',
+  },
+  {
+    id: 6,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-05',
+    time: '08:22',
+    newPoint: 2000,
+    currentPoint: 10001,
+    type: 'spent',
+  },
+  {
+    id: 7,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-05',
+    time: '11:30',
+    newPoint: 2000,
+    currentPoint: 12001,
+    type: 'earned',
+  },
+  {
+    id: 8,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-05',
+    time: '14:47',
+    newPoint: 2000,
+    currentPoint: 10001,
+    type: 'spent',
+  },
+  {
+    id: 9,
+    icon: usageIcon,
+    name: '토스 뱅크',
+    date: '2025-03-05',
+    time: '19:21',
+    newPoint: 2000,
+    currentPoint: 12001,
+    type: 'earned',
+  },
+];
+
 export default function PointHistory() {
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
   //클릭 됐는지 안됐는지
   const [clicked, setClicked] = useState(false);
   const [selectedValue, setSelectedValue] = useState('전체');
 
+  //필터링
   const handleClick = () => {
     setClicked(!clicked);
     console.log(clicked);
@@ -192,13 +300,54 @@ export default function PointHistory() {
     setClicked(!clicked);
   };
 
+  //선택된 필터에 따라 내역을 필터링
+  const filterHistory = (history: dummyPointHistoryProps[], filter: string) => {
+    if (filter === '적립 내역') {
+      return history.filter((item) => item.type === 'earned');
+    } else if (filter === '사용 내역') {
+      return history.filter((item) => item.type === 'spent');
+    }
+    return history;
+  };
+
+  // 필터링된 내역 가져오기
+  const filteredHistory = filterHistory(dummyPointHistory, selectedValue);
+
+  //최신순으로 정렬 후 날짜별 그룹화
+  const groupByDateSorted = (history: dummyPointHistoryProps[]) => {
+    const grouped: { [key: string]: dummyPointHistoryProps[] } = {};
+
+    history
+      .sort((a, b) => {
+        const dateA = new Date(`${a.date} ${a.time}`).getTime();
+        const dateB = new Date(`${b.date} ${b.time}`).getTime();
+        return dateB - dateA;
+      })
+      .forEach((item) => {
+        if (!grouped[item.date]) {
+          grouped[item.date] = [];
+        }
+        grouped[item.date].push(item);
+      });
+    return grouped;
+  };
+
+  const groupedHistory = groupByDateSorted(filteredHistory);
+  console.log(groupedHistory);
+
+  //합산 포인트 계산
+  const totalCurrentPoint = dummyPointHistory.reduce(
+    (acc, cur) => acc + Number(cur.newPoint) * (cur.type === 'earned' ? 1 : -1),
+    0,
+  );
+
   return (
     <>
       <Wrap>
         <HistoryTop>
           <TopText>
             <div>캐시백 포인트</div>
-            <Balance>10,000원</Balance>
+            <Balance>{totalCurrentPoint}원</Balance>
           </TopText>
           <Button>
             <Link to={'/donatebefore'}>
@@ -242,20 +391,32 @@ export default function PointHistory() {
           </SelectMenu>
         </FilterList>
         <PointUsage>
-          <PointDate>2월 17일</PointDate>
-          <PointUsageItem>
-            <UsageIcon>
-              <img src={usageIcon} />
-            </UsageIcon>
-            <UsageText>
-              <div>토스 뱅크</div>
-              <Time>10:59</Time>
-            </UsageText>
-            <UsagePoint>
-              <NewPoint>+1원</NewPoint>
-              <CurrentPoint>1원</CurrentPoint>
-            </UsagePoint>
-          </PointUsageItem>
+          {Object.keys(groupedHistory).map((date) => (
+            <>
+              <PointDate>{date}</PointDate>
+              {groupedHistory[date].map((history) => (
+                <PointUsageItem key={history.id}>
+                  <UsageIcon>
+                    <img src={history.icon} />
+                  </UsageIcon>
+                  <UsageText>
+                    <div>{history.name}</div>
+                    <Time>{history.time}</Time>
+                  </UsageText>
+                  <UsagePoint>
+                    <NewPoint
+                      style={{ color: history.type === 'earned' ? colors.Red : colors.Blue }}
+                    >
+                      {history.type === 'earned'
+                        ? `+${Number(history.newPoint)}원`
+                        : `-${Number(history.newPoint)}원`}
+                    </NewPoint>
+                    <CurrentPoint>{history.currentPoint}원</CurrentPoint>
+                  </UsagePoint>
+                </PointUsageItem>
+              ))}
+            </>
+          ))}
         </PointUsage>
       </Wrap>
     </>
