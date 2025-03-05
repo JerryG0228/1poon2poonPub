@@ -16,6 +16,7 @@ import DonateHome from './pages/donate/DonateHome';
 import Invest from '@/pages/invest/InvestMainBefore';
 import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
+import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/donatecategory" element={<DonateCategory />} /> {/* 기부 카테고리 페이지 */}
           <Route path="/donategoal" element={<DonateGoal />} /> {/* 기부 목표 금액 설정 페이지 */}
           <Route path="/donatehome" element={<DonateHome />} /> {/* 기부 메인 페이지 */}
+          <Route path="/donate" element={<Donate />} /> {/* 기부 메인 페이지 */}
           <Route path="/investbefore" element={<InvestMainBefore />} /> {/* 투자 페이지 */}
         </Route>
 

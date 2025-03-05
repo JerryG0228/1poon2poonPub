@@ -14,8 +14,19 @@ const Box = styled.div`
   font-weight: bold;
 `;
 
+const TitleBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 const Title = styled.div`
   font-size: 2rem;
+`;
+
+const Info = styled.div`
+  font-size: 0.9rem;
+  color: #c5c5c5;
 `;
 
 const InputWrapper = styled.div`
@@ -27,7 +38,7 @@ const InputWrapper = styled.div`
   }
 `;
 
-const InputAmout = styled.input`
+const InputAmout = styled.input<{ value: number }>`
   font-size: 1.55rem;
   border: none;
   border-bottom: 1px solid ${colors.Grey};
@@ -41,7 +52,7 @@ const InputAmout = styled.input`
   &:focus {
     outline: none;
     border-bottom: 1px solid ${colors.LightBlue};
-    color: white;
+    color: ${(props) => (props.value < 10000 ? colors.Grey : colors.White)};
   }
 
   /* 파이어폭스 스핀 버튼 숨기기 */
@@ -69,8 +80,8 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 `;
 
 export default function DonateGoal() {
-  const [price, setPrice] = useState<number | null>(null);
-  const [data, setData] = useState<Object>({});
+  const [price, setPrice] = useState<number | null>(null); // 목표 금액
+  const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
   const location = useLocation();
 
@@ -78,20 +89,23 @@ export default function DonateGoal() {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
     setPrice(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
-    setData({ ...location.state.selectedCategory, price: value });
+    setData({ ...location.state.selectedCategory, price: value, currentPrice: 0 });
   };
 
   useEffect(() => {
-    setBgColor(price == null ? colors.Grey : colors.LightBlue);
+    setBgColor((price ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
   }, [price]);
 
   return (
     <Box>
-      <Title>
-        기부 목표 금액을
-        <br />
-        설정해주세요
-      </Title>
+      <TitleBox>
+        <Title>
+          기부 목표 금액을
+          <br />
+          설정해주세요
+        </Title>
+        <Info>최소 10,000원 이상 설정 가능</Info>
+      </TitleBox>
       <InputWrapper>
         <InputAmout
           id="inputAmount"
@@ -102,7 +116,7 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatehome" state={{ data }} disabled={price == null}>
+      <CustomLink to="/donatehome" state={{ data }} disabled={(price ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>설정하기</div>
