@@ -1,17 +1,7 @@
 import styled from 'styled-components';
-<<<<<<< HEAD
 import NonTitleBox from '@components/NonTitleBox';
-=======
-import NonTitleBox from '@/components/NonTitleBox';
->>>>>>> dev
 import cashbackImage from '@/assets/Main/CashbackIcon.png';
 import vectorImage from '@/assets/Main/Vector.png';
-
-const MainWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
 
 const CashBackWrap = styled.div`
   display: flex;
