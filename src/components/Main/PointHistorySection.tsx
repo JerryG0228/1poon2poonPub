@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import NonTitleBox from './NonTitleBox';
+import NonTitleBox from '@/components/NonTitleBox';
 import cashbackImage from '@/assets/Main/CashbackIcon.png';
 import vectorImage from '@/assets/Main/Vector.png';
 

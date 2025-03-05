@@ -88,7 +88,7 @@ export default function DonateCategory() {
           />
         ))}
       </DonateCategoryBox>
-      <CustomLink to="/donateGoal" state={{ selectedCategory }} disabled={selectedCategory == null}>
+      <CustomLink to="/donategoal" state={{ selectedCategory }} disabled={selectedCategory == null}>
         <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>다음</div>
