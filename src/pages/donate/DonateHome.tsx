@@ -49,16 +49,9 @@ const SelectCatgegory = styled.img`
 
 export default function DonateHome() {
   const location = useLocation();
-  const target = location.state.data.price;
-  const categoryImg = location.state.data.image;
-
-  const handleBtn = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    // 카테고리를 선택하지 않으면 다음으로 넘어가지 않음.
-    if (true) {
-      event.preventDefault();
-      alert('기부 할 카테고리를 선택해 주세요!');
-    }
-  };
+  const target = location.state.data.price; // 목표 금액
+  const categoryImg = location.state.data.image; // 기부 카테고리 이미지
+  const currentPrice = location.state.data.currentPrice;
 
   return (
     <Box>
@@ -70,10 +63,10 @@ export default function DonateHome() {
         </TotalWrapper>
       </TitleWrapper>
       <SelectCatgegory src={categoryImg}></SelectCatgegory>
-      <CharacterBox currDonate={40000} targetDonate={target}></CharacterBox>
+      <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
 
-      <Guage currDonate={10000} targetDonate={target}></Guage>
-      <Link to="/donateGoal" state={{}} onClick={handleBtn}>
+      <Guage currDonate={currentPrice} targetDonate={target}></Guage>
+      <Link to="/donate" state={{}}>
         <Btn bgColor={'#313845'} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>기부 포인트 교환</div>

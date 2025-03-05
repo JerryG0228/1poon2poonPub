@@ -69,8 +69,8 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 `;
 
 export default function DonateGoal() {
-  const [price, setPrice] = useState<number | null>(null);
-  const [data, setData] = useState<Object>({});
+  const [price, setPrice] = useState<number | null>(null); // 목표 금액
+  const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
   const location = useLocation();
 
@@ -78,7 +78,7 @@ export default function DonateGoal() {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
     setPrice(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
-    setData({ ...location.state.selectedCategory, price: value });
+    setData({ ...location.state.selectedCategory, price: value, currentPrice: 0 });
   };
 
   useEffect(() => {
