@@ -41,10 +41,6 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
 `;
 
-const CustomBtn = styled(Btn)<{ disabled?: boolean }>`
-  background-color: ${(props) => (props.disabled ? 'grey' : 'blue')};
-`;
-
 const categoryList = [
   { name: '교육·문화', image: booksImage },
   { name: '공익·인권', image: doveImage },

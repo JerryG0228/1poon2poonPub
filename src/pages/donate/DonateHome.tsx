@@ -3,6 +3,7 @@ import CharacterBox from '@/components/CharacterBox';
 import Guage from '@/components/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -48,10 +49,18 @@ const SelectCatgegory = styled.img`
 `;
 
 export default function DonateHome() {
+  const [data, setData] = useState<any>({}); // 전달 데이터
+
   const location = useLocation();
-  const target = location.state.data.price; // 목표 금액
-  const categoryImg = location.state.data.image; // 기부 카테고리 이미지
-  const currentPrice = location.state.data.currentPrice;
+
+  useEffect(() => {
+    setData(location.state.data);
+  }, [location.state.data]);
+  console.log(data);
+  // data가 변경되었을 때, target, categoryImg, currentPrice를 안전하게 사용하기
+  const target = data?.price || 0; // 목표 금액
+  const categoryImg = data?.image || ''; // 기부 카테고리 이미지
+  const currentPrice = data?.currentPrice || 0; // 현재 기부 금액
 
   return (
     <Box>
@@ -62,11 +71,10 @@ export default function DonateHome() {
           <Unit>원</Unit>
         </TotalWrapper>
       </TitleWrapper>
-      <SelectCatgegory src={categoryImg}></SelectCatgegory>
+      {categoryImg && <SelectCatgegory src={categoryImg} alt="기부 카테고리" />}
       <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
-
       <Guage currDonate={currentPrice} targetDonate={target}></Guage>
-      <Link to="/donate" state={{}}>
+      <Link to="/donate" state={{ data }}>
         <Btn bgColor={'#313845'} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>기부 포인트 교환</div>

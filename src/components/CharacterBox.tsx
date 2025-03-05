@@ -11,9 +11,9 @@ import Lottie from 'lottie-react';
 
 const Jello = keyframes` // 모찌 리액션
   0% { transform: scale3d(1,1,1); }
-  30% { transform: scale3d(0.75,1.25,1); }
-  40% { transform: scale3d(1.25,0.75,1); }
-  50% { transform: scale3d(0.85,1.15,1); }
+  30% { transform: scale3d(0.65,1.35,1); }
+  40% { transform: scale3d(1.35,0.65,1); }
+  50% { transform: scale3d(0.75,1.25,1); }
   65% { transform: scale3d(1.05,0.95,1); }
   75% { transform: scale3d(0.95,1.05,1); }
   100% { transform: scale3d(1,1,1); }
@@ -32,7 +32,7 @@ const RunAway = keyframes` //easeInBack - 도망가는 모션 cubic-bezier(0.68,
   }
 `;
 
-const Enter = keyframes`
+const Enter = keyframes` // 등장 모션
   0% {
     -webkit-transform: translateY(600px) rotateX(30deg) scale(0);
             transform: translateY(600px) rotateX(30deg) scale(0);
@@ -49,7 +49,7 @@ const Enter = keyframes`
   }
 `;
 
-const Jump = keyframes`
+const Jump = keyframes` // 점프 모션
   0% {
     transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태 */
   }
@@ -69,16 +69,16 @@ const Jump = keyframes`
     transform: scale3d(0.9, 0.7, 1) translateY(-3rem); /* 점프 중반 */
   }
   60% {
-    transform: scale3d(0.8, 0.9, 1) translateY(-7rem); /* 점프 최고점 */
+    transform: scale3d(0.8, 0.9, 1) translateY(-7rem); /* 점프 후반 */
   }
   70% {
-    transform: scale3d(0.7, 1, 1) translateY(-9rem); /* 점프 최고점 */
+    transform: scale3d(0.7, 1, 1) translateY(-10rem); /* 점프 최고점 */
   }
   80% {
-    transform: scale3d(0.8, 1, 1) translateY(-5rem); /* 점프 하강 */
+    transform: scale3d(0.8, 1, 1) translateY(-8rem); /* 점프 하강 */
   }
   90% {
-    transform: scale3d(0.9, 1, 1) translateY(-2rem); /* 착지 직전 */
+    transform: scale3d(0.9, 1, 1) translateY(-4rem); /* 착지 직전 */
   }
   100% {
     transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태로 돌아옴 */
@@ -102,8 +102,8 @@ const CharacterAni = styled.div<{ isActive: boolean; animate: string }>`
   ${(props) =>
     props.isActive &&
     css`
-      animation: ${aniList[props.animate]} 1s
-        ${props.animate == 'RunAway' ? 'cubic-bezier(0.68, -0.55, 0.27, 1.55)' : 'ease-in-out'};
+      animation: ${aniList[props.animate]} ${props.animate == 'RunAway' ? '2s' : '1s'}
+        ${props.animate == 'RunAway' ? 'cubic-bezier(0.65 , -0.7, 0.4, 1.75)' : 'ease-in-out'};
     `}
 `;
 
@@ -112,11 +112,15 @@ const ButtonBox = styled.div`
   gap: 1rem;
 `;
 
-const ActionButton = styled.button`
+const ActionButton = styled.button<{ percent: number }>`
   background-color: transparent;
   color: ${colors.White};
   border: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
+
+  &:disabled {
+    color: ${colors.Grey};
+  }
 `;
 
 const CharacterImg = styled.img`
@@ -159,7 +163,6 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
   const [isClickable, setIsClickable] = useState<boolean>(true); // 캐릭터 클릭 가능 상태
   const [animate, setAnimate] = useState<string>('');
-
   const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
   const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
 
@@ -173,7 +176,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
     setTimeout(() => {
       setIsActive(false); // 애니메이션 종료
       setIsClickable(true); // 애니메이션 종료 후 클릭 가능
-    }, 1300); // 1.3초 후 애니메이션 후 상태 초기화
+    }, 1500); // 1.3초 후 애니메이션 후 상태 초기화
   };
 
   useEffect(() => {
@@ -181,20 +184,45 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   }, [currDonate, spring]);
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
+    console.log(targetDonate);
+    console.log(per);
     if (per < 25) setCharacter(lv1);
     else if (per >= 25 && per < 50) setCharacter(lv2);
     else if (per >= 50 && per < 75) setCharacter(lv3);
     else if (per >= 75 && per < 100) setCharacter(lv4);
     else setCharacter(present);
-  }, []);
+  }, [currDonate, targetDonate]);
 
   return (
     <Wrapper>
       <ButtonBox>
-        <ActionButton onClick={() => handleClick('Jello')}>말랑말랑</ActionButton>
-        <ActionButton onClick={() => handleClick('RunAway')}>도망가기</ActionButton>
-        <ActionButton onClick={() => handleClick('Jump')}>점프하기</ActionButton>
-        <ActionButton onClick={() => handleClick('Enter')}>날아오기</ActionButton>
+        <ActionButton onClick={() => handleClick('Jello')} disabled={character == present}>
+          말랑말랑
+        </ActionButton>
+        <span>|</span>
+        <ActionButton
+          onClick={() => handleClick('RunAway')}
+          disabled={per < 25 || character == present}
+          percent={per}
+        >
+          도망가기
+        </ActionButton>
+        <span>|</span>
+        <ActionButton
+          onClick={() => handleClick('Jump')}
+          disabled={per < 50 || character == present}
+          percent={per}
+        >
+          점프하기
+        </ActionButton>
+        <span>|</span>
+        <ActionButton
+          onClick={() => handleClick('Enter')}
+          disabled={per < 75 || character == present}
+          percent={per}
+        >
+          날아오기
+        </ActionButton>
       </ButtonBox>
       <div style={{ position: 'relative' }}>
         {per === 100 ? (

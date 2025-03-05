@@ -2,7 +2,9 @@ import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import { colors } from '@/styles/colors';
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Box = styled.div`
@@ -38,13 +40,24 @@ const PointBalance = styled.div`
 `;
 
 export default function Donate() {
+  const [data, setData] = useState<any>({}); // 전달 데이터
   const [value, setValue] = useState('');
 
+  const location = useLocation();
+  const state = location.state.data;
+  const remainAmount = state.price - state.currentPrice;
+
+  useEffect(() => {
+    const currentBalance = state.currentPrice + Number(value);
+    console.log(currentBalance);
+
+    setData({ ...state, currentPrice: currentBalance });
+  }, [value]);
   return (
     <Box>
       <DonateBox>
         <TitleBox title="목표 금액까지 남은 금액">
-          50,000원
+          {remainAmount}
           <div></div>
         </TitleBox>
         <TitleBox title="기부 금액">
@@ -57,15 +70,16 @@ export default function Donate() {
               setValue(e.target.value)
             }
           ></DonateInput>
-
           <PointBalance>보유 포인트 250,000원</PointBalance>
         </TitleBox>
       </DonateBox>
-      <Btn bgColor={colors.Blue} handleBtn={() => {}}>
-        <PressMotion>
-          <div style={{ width: '20.5rem' }}>기부 하기</div>
-        </PressMotion>
-      </Btn>
+      <Link to="/donateHome" state={{ data }}>
+        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+          <PressMotion>
+            <div style={{ width: '20.5rem' }}>기부 하기</div>
+          </PressMotion>
+        </Btn>
+      </Link>
     </Box>
   );
 }
