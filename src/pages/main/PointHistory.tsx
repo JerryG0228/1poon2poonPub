@@ -194,7 +194,7 @@ const dummyPointHistory = [
     id: 1,
     icon: usageIcon,
     name: '토스 뱅크',
-    date: '2025-03-05',
+    date: '2025-03-03',
     time: '10:59',
     newPoint: 1,
     currentPoint: 1,
@@ -204,7 +204,7 @@ const dummyPointHistory = [
     id: 2,
     icon: usageIcon,
     name: '토스 뱅크',
-    date: '2025-03-05',
+    date: '2025-03-03',
     time: '11:30',
     newPoint: 500,
     currentPoint: 501,
@@ -214,7 +214,7 @@ const dummyPointHistory = [
     id: 3,
     icon: usageIcon,
     name: '토스 뱅크',
-    date: '2025-03-05',
+    date: '2025-03-04',
     time: '14:20',
     newPoint: 3500,
     currentPoint: 4001,
@@ -224,7 +224,7 @@ const dummyPointHistory = [
     id: 4,
     icon: usageIcon,
     name: '토스 뱅크',
-    date: '2025-03-05',
+    date: '2025-03-04',
     time: '16:45',
     newPoint: 10000,
     currentPoint: 14001,
@@ -234,7 +234,7 @@ const dummyPointHistory = [
     id: 5,
     icon: usageIcon,
     name: '토스 뱅크',
-    date: '2025-03-05',
+    date: '2025-03-04',
     time: '19:10',
     newPoint: 2000,
     currentPoint: 12001,
@@ -245,7 +245,7 @@ const dummyPointHistory = [
     icon: usageIcon,
     name: '토스 뱅크',
     date: '2025-03-05',
-    time: '19:10',
+    time: '08:22',
     newPoint: 2000,
     currentPoint: 10001,
     type: 'spent',
@@ -255,7 +255,7 @@ const dummyPointHistory = [
     icon: usageIcon,
     name: '토스 뱅크',
     date: '2025-03-05',
-    time: '19:10',
+    time: '11:30',
     newPoint: 2000,
     currentPoint: 12001,
     type: 'earned',
@@ -265,7 +265,7 @@ const dummyPointHistory = [
     icon: usageIcon,
     name: '토스 뱅크',
     date: '2025-03-05',
-    time: '19:10',
+    time: '14:47',
     newPoint: 2000,
     currentPoint: 10001,
     type: 'spent',
@@ -275,7 +275,7 @@ const dummyPointHistory = [
     icon: usageIcon,
     name: '토스 뱅크',
     date: '2025-03-05',
-    time: '19:10',
+    time: '19:21',
     newPoint: 2000,
     currentPoint: 12001,
     type: 'earned',
@@ -288,9 +288,16 @@ export default function PointHistory() {
   const [clicked, setClicked] = useState(false);
   const [selectedValue, setSelectedValue] = useState('전체');
 
+  //필터링
   const handleClick = () => {
     setClicked(!clicked);
     console.log(clicked);
+  };
+
+  //클릭한 값으로 값이 바뀜
+  const handleSelect = (filter: string) => {
+    setSelectedValue(filter);
+    setClicked(!clicked);
   };
 
   //선택된 필터에 따라 내역을 필터링
@@ -303,14 +310,30 @@ export default function PointHistory() {
     return history;
   };
 
-  //클릭한 값으로 값이 바뀜
-  const handleSelect = (filter: string) => {
-    setSelectedValue(filter);
-    setClicked(!clicked);
-  };
-
   // 필터링된 내역 가져오기
   const filteredHistory = filterHistory(dummyPointHistory, selectedValue);
+
+  //최신순으로 정렬 후 날짜별 그룹화
+  const groupByDateSorted = (history: dummyPointHistoryProps[]) => {
+    const grouped: { [key: string]: dummyPointHistoryProps[] } = {};
+
+    history
+      .sort((a, b) => {
+        const dateA = new Date(`${a.date} ${a.time}`).getTime();
+        const dateB = new Date(`${b.date} ${b.time}`).getTime();
+        return dateB - dateA;
+      })
+      .forEach((item) => {
+        if (!grouped[item.date]) {
+          grouped[item.date] = [];
+        }
+        grouped[item.date].push(item);
+      });
+    return grouped;
+  };
+
+  const groupedHistory = groupByDateSorted(filteredHistory);
+  console.log(groupedHistory);
 
   //합산 포인트 계산
   const totalCurrentPoint = dummyPointHistory.reduce(
@@ -368,28 +391,32 @@ export default function PointHistory() {
           </SelectMenu>
         </FilterList>
         <PointUsage>
-          <PointDate>2월 17일</PointDate>
-          {filteredHistory.map((history) => {
-            return (
-              <PointUsageItem key={history.id}>
-                <UsageIcon>
-                  <img src={history.icon} />
-                </UsageIcon>
-                <UsageText>
-                  <div>{history.name}</div>
-                  <Time>{history.time}</Time>
-                </UsageText>
-                <UsagePoint>
-                  <NewPoint style={{ color: history.type === 'earned' ? colors.Red : colors.Blue }}>
-                    {history.type === 'earned'
-                      ? `+${Number(history.newPoint)}원`
-                      : `-${Number(history.newPoint)}원`}
-                  </NewPoint>
-                  <CurrentPoint>{history.currentPoint}원</CurrentPoint>
-                </UsagePoint>
-              </PointUsageItem>
-            );
-          })}
+          {Object.keys(groupedHistory).map((date) => (
+            <>
+              <PointDate>{date}</PointDate>
+              {groupedHistory[date].map((history) => (
+                <PointUsageItem key={history.id}>
+                  <UsageIcon>
+                    <img src={history.icon} />
+                  </UsageIcon>
+                  <UsageText>
+                    <div>{history.name}</div>
+                    <Time>{history.time}</Time>
+                  </UsageText>
+                  <UsagePoint>
+                    <NewPoint
+                      style={{ color: history.type === 'earned' ? colors.Red : colors.Blue }}
+                    >
+                      {history.type === 'earned'
+                        ? `+${Number(history.newPoint)}원`
+                        : `-${Number(history.newPoint)}원`}
+                    </NewPoint>
+                    <CurrentPoint>{history.currentPoint}원</CurrentPoint>
+                  </UsagePoint>
+                </PointUsageItem>
+              ))}
+            </>
+          ))}
         </PointUsage>
       </Wrap>
     </>
