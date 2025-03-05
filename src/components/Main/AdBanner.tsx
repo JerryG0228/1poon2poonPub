@@ -16,10 +16,10 @@ const SlideItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: lightgray;
   font-size: 20px;
   font-weight: bold;
   border-radius: 1rem;
+  margin-right: 10px;
   > img {
     height: 5rem;
     border-radius: 1rem;
@@ -36,6 +36,7 @@ function AutoPlaySlider() {
     autoplaySpeed: 4000,
     cssEase: 'linear',
     arrows: false,
+    variableWidth: true,
   };
 
   return (
