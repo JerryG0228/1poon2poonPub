@@ -18,20 +18,21 @@ const ImageBox = styled.div<{ bgColor: string }>`
   background-color: ${(props) => props.bgColor || 'transparent'};
   border-radius: 0.3rem;
   padding: 0.4rem 0.3rem 0.3rem;
-  width: 2rem;
-  height: 2rem;
+  width: 2.2rem;
+  height: 2.2rem;
 `;
 //이미지
 const Icon = styled.img`
-  width: 1.2rem;
-  height: 1rem;
+  width: 1.4rem;
+  height: 1.2rem;
 `;
 //영역 제목
 const Title = styled.div`
-  font-size: 0.5rem;
-  width: 3rem;
+  font-size: 0.7rem;
+  width: 3.2rem;
   height: 1rem;
   text-align: center;
+  font-weight: 500;
 `;
 
 interface Props {

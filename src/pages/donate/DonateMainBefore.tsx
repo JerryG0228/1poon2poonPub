@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
-import DonationImg from '@/assets/donatePage/Donation.png';
 import Lottie from 'lottie-react';
 import DonationAni from '@/assets/donatePage/Donation.json';
 import { Link } from 'react-router-dom';
@@ -40,10 +39,9 @@ export default function DonateMainBefore() {
   return (
     <Box>
       <StyledLottie animationData={DonationAni} loop={true} />
-      {/* <DonateImg src={DonationImg}></DonateImg> */}
       <Text>목표 금액을 설정하고 기부를 시작해볼까요?</Text>
-      <Link to="/donateCategory">
-        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+      <Link to="/donatecategory">
+        <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '7rem' }}>설정하러 가기</div>
           </PressMotion>
