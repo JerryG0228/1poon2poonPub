@@ -7,6 +7,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import DoveBadge from '@/assets/donatePage/DooveBadge.png';
+import EarthBadge from '@/assets/donatePage/EarthBadge.png';
+import BooksBadge from '@/assets/donatePage/BooksBadge.png';
+import HosBadge from '@/assets/donatePage/HosBadge.png';
 
 const Box = styled.div`
   display: flex;
@@ -48,6 +52,30 @@ const SelectCatgegory = styled.img`
   margin-bottom: 3.5rem;
 `;
 
+const BadgeBox = styled.div`
+  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.3rem;
+`;
+
+const Badge = styled.img`
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 3.7rem;
+  flex-basis: calc(25% - 1rem); //
+`;
+
+const Achive = [
+  { badge: DoveBadge, page: 'dovePage' },
+  { badge: EarthBadge, page: 'EarthPage' },
+  { badge: BooksBadge, page: 'EarthPage' },
+  { badge: HosBadge, page: 'EarthPage' },
+  { badge: HosBadge, page: 'EarthPage' },
+  { badge: HosBadge, page: 'EarthPage' },
+];
+
 export default function DonateHome() {
   const [data, setData] = useState<any>({}); // 전달 데이터
 
@@ -56,7 +84,7 @@ export default function DonateHome() {
   useEffect(() => {
     setData(location.state.data);
   }, [location.state.data]);
-  console.log(data);
+
   // data가 변경되었을 때, target, categoryImg, currentPrice를 안전하게 사용하기
   const target = data?.price || 0; // 목표 금액
   const categoryImg = data?.image || ''; // 기부 카테고리 이미지
@@ -81,7 +109,14 @@ export default function DonateHome() {
           </PressMotion>
         </Btn>
       </Link>
-      <TitleBox title="기부 뱃지">1</TitleBox>
+      <TitleBox title="기부 뱃지">
+        <BadgeBox>
+          {Achive.map((item) => {
+            return <Badge src={item.badge} alt="클릭 가능 이미지"></Badge>;
+          })}
+        </BadgeBox>
+      </TitleBox>
+      <div style={{ marginTop: '1rem' }}></div>
     </Box>
   );
 }
