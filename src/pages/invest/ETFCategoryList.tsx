@@ -71,6 +71,28 @@ function ETFCategoryList() {
   const [topETFs, setTopETFs] = useState<{ name: string; price: number; changePercent: string }[]>(
     [],
   );
+  const [watchlist, setWatchlist] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
+  });
+
+  // ✅ 관심 ETF 추가/삭제 함수
+  const toggleFavorite = (etfName: string) => {
+    setWatchlist((prevWatchlist) => {
+      const updatedWatchlist = prevWatchlist.includes(etfName)
+        ? prevWatchlist.filter((name) => name !== etfName)
+        : [...prevWatchlist, etfName];
+
+      localStorage.setItem('favoriteETFs', JSON.stringify(updatedWatchlist));
+
+      console.log('✅ 관심 ETF 업데이트됨:', updatedWatchlist); // 🚀 콘솔 확인
+      return updatedWatchlist;
+    });
+  };
+
+  // ✅ 관심 ETF 변경 감지 (스토리지에 저장)
+  useEffect(() => {
+    localStorage.setItem('favoriteETFs', JSON.stringify(watchlist));
+  }, [watchlist]);
 
   useEffect(() => {
     if (!category) return;
@@ -177,6 +199,8 @@ function ETFCategoryList() {
               changePercent={changePercent}
               isRecommend={false}
               onClick={() => navigate(`/etf-detail/${etf}`)}
+              onFavoriteToggle={toggleFavorite} // ✅ 관심 ETF 토글
+              isFavorite={watchlist.includes(etf)} // ✅ 현재 ETF가 관심 ETF인지 여부
             />
           );
         })}
