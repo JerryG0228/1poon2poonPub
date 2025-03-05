@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import DoveBadge from '@/assets/donatePage/DooveBadge.png';
+import DoveBadge from '@/assets/donatePage/DoveBadge.png';
 import EarthBadge from '@/assets/donatePage/EarthBadge.png';
 import BooksBadge from '@/assets/donatePage/BooksBadge.png';
 import HosBadge from '@/assets/donatePage/HosBadge.png';
@@ -89,6 +89,8 @@ export default function DonateHome() {
   const target = data?.price || 0; // 목표 금액
   const categoryImg = data?.image || ''; // 기부 카테고리 이미지
   const currentPrice = data?.currentPrice || 0; // 현재 기부 금액
+
+  const handleClick = () => {};
 
   return (
     <Box>
