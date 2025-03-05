@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import TitleBox from '@/components/TitleBox';
-import PressMotion from '@/components/PressMotion';
-import Btn from '@/components/Btn';
-import AnimatedComponent from '@/components/CoinRotate';
+import TitleBox from '@components/TitleBox';
+import PressMotion from '@components/PressMotion';
+import Btn from '@components/Btn';
+import AnimatedComponent from '@components/CoinRotate';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 import { colors } from '@/styles/colors';
