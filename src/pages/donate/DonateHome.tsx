@@ -264,7 +264,7 @@ export default function DonateHome() {
         <Link to="/donate" state={{ data }}>
           <Btn bgColor={colors.Navy} handleBtn={() => {}}>
             <PressMotion>
-              <div style={{ width: '18rem' }}>기부 포인트 교환</div>
+              <div style={{ width: '18.5rem' }}>기부 포인트 교환</div>
             </PressMotion>
           </Btn>
         </Link>

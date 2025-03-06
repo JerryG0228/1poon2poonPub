@@ -26,7 +26,7 @@ const GuageBar = styled.div<{ per: number }>`
   position: absolute;
   top: 0;
 
-  width: ${(props) => props.per}%;
+  width: ${(props) => (props.per * 90) / 100}%;
   height: 1.2rem;
   border-radius: 5rem;
 

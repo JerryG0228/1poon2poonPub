@@ -19,10 +19,6 @@ const Box = styled.div`
   height: auto;
 `;
 
-const DonateImg = styled.img`
-  width: 11rem;
-`;
-
 const StyledLottie = styled(Lottie)`
   width: 13rem;
   height: 13rem;
