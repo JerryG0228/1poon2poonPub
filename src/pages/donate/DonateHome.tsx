@@ -17,6 +17,9 @@ import DovePage from '@/assets/donatePage/DovePage.png';
 import styled, { keyframes } from 'styled-components';
 import PoonStapm from '@/assets/donatePage/PoonStamp.png';
 import { FaXmark } from 'react-icons/fa6';
+import DonateNonTitleBox from '@/components/Donate/DonateNonTitleBox';
+import { color } from 'framer-motion';
+import { colors } from '@/styles/colors';
 
 const TiltIn = keyframes`
   0% {
@@ -48,7 +51,7 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   font-weight: bold;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
 `;
 
@@ -257,14 +260,17 @@ export default function DonateHome() {
         </SubTitle>
       </TitleWrapper>
       <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
-      <Guage currDonate={currentPrice} targetDonate={target}></Guage>
-      <Link to="/donate" state={{ data }}>
-        <Btn bgColor={'#313845'} handleBtn={() => {}}>
-          <PressMotion>
-            <div style={{ width: '20.5rem' }}>기부 포인트 교환</div>
-          </PressMotion>
-        </Btn>
-      </Link>
+      <DonateNonTitleBox>
+        <Guage currDonate={currentPrice} targetDonate={target}></Guage>
+        <Link to="/donate" state={{ data }}>
+          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+            <PressMotion>
+              <div style={{ width: '18rem' }}>기부 포인트 교환</div>
+            </PressMotion>
+          </Btn>
+        </Link>
+      </DonateNonTitleBox>
+
       <TitleBox title="기부 뱃지">
         <BadgeBox>
           {Achive.map((item) => {

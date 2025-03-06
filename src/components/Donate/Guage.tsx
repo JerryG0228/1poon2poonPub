@@ -6,15 +6,20 @@ const Percentage = styled.div<{ per: number }>`
   font-weight: 500;
   font-size: 0.9rem;
 
-  width: ${(props) => props.per + 3}%;
   text-align: right;
 `;
 
+const GuageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+`;
+
 const GuageBg = styled.div`
-  width: 100%;
-  height: 0.8rem;
+  width: 90%;
+  height: 1.2rem;
   border-radius: 5rem;
-  background-color: #313845;
+  background-color: ${colors.Navy};
 `;
 
 const GuageBar = styled.div<{ per: number }>`
@@ -22,7 +27,7 @@ const GuageBar = styled.div<{ per: number }>`
   top: 0;
 
   width: ${(props) => props.per}%;
-  height: 0.8rem;
+  height: 1.2rem;
   border-radius: 5rem;
 
   background: linear-gradient(to right, #0064ff, #cbdfad);
@@ -38,10 +43,12 @@ export default function Guage({ currDonate, targetDonate }: Props) {
 
   return (
     <div>
-      <Percentage per={per}>{per}%</Percentage>
-      <div style={{ marginTop: '0.5rem', position: 'relative' }}>
-        <GuageBg />
-        <GuageBar per={per} />
+      <div style={{ position: 'relative' }}>
+        <GuageWrapper>
+          <GuageBg />
+          <GuageBar per={per} />
+          <Percentage per={per}>{per}%</Percentage>
+        </GuageWrapper>
       </div>
     </div>
   );
