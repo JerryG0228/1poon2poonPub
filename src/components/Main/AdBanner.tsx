@@ -12,7 +12,7 @@ const SliderContainer = styled.div`
 
 const SlideItem = styled.div`
   width: 23rem;
-  height: 5rem;
+  height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
