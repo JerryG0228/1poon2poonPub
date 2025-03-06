@@ -5,7 +5,7 @@ const Wrapper = styled.div<{ bgColor: string }>`
   display: flex;
   align-items: center;
   text-align: center;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
 
   width: fit-content;
   border-radius: 1rem;

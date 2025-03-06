@@ -5,7 +5,10 @@ import Btn from '@components/Btn';
 import AnimatedComponent from '@components/CoinRotate';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
+import oneCoinBack from '@/assets/Coin/100coinback.png';
+import fiveCoinBack from '@/assets/Coin/500coinback.png';
 import { colors } from '@/styles/colors';
+import FlipImage from '../FlipImage';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -82,11 +85,16 @@ export default function StampBoardSection({
                   coins[index] ? (
                     <AnimatedComponent key={index}>
                       <Circle>
-                        {coins[index] === 500 ? (
+                        {/* {coins[index] === 500 ? (
                           <img src={fiveCoin} alt="500원 동전" />
                         ) : (
                           <img src={oneCoin} alt="100원 동전" />
-                        )}
+                        )} */}
+                        <FlipImage
+                          srcA={coins[index] === 500 ? fiveCoin : oneCoin}
+                          srcB={coins[index] === 500 ? fiveCoinBack : oneCoinBack}
+                          alt={`${coins[index]}원 동전`}
+                        />
                       </Circle>
                     </AnimatedComponent>
                   ) : (

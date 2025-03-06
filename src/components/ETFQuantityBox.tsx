@@ -13,8 +13,8 @@ const Box = styled.div<{ $isRecommend: boolean }>`
 `;
 
 const ETFImg = styled.img`
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
 `;
 
 const ETFContentBox = styled.div`
@@ -38,7 +38,7 @@ const ETFContent = styled.div`
 `;
 
 const ETFPrice = styled.div`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: white;
 `;
 

@@ -19,12 +19,16 @@ import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
+import HomeLayout from './layout/HomeLayout';
+import DonateSetFinish from './pages/donate/DonateSetFinish';
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
+        <Route path="donatesetfinish" element={<DonateSetFinish />} /> {/* 기부 목표 설정 완료 페이지 */}
+
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
           <Route path="/pointhistory" element={<PointHistory />} />
@@ -33,6 +37,9 @@ function App() {
           <Route path="/donategoal" element={<DonateGoal />} /> {/* 기부 목표 금액 설정 페이지 */}
           <Route path="/donate" element={<Donate />} /> {/* 기부 메인 페이지 */}
           <Route path="/investbefore" element={<InvestMainBefore />} /> {/* 투자 페이지 */}
+          <Route path="/etf-detail/:symbol" element={<ETFDetail />} /> {/* ETF 상세 페이지 */}
+          <Route path="/InvestMainBefore" element={<Invest />} /> {/* 투자 시작 페이지 */}
+          <Route path="/investCategory" element={<InvestCategory />} /> {/* 투자 카테고리 페이지 */}
         </Route>
 
         <Route element={<DonateMainLayout />}>
@@ -40,15 +47,15 @@ function App() {
         </Route>
 
         <Route element={<PlusLayout />}>
-          <Route path="/InvestMainBefore" element={<Invest />} /> {/* 투자 시작 페이지 */}
-          <Route path="/investCategory" element={<InvestCategory />} /> {/* 투자 카테고리 페이지 */}
+          <Route path="/InvestmentHome" element={<InvestmentHome />} /> {/* 내 페이지 */}
+        </Route>
+
+        <Route element={<HomeLayout />}>
           <Route path="/etf-list" element={<ETFList />} /> {/* 내가 선택한 ETF 목록 */}
           <Route path="/etf-category/:category" element={<ETFCategoryList />} />{' '}
           {/* 투자 카테고리별 ETF 리스트 페이지 */}
-          <Route path="/etf-detail/:symbol" element={<ETFDetail />} /> {/* ETF 상세 페이지 */}
           <Route path="/etf-buy/:symbol" element={<ETFBuy />} /> {/* ETF 구매 페이지 */}
           <Route path="/etf-sell/:symbol" element={<ETFSell />} /> {/* ETF 판매 페이지 */}
-          <Route path="/InvestmentHome" element={<InvestmentHome />} /> {/* 내 페이지 */}
         </Route>
       </Routes>
     </BrowserRouter>

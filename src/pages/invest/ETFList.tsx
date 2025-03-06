@@ -18,22 +18,19 @@ const Container = styled.div`
   color: white;
 `;
 
-const Section = styled.div``;
 const CategoryList = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   gap: 10px;
   margin-top: 1rem;
 `;
 
-const CategoryHeader = styled.div<{ $active: boolean }>`
+const CategoryHeader = styled.div`
   font-size: 1rem;
   font-weight: bold;
   padding: 10px 0;
   display: flex;
   justify-content: space-between;
-  opacity: ${({ $active }) => ($active ? 1 : 1)}; /* 활성 상태 시 불투명도 조정 */
   cursor: pointer;
 `;
 
@@ -41,7 +38,7 @@ const ETFSection = styled.div`
   margin-top: 10px;
 `;
 
-const ETFTitle1 = styled.h2`
+const ETFTitle = styled.h2`
   font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 0.25rem;
@@ -93,30 +90,9 @@ function ETFList() {
   const [previousCloseData, setPreviousCloseData] = useState<{ [key: string]: number }>({});
   const [randomETFs, setRandomETFs] = useState<{ [key: string]: any[] }>({});
 
-  const [watchlist, setWatchlist] = useState<string[]>(() => {
-    return JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
-  });
-
-  // ✅ 관심 ETF 추가/삭제 함수
-  const toggleFavorite = (etfName: string) => {
-    setWatchlist((prevWatchlist) => {
-      const updatedWatchlist = prevWatchlist.includes(etfName)
-        ? prevWatchlist.filter((name) => name !== etfName)
-        : [...prevWatchlist, etfName];
-
-      localStorage.setItem('favoriteETFs', JSON.stringify(updatedWatchlist));
-
-      console.log('✅ 관심 ETF 업데이트됨:', updatedWatchlist); // 🚀 콘솔 확인
-      return updatedWatchlist;
-    });
-  };
-
-  useEffect(() => {
-    localStorage.setItem('favoriteETFs', JSON.stringify(watchlist));
-  }, [watchlist]);
-
   useEffect(() => {
     if (Object.keys(randomETFs).length > 0) return;
+
     console.log('📢 etfData 확인:', etfData);
     console.log('📢 선택된 카테고리:', selectedCategories);
 
@@ -132,7 +108,7 @@ function ETFList() {
 
       const etfs = etfData[englishCategory] ?? [];
 
-      if (etfs && etfs.length > 0) {
+      if (etfs.length > 0) {
         selectedETFData[category] = [...etfs].sort(() => 0.5 - Math.random()).slice(0, 3);
       } else {
         selectedETFData[category] = [];
@@ -185,72 +161,64 @@ function ETFList() {
 
   return (
     <Container>
-      <Section>
-        <ETFTitle1>관심 ETF 카테고리</ETFTitle1>
-        <CategoryList>
-          {selectedCategories.map((category) => (
-            <EtfCategoryBox
-              key={category}
-              title={category}
-              imageSrc={categoryImages[category]} // ✅ 이미지 추가
-              active={true} // ✅ 선택된 카테고리는 항상 활성화된 상태
-              onClick={() => console.log(`${category} 클릭됨`)}
-            />
-          ))}
-        </CategoryList>
-      </Section>
+      <ETFTitle>관심 ETF 카테고리</ETFTitle>
+      <CategoryList>
+        {selectedCategories.map((category) => (
+          <EtfCategoryBox
+            key={category}
+            title={category}
+            imageSrc={categoryImages[category]}
+            active={true}
+            onClick={() => console.log(`${category} 클릭됨`)}
+          />
+        ))}
+      </CategoryList>
 
       <Divider />
 
-      <Section>
-        <ETFTitle1>추천 ETF</ETFTitle1>
-        {selectedCategories.map((category) => (
-          <ETFSection key={category}>
-            <CategoryHeader>
-              <EtfCategoryBox
-                title={category}
-                imageSrc={categoryImages[category]} // ✅ 이미지 추가
-                active={true} // ✅ 선택된 카테고리는 항상 활성화된 상태
-                onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
+      <ETFTitle>추천 ETF</ETFTitle>
+      {selectedCategories.map((category) => (
+        <ETFSection key={category}>
+          <CategoryHeader>
+            <EtfCategoryBox
+              title={category}
+              imageSrc={categoryImages[category]}
+              active={true}
+              onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
+            />
+            <MoreButton
+              onClick={() =>
+                navigate(`/etf-category/${categoryMapping[category]}`, { state: { category } })
+              }
+            >
+              {'+'}
+            </MoreButton>
+          </CategoryHeader>
+
+          {(expandedCategory === category
+            ? etfData[categoryMapping[category]]
+            : randomETFs[category]
+          )?.map((etf) => {
+            const currentPrice = prices[etf] ?? 0;
+            const previousClose = previousCloseData[etf] ?? 0;
+            const priceChange = currentPrice - previousClose;
+            const changePercent =
+              previousClose !== 0 ? ((priceChange / previousClose) * 100).toFixed(1) : '0.0';
+
+            return (
+              <ETFBox
+                key={etf}
+                name={etf}
+                price={currentPrice}
+                transPrice={priceChange}
+                changePercent={changePercent}
+                isRecommend={true}
+                onClick={() => navigate(`/etf-detail/${etf}`)}
               />
-              {/* ✅ 올바른 이미지 사용 */}
-
-              <MoreButton
-                onClick={() =>
-                  navigate(`/etf-category/${categoryMapping[category]}`, { state: { category } })
-                }
-              >
-                {'+'}
-              </MoreButton>
-            </CategoryHeader>
-
-            {(expandedCategory === category
-              ? etfData[categoryMapping[category]]
-              : randomETFs[category]
-            )?.map((etf) => {
-              const currentPrice = prices[etf] ?? 0;
-              const previousClose = previousCloseData[etf] ?? 0;
-              const priceChange = currentPrice - previousClose;
-              const changePercent =
-                previousClose !== 0 ? ((priceChange / previousClose) * 100).toFixed(1) : '0.0';
-
-              return (
-                <ETFBox
-                  key={etf}
-                  name={etf}
-                  price={currentPrice}
-                  transPrice={priceChange}
-                  changePercent={changePercent}
-                  isRecommend={true}
-                  onClick={() => navigate(`/etf-detail/${etf}`)} // ✅ 클릭 시 이동
-                  onFavoriteToggle={toggleFavorite} // ✅ 관심 ETF 토글
-                  isFavorite={watchlist.includes(etf)} // ✅ 현재 ETF가 관심 ETF인지 여부
-                />
-              );
-            })}
-          </ETFSection>
-        ))}
-      </Section>
+            );
+          })}
+        </ETFSection>
+      ))}
     </Container>
   );
 }

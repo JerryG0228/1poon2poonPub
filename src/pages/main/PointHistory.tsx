@@ -3,11 +3,11 @@ import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import downArrowImage from '@/assets/Main/DownArrow.png';
 import usageIcon from '@/assets/Main/UsageIcon.png';
 import { useState } from 'react';
 import blueCheckImage from '@/assets/Main/check_blue.png';
 import greyCheckImage from '@/assets/Main/check_grey.png';
+import { IoIosArrowDown } from 'react-icons/io';
 
 const Wrap = styled.div`
   display: flex;
@@ -369,7 +369,7 @@ export default function PointHistory() {
         <PointFilter>
           <PointNav>
             <CurrentNav onClick={handleClick}>{selectedValue}</CurrentNav>
-            <img src={downArrowImage} />
+            <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
           </PointNav>
         </PointFilter>
         <Overlay clicked={clicked}></Overlay>
