@@ -27,8 +27,8 @@ const RunAway = keyframes` //easeInBack - 도망가는 모션 cubic-bezier(0.68,
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateX(-1000px) rotate(-540deg);
-            transform: translateX(-1000px) rotate(-540deg);
+    -webkit-transform: translateX(-800px) rotate(-540deg);
+            transform: translateX(-800px) rotate(-540deg);
     opacity: 0;
   }
 `;
@@ -157,6 +157,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const [isClickable, setIsClickable] = useState<boolean>(true); // 캐릭터 클릭 가능 상태
   const [animate, setAnimate] = useState<string>('');
   const [isLottieVisible, setIsLottieVisible] = useState(false);
+  const [getCoinCount, setGetCoinCount] = useState<number>(5);
   const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
   const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
 
@@ -185,10 +186,17 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const handleClick = () => {
     if (!isClickable) return;
     const randomAni = weightedRandomAnimation();
-    setAnimate('Jello');
     setIsActive(true); // 애니메이션 시작
     setIsClickable(false); // 애니메이션 종료 후 클릭 가능
-    setIsLottieVisible(true);
+
+    //코인 얻을 때 까진 말랑말랑, 횟수 끝나면 랜덤 모션 재생
+    if (getCoinCount > 0) {
+      setIsLottieVisible(true);
+      setGetCoinCount(getCoinCount - 1);
+      setAnimate('Jello');
+    } else {
+      setAnimate(randomAni);
+    }
 
     setTimeout(() => {
       setIsActive(false); // 애니메이션 종료
@@ -219,7 +227,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
 
   return (
     <Wrapper>
-      <div style={{ marginBottom: '5rem', marginLeft: '20rem' }}>4/4</div>
+      <div style={{ marginBottom: '5rem', marginLeft: '20rem' }}>{getCoinCount}/5</div>
       <div style={{ position: 'relative' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
