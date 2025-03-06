@@ -1,6 +1,6 @@
 import Btn from '@/components/Btn';
-import CharacterBox from '@/components/CharacterBox';
-import Guage from '@/components/Guage';
+import CharacterBox from '@/components/Donate/CharacterBox';
+import Guage from '@/components/Donate/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import { useEffect, useState } from 'react';
@@ -73,7 +73,7 @@ const DonationTitle = styled.div`
 `;
 
 const CategoryName = styled.div`
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #c5c5c5;
 `;
 
@@ -81,7 +81,7 @@ const SubTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
 `;
 
 const TotalWrapper = styled.div`
@@ -103,16 +103,16 @@ const Unit = styled.div`
 const CategoryWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.5rem;
 `;
 
 const CategoryTitle = styled.div`
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: white;
 `;
 
 const SelectCatgegory = styled.img`
-  width: 1.2rem;
+  width: 1.3rem;
 `;
 
 const BadgeBox = styled.div`

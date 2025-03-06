@@ -88,9 +88,9 @@ const CharacterAni = styled.div<{ isActive: boolean; animate: string }>`
     `}
 `;
 
-const CharacterImg = styled.img`
-  width: 10rem;
-  height: 10rem;
+const CharacterImg = styled.img<{ growth: number }>`
+  width: ${(props) => props.growth + 'rem'};
+  height: ${(props) => props.growth + 'rem'};
 `;
 
 const CharacterName = styled.div`
@@ -131,6 +131,7 @@ interface Props {
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const [character, setCharacter] = useState<string>('');
+  const [growth, setGrowth] = useState<number>(10);
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
   const [isClickable, setIsClickable] = useState<boolean>(true); // 캐릭터 클릭 가능 상태
   const [animate, setAnimate] = useState<string>('');
@@ -155,13 +156,19 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   }, [currDonate, spring]);
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
-    console.log(targetDonate);
-    console.log(per);
-    if (per < 25) setCharacter(lv1);
-    else if (per >= 25 && per < 50) setCharacter(lv2);
-    else if (per >= 50 && per < 75) setCharacter(lv3);
-    else if (per >= 75 && per < 100) setCharacter(lv4);
-    else setCharacter(present);
+    if (per < 25) {
+      setCharacter(lv1);
+      setGrowth(7.5);
+    } else if (per >= 25 && per < 50) {
+      setCharacter(lv2);
+      setGrowth(8.5);
+    } else if (per >= 50 && per < 75) {
+      setCharacter(lv3);
+      setGrowth(10);
+    } else if (per >= 75 && per < 100) {
+      setCharacter(lv4);
+      setGrowth(12);
+    } else setCharacter(present);
   }, [currDonate, targetDonate]);
 
   return (
@@ -171,7 +178,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : (
           <CharacterAni isActive={isActive} animate={animate} onClick={handleClick}>
-            <CharacterImg src={character} alt="캐릭터" />
+            <CharacterImg src={character} alt="캐릭터" growth={12} />
           </CharacterAni>
         )}
       </div>
