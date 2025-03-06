@@ -52,15 +52,33 @@ const Box = styled.div`
   margin-top: 1.5rem;
 `;
 
+const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+`;
+
+const MainTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const DonationTitle = styled.div`
   font-size: 1rem;
   color: #c5c5c5;
 `;
 
-const TitleWrapper = styled.div`
+const CategoryName = styled.div`
+  font-size: 0.8rem;
+  color: #c5c5c5;
+`;
+
+const SubTitle = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5rem;
 `;
 
 const TotalWrapper = styled.div`
@@ -79,9 +97,19 @@ const Unit = styled.div`
   margin-top: 0.3rem;
 `;
 
+const CategoryWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+`;
+
+const CategoryTitle = styled.div`
+  font-size: 0.9rem;
+  color: white;
+`;
+
 const SelectCatgegory = styled.img`
-  width: 1.5rem;
-  margin-bottom: 3.5rem;
+  width: 1.2rem;
 `;
 
 const BadgeBox = styled.div`
@@ -213,13 +241,21 @@ export default function DonateHome() {
   return (
     <Box>
       <TitleWrapper>
-        <DonationTitle>지금까지 기부한 금액</DonationTitle>
-        <TotalWrapper>
-          <TotalDonation>100,000</TotalDonation>
-          <Unit>원</Unit>
-        </TotalWrapper>
+        <MainTitle>
+          <DonationTitle>지금까지 기부한 금액</DonationTitle>
+          <CategoryName>카테고리</CategoryName>
+        </MainTitle>
+        <SubTitle>
+          <TotalWrapper>
+            <TotalDonation>100,000</TotalDonation>
+            <Unit>원</Unit>
+          </TotalWrapper>
+          <CategoryWrapper>
+            <CategoryTitle>교육 인권</CategoryTitle>
+            <SelectCatgegory src={categoryImg} alt="기부 카테고리" />
+          </CategoryWrapper>
+        </SubTitle>
       </TitleWrapper>
-      {categoryImg && <SelectCatgegory src={categoryImg} alt="기부 카테고리" />}
       <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
       <Guage currDonate={currentPrice} targetDonate={target}></Guage>
       <Link to="/donate" state={{ data }}>

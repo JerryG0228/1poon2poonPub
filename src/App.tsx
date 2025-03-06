@@ -4,6 +4,7 @@ import Main from './pages/main/Main';
 import DonateMainBefore from './pages/donate/DonateMainBefore';
 import DefaultLayout from './layout/DefaultLayout';
 import PlusLayout from './layout/PlusLayout';
+import DonateMainLayout from './layout/DonateMainLayout';
 import InvestCategory from '@/pages/invest/Category'; // 투자 카테고리 선택
 import ETFList from '@/pages/invest/ETFList'; // ETF 목록
 import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
@@ -30,9 +31,12 @@ function App() {
           <Route path="/donatebefore" element={<DonateMainBefore />} /> {/* 기부 초기 페이지 */}
           <Route path="/donatecategory" element={<DonateCategory />} /> {/* 기부 카테고리 페이지 */}
           <Route path="/donategoal" element={<DonateGoal />} /> {/* 기부 목표 금액 설정 페이지 */}
-          <Route path="/donatehome" element={<DonateHome />} /> {/* 기부 메인 페이지 */}
           <Route path="/donate" element={<Donate />} /> {/* 기부 메인 페이지 */}
           <Route path="/investbefore" element={<InvestMainBefore />} /> {/* 투자 페이지 */}
+        </Route>
+
+        <Route element={<DonateMainLayout />}>
+          <Route path="/donatehome" element={<DonateHome />} /> {/* 기부 메인 페이지 */}
         </Route>
 
         <Route element={<PlusLayout />}>
