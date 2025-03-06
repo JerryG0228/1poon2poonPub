@@ -32,23 +32,6 @@ const RunAway = keyframes` //easeInBack - 도망가는 모션 cubic-bezier(0.68,
   }
 `;
 
-const Enter = keyframes` // 등장 모션
-  0% {
-    -webkit-transform: translateY(600px) rotateX(30deg) scale(0);
-            transform: translateY(600px) rotateX(30deg) scale(0);
-    -webkit-transform-origin: 50% 100%;
-            transform-origin: 50% 100%;
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0) rotateX(0) scale(1);
-            transform: translateY(0) rotateX(0) scale(1);
-    -webkit-transform-origin: 50% -1400px;
-            transform-origin: 50% -1400px;
-    opacity: 1;
-  }
-`;
-
 const Jump = keyframes` // 점프 모션
   0% {
     transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태 */
@@ -88,12 +71,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
 `;
 
 const aniList: Record<string, Keyframes> = {
   Jello: Jello,
-  Enter: Enter,
   RunAway: RunAway,
   Jump: Jump,
 };
@@ -107,25 +88,15 @@ const CharacterAni = styled.div<{ isActive: boolean; animate: string }>`
     `}
 `;
 
-const ButtonBox = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const ActionButton = styled.button<{ percent: number }>`
-  background-color: transparent;
-  color: ${colors.White};
-  border: none;
-  font-size: 1rem;
-
-  &:disabled {
-    color: ${colors.Grey};
-  }
-`;
-
 const CharacterImg = styled.img`
   width: 10rem;
   height: 10rem;
+`;
+
+const CharacterName = styled.div`
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
 `;
 
 const TextBox = styled.div`
@@ -195,44 +166,16 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
 
   return (
     <Wrapper>
-      <ButtonBox>
-        <ActionButton onClick={() => handleClick('Jello')} disabled={character == present}>
-          말랑말랑
-        </ActionButton>
-        <span>|</span>
-        <ActionButton
-          onClick={() => handleClick('RunAway')}
-          disabled={per < 25 || character == present}
-          percent={per}
-        >
-          도망가기
-        </ActionButton>
-        <span>|</span>
-        <ActionButton
-          onClick={() => handleClick('Jump')}
-          disabled={per < 50 || character == present}
-          percent={per}
-        >
-          점프하기
-        </ActionButton>
-        <span>|</span>
-        <ActionButton
-          onClick={() => handleClick('Enter')}
-          disabled={per < 75 || character == present}
-          percent={per}
-        >
-          날아오기
-        </ActionButton>
-      </ButtonBox>
       <div style={{ position: 'relative' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : (
-          <CharacterAni isActive={isActive} animate={animate}>
+          <CharacterAni isActive={isActive} animate={animate} onClick={handleClick}>
             <CharacterImg src={character} alt="캐릭터" />
           </CharacterAni>
         )}
       </div>
+      <CharacterName>한푼이</CharacterName>
       <TextBox>
         <Donate>{animatedValue}</Donate>
         <Target>/</Target>
