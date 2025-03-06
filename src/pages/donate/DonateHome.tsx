@@ -1,6 +1,6 @@
 import Btn from '@/components/Btn';
-import CharacterBox from '@/components/CharacterBox';
-import Guage from '@/components/Guage';
+import CharacterBox from '@/components/Donate/CharacterBox';
+import Guage from '@/components/Donate/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,9 @@ import DovePage from '@/assets/donatePage/DovePage.png';
 import styled, { keyframes } from 'styled-components';
 import PoonStapm from '@/assets/donatePage/PoonStamp.png';
 import { FaXmark } from 'react-icons/fa6';
+import DonateNonTitleBox from '@/components/Donate/DonateNonTitleBox';
+import { color } from 'framer-motion';
+import { colors } from '@/styles/colors';
 
 const TiltIn = keyframes`
   0% {
@@ -48,8 +51,20 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   font-weight: bold;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+`;
+
+const MainTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const DonationTitle = styled.div`
@@ -57,10 +72,15 @@ const DonationTitle = styled.div`
   color: #c5c5c5;
 `;
 
-const TitleWrapper = styled.div`
+const CategoryName = styled.div`
+  font-size: 1rem;
+  color: #c5c5c5;
+`;
+
+const SubTitle = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const TotalWrapper = styled.div`
@@ -79,9 +99,19 @@ const Unit = styled.div`
   margin-top: 0.3rem;
 `;
 
+const CategoryWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const CategoryTitle = styled.div`
+  font-size: 1.2rem;
+  color: white;
+`;
+
 const SelectCatgegory = styled.img`
-  width: 1.5rem;
-  margin-bottom: 3.5rem;
+  width: 1.3rem;
 `;
 
 const BadgeBox = styled.div`
@@ -213,22 +243,33 @@ export default function DonateHome() {
   return (
     <Box>
       <TitleWrapper>
-        <DonationTitle>지금까지 기부한 금액</DonationTitle>
-        <TotalWrapper>
-          <TotalDonation>100,000</TotalDonation>
-          <Unit>원</Unit>
-        </TotalWrapper>
+        <MainTitle>
+          <DonationTitle>지금까지 기부한 금액</DonationTitle>
+          <CategoryName>카테고리</CategoryName>
+        </MainTitle>
+        <SubTitle>
+          <TotalWrapper>
+            <TotalDonation>100,000</TotalDonation>
+            <Unit>원</Unit>
+          </TotalWrapper>
+          <CategoryWrapper>
+            <CategoryTitle>교육 인권</CategoryTitle>
+            <SelectCatgegory src={categoryImg} alt="기부 카테고리" />
+          </CategoryWrapper>
+        </SubTitle>
       </TitleWrapper>
-      {categoryImg && <SelectCatgegory src={categoryImg} alt="기부 카테고리" />}
       <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
-      <Guage currDonate={currentPrice} targetDonate={target}></Guage>
-      <Link to="/donate" state={{ data }}>
-        <Btn bgColor={'#313845'} handleBtn={() => {}}>
-          <PressMotion>
-            <div style={{ width: '20.5rem' }}>기부 포인트 교환</div>
-          </PressMotion>
-        </Btn>
-      </Link>
+      <DonateNonTitleBox>
+        <Guage currDonate={currentPrice} targetDonate={target}></Guage>
+        <Link to="/donate" state={{ data }}>
+          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+            <PressMotion>
+              <div style={{ width: '18.5rem' }}>기부 포인트 교환</div>
+            </PressMotion>
+          </Btn>
+        </Link>
+      </DonateNonTitleBox>
+
       <TitleBox title="기부 뱃지">
         <BadgeBox>
           {Achive.map((item) => {
