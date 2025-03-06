@@ -55,7 +55,7 @@ const Jump = keyframes` // 점프 모션
     transform: scale3d(0.8, 0.9, 1) translateY(-7rem); /* 점프 후반 */
   }
   70% {
-    transform: scale3d(0.7, 1, 1) translateY(-10rem); /* 점프 최고점 */
+    transform: scale3d(0.7, 1, 1) translateY(-9rem); /* 점프 최고점 */
   }
   80% {
     transform: scale3d(0.8, 1, 1) translateY(-8rem); /* 점프 하강 */
@@ -138,17 +138,39 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
   const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
 
+  //랜덤 애니메이션 설정
+  const weightedRandomAnimation = () => {
+    const weightedAnimations = [
+      { name: 'Jello', weight: 55 }, // 55% 확률
+      { name: 'RunAway', weight: 10 }, // 10% 확률
+      { name: 'Jump', weight: 35 }, // 35% 확률
+    ];
+
+    const totalWeight = weightedAnimations.reduce((acc, anim) => acc + anim.weight, 0);
+    const randomNum = Math.random() * totalWeight;
+
+    let cumulativeWeight = 0;
+    for (const anim of weightedAnimations) {
+      cumulativeWeight += anim.weight;
+      if (randomNum < cumulativeWeight) {
+        return anim.name;
+      }
+    }
+    return 'Jello'; // 기본값
+  };
+
   // 애니메이션 트리거 함수
-  const handleClick = (animate: string) => {
+  const handleClick = () => {
     if (!isClickable) return;
-    setAnimate(animate);
+    const randomAni = weightedRandomAnimation();
+    setAnimate(randomAni);
     setIsActive(true); // 애니메이션 시작
     setIsClickable(false); // 애니메이션 종료 후 클릭 가능
 
     setTimeout(() => {
       setIsActive(false); // 애니메이션 종료
       setIsClickable(true); // 애니메이션 종료 후 클릭 가능
-    }, 1500); // 1.3초 후 애니메이션 후 상태 초기화
+    }, 1300); // 1.3초 후 애니메이션 후 상태 초기화
   };
 
   useEffect(() => {
@@ -173,11 +195,12 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
 
   return (
     <Wrapper>
+      <div style={{ marginBottom: '5rem', marginLeft: '20rem' }}>4/4</div>
       <div style={{ position: 'relative' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : (
-          <CharacterAni isActive={isActive} animate={animate} onClick={handleClick}>
+          <CharacterAni isActive={isActive} animate={animate} onClick={() => handleClick()}>
             <CharacterImg src={character} alt="캐릭터" growth={12} />
           </CharacterAni>
         )}
