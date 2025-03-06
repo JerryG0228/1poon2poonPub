@@ -8,7 +8,7 @@ interface Props {
 const StyledMotion = styled(motion.div)`
   width: fit-content;
   padding: 0.5rem 0;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
 `;
 
 export default function PressMotion({ children }: Props) {

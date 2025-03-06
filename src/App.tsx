@@ -19,12 +19,15 @@ import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 import HomeLayout from './layout/HomeLayout';
+import DonateSetFinish from './pages/donate/DonateSetFinish';
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
+        <Route path="donatesetfinish" element={<DonateSetFinish />} /> {/* 기부 목표 설정 완료 페이지 */}
+
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
           <Route path="/pointhistory" element={<PointHistory />} />

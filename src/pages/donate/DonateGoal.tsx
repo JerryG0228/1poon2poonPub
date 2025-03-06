@@ -116,7 +116,7 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatehome" state={{ data }} disabled={(price ?? 0) < 10000}>
+      <CustomLink to="/donatesetfinish" state={{ data }} disabled={(price ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>설정하기</div>
