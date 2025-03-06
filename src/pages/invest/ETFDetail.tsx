@@ -4,6 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import CandlestickChart from '@/components/CandlestickChart';
 import { useNavigate } from 'react-router-dom';
+import { FaHeart } from 'react-icons/fa'; // ✅ 하트 아이콘 추가
 
 const Container = styled.div`
   /* margin-left: 0.5rem; */
@@ -162,6 +163,16 @@ const LargeBtn2 = styled.button`
   border-radius: 1.3rem; /* ✅ 버튼 둥글게 */
   background-color: #0064ff;
 `;
+/* ✅ 하트(즐겨찾기) 버튼 스타일 추가 */
+const FavoriteButton = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+`;
 
 function ETFDetail() {
   const navigate = useNavigate();
@@ -171,6 +182,9 @@ function ETFDetail() {
   const [buyVolume, setBuyVolume] = useState(7500);
   const [sellVolume, setSellVolume] = useState(3500);
   const [timeRange, setTimeRange] = useState<'1d' | '1w' | '1mo' | '1y'>('1d');
+
+  // ✅ 관심 ETF 상태 추가
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -187,6 +201,27 @@ function ETFDetail() {
     }
     fetchData();
   }, [symbol]);
+
+  // ✅ 관심 ETF 목록 불러오기
+  useEffect(() => {
+    const favoriteETFs = JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
+    setIsFavorite(favoriteETFs.includes(symbol));
+  }, [symbol]);
+
+  // ✅ 관심 ETF 토글 함수
+  const toggleFavorite = () => {
+    const favoriteETFs = JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
+
+    let updatedFavorites;
+    if (favoriteETFs.includes(symbol)) {
+      updatedFavorites = favoriteETFs.filter((item: string) => item !== symbol);
+    } else {
+      updatedFavorites = [...favoriteETFs, symbol];
+    }
+
+    localStorage.setItem('favoriteETFs', JSON.stringify(updatedFavorites));
+    setIsFavorite(!isFavorite);
+  };
 
   if (error)
     return (
@@ -224,6 +259,10 @@ function ETFDetail() {
     max !== min ? ((value - min) / (max - min)) * 100 : 50;
   return (
     <Container>
+      <FavoriteButton onClick={toggleFavorite}>
+        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} /> {/* ❤️ 빨강 / 🤍 회색 */}
+      </FavoriteButton>
+
       <EtfTile>{symbol} ETF</EtfTile>
       <CurPrice>{currentPrice} USD</CurPrice>
       <ChangeBox>
