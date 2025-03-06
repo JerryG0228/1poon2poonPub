@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import NonTitleBox from '@components/NonTitleBox';
 import cashbackImage from '@/assets/Main/CashbackIcon.png';
-import vectorImage from '@/assets/Main/Vector.png';
+import { IoIosArrowForward } from 'react-icons/io';
 
 const CashBackWrap = styled.div`
   display: flex;
@@ -42,12 +42,6 @@ const CashBacArrowWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  > img {
-    justify-content: center;
-    align-items: center;
-    width: 0.8rem;
-    height: 1.1rem;
-  }
 `;
 
 interface PointHistorySectionProps {
@@ -67,7 +61,7 @@ export default function PointHistorySection({ point }: PointHistorySectionProps)
             <Point>캐시백 포인트</Point>
           </CashBackTextWrap>
           <CashBacArrowWrap>
-            <img src={vectorImage} />
+            <IoIosArrowForward style={{ fontSize: '1.5rem' }} />
           </CashBacArrowWrap>
         </CashBackWrap>
       </NonTitleBox>
