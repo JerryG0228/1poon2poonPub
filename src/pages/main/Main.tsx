@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CashbackSection from '@/components/Main/CashbackSection';
 import StampBoardSection from '@/components/Main/StampBoardSection';
 import PointHistorySection from '@/components/Main/PointHistorySection';
 import CashbackServiceSection from '@/components/Main/CashbackServiceSection';
 import AdBanner from '@/components/Main/AdBanner';
+import baseAxios from '@/apis/axiosInstance';
+import useStore from '@/store/User';
 
 const MainWrap = styled.div`
   display: flex;
@@ -35,6 +37,19 @@ const dummyData: Payment[] = [
 ];
 
 export default function Main() {
+  // 전역 상태 관리
+  const {
+    username,
+    points,
+    badges,
+    interests,
+    goalCategory,
+    totalDonations,
+    goalDonations,
+    currentDonations,
+    setDefault,
+  } = useStore();
+
   //더미 데이터 가져오기
   const [data, setData] = useState(dummyData);
 
@@ -82,6 +97,38 @@ export default function Main() {
   };
 
   //코인 10개 차면 다른 화면 띄우기 지우기
+
+  // 초기 유저 데이터 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      await baseAxios
+        .get(`/user/tester`)
+        .then((res) => res.data)
+        .then((data) => {
+          setDefault(
+            data.name,
+            data.cashback.points,
+            data.donate.badges,
+            data.invest.category,
+            data.donate.category,
+            data.donate.totalAmount,
+            data.donate.targetAmount,
+            data.donate.currentAmount,
+          );
+          console.log({
+            name: username,
+            points: points,
+            badges: badges,
+            interests: interests,
+            goalCategory: goalCategory,
+            totalDonations: totalDonations,
+            goalDonations: goalDonations,
+            currentDonations: currentDonations,
+          });
+        });
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
