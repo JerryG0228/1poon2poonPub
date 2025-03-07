@@ -42,9 +42,10 @@ const FlipWrapper = styled.div<{ isFlipping: boolean }>`
 `;
 
 const CoinImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 13vw;
+  height: 13vw;
+  max-width: 56px;
+  max-height: 56px;
 `;
 
 interface FlipImageProps {
