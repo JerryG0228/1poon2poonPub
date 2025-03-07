@@ -164,7 +164,7 @@ interface PointHistoryProps {
 }
 
 export default function PointHistory() {
-  const { points, pointHistory, badges, goalDonations } = useStore();
+  const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
   //클릭 됐는지 안됐는지
   const [clicked, setClicked] = useState(false);
@@ -218,7 +218,6 @@ export default function PointHistory() {
   };
 
   const groupedHistory = groupByDateSorted(filteredHistory);
-  console.log(groupedHistory);
 
   //overlay 클릭시 필터 닫기
   const closeFilter = () => {
@@ -227,6 +226,9 @@ export default function PointHistory() {
 
   //상황별 기부 페이지 이동 경로
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
+
+  //상황별 투자 페이지 이동 경로
+  const investLink = interestsStock.length === 0 ? '/donatebefore' : '/donate';
 
   return (
     <>
@@ -245,7 +247,7 @@ export default function PointHistory() {
                 </PressMotion>
               </Btn>
             </Link>
-            <Link to={'/investbefore'}>
+            <Link to={investLink}>
               <Btn bgColor={colors.Navy} handleBtn={() => {}}>
                 <PressMotion>
                   <div style={{ width: '10rem' }}>투자하러 가기</div>
