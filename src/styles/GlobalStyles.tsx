@@ -16,6 +16,11 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     overflow-y: auto;
     background-color: ${colors.Navy};
+    
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-use-select: none;
+    user-select: none;
   }
 
   ul, ol {
@@ -28,10 +33,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #root {
-    max-width: 393px;
+    max-width: 430px;
     height: 100%;
     margin: 0 auto;
-    padding: 1rem;
     background-color: ${colors.Navy};
     color: ${colors.White};
   }

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import CashbackSection from '@/components/Main/CashbackSection';
 import StampBoardSection from '@/components/Main/StampBoardSection';
 import PointHistorySection from '@/components/Main/PointHistorySection';
@@ -8,12 +8,12 @@ import CashbackServiceSection from '@/components/Main/CashbackServiceSection';
 import AdBanner from '@/components/Main/AdBanner';
 import baseAxios from '@/apis/axiosInstance';
 import useStore from '@/store/User';
-import PressMotion from '@/components/PressMotion';
 
 const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 0 1rem;
 `;
 
 export default function Main() {
@@ -26,26 +26,13 @@ export default function Main() {
     pointHistory,
     badges,
     interests,
+    ownedStocks,
     goalCategory,
     totalDonations,
     goalDonations,
     currentDonations,
     setDefault,
   } = useStore();
-
-  // const coins = data.map((payment) => {
-  //   return payment.amount >= 10000 ? 500 : 100;
-  // });
-
-  // console.log(coins);
-
-  // const totalPoint = coins.reduce((total, cur) => total + cur, 0);
-
-  // console.log(totalPoint);
-
-  // const isFull = coins.length === 10;
-
-  //코인 10개 차면 다른 화면 띄우기 지우기
 
   // 초기 유저 데이터 가져오기
   useEffect(() => {
@@ -62,6 +49,7 @@ export default function Main() {
             data.cashback.history,
             data.donate.badges,
             data.invest.category,
+            data.invest.ownedETFs,
             data.donate.category,
             data.donate.totalAmount,
             data.donate.targetAmount,
@@ -75,6 +63,7 @@ export default function Main() {
             pointHistory: pointHistory,
             badges: badges,
             interests: interests,
+            ownedETFs: ownedStocks,
             goalCategory: goalCategory,
             totalDonations: totalDonations,
             goalDonations: goalDonations,
@@ -84,6 +73,10 @@ export default function Main() {
     };
     fetchData();
   }, []);
+
+  console.log(currentDonations);
+  console.log(goalDonations);
+  console.log(ownedStocks);
 
   return (
     <MainWrap>

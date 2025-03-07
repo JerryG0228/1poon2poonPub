@@ -10,6 +10,25 @@ import { IoIosArrowDown } from 'react-icons/io';
 import useStore from '@/store/User';
 import PointBox from '@/components/PointBox';
 
+const GreyBox = styled.div`
+  background-color: #313845;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: 100%;
+`;
+
+const NavyLine = styled.div`
+  background-color: ${colors.Navy};
+  position: absolute;
+  top: 15rem;
+  width: 430px;
+  height: 1.2rem;
+`;
+
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -21,7 +40,7 @@ const Wrap = styled.div`
 const HistoryTop = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 3rem 0;
+  padding: 3rem 1rem;
   gap: 3rem;
 `;
 
@@ -32,8 +51,9 @@ const TopText = styled.div`
 
 const Balance = styled.div`
   display: flex;
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-size: 2.3rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
 `;
 
 const Button = styled.div`
@@ -45,8 +65,6 @@ const Button = styled.div`
 const PointFilter = styled.div`
   display: flex;
   flex-direction: row;
-  height: 2rem;
-  margin: 2rem 0 0.5rem 0;
 `;
 
 const PointNav = styled.div`
@@ -54,11 +72,16 @@ const PointNav = styled.div`
   font-size: 1rem;
   height: 2rem;
   align-items: center;
-  gap: 1rem;
   > img {
     width: 1rem;
     height: 0.6rem;
   }
+`;
+
+const NavContent = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 `;
 
 const CurrentNav = styled.div`
@@ -141,7 +164,7 @@ interface PointHistoryProps {
 }
 
 export default function PointHistory() {
-  const { points, pointHistory } = useStore();
+  const { points, pointHistory, badges, goalDonations } = useStore();
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
   //클릭 됐는지 안됐는지
   const [clicked, setClicked] = useState(false);
@@ -197,71 +220,89 @@ export default function PointHistory() {
   const groupedHistory = groupByDateSorted(filteredHistory);
   console.log(groupedHistory);
 
+  //overlay 클릭시 필터 닫기
+  const closeFilter = () => {
+    setClicked(false);
+  };
+
+  //상황별 기부 페이지 이동 경로
+  const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
+
   return (
     <>
+      <GreyBox />
       <Wrap>
         <HistoryTop>
           <TopText>
             <div>캐시백 포인트</div>
-            <Balance>{points}원</Balance>
+            <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
-            <Link to={'/donatebefore'}>
+            <Link to={donateLink}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '9rem' }}>기부하러 가기</div>
+                  <div style={{ width: '10rem' }}>기부하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
             <Link to={'/investbefore'}>
               <Btn bgColor={colors.Navy} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '9rem' }}>투자하러 가기</div>
+                  <div style={{ width: '10rem' }}>투자하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
           </Button>
         </HistoryTop>
-        <PointFilter>
-          <PointNav>
-            <CurrentNav onClick={handleClick}>{selectedValue}</CurrentNav>
-            <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
-          </PointNav>
-        </PointFilter>
-        <Overlay clicked={clicked}></Overlay>
-        <FilterList clicked={clicked}>
-          <SelectTitle>내역 선택</SelectTitle>
-          <SelectMenu>
-            {filterOptions.map((item) => {
-              return (
-                <SelectItem
-                  key={item}
-                  onClick={() => handleSelect(item)}
-                  isSelected={selectedValue === item}
-                >
-                  <div>{item}</div>
-                  <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />
-                </SelectItem>
-              );
-            })}
-          </SelectMenu>
-        </FilterList>
-        <PointUsage>
-          {Object.keys(groupedHistory).map((date) => (
-            <>
-              <PointDate>{date}</PointDate>
-              {groupedHistory[date].map((history) => (
-                <PointBox
-                  key={history._id}
-                  time={history.time}
-                  name={history.name}
-                  point={history.finalPoints}
-                  transPoint={history.change}
-                />
-              ))}
-            </>
-          ))}
-        </PointUsage>
+
+        <NavyLine />
+
+        <div style={{ padding: '1rem' }}>
+          <PointFilter>
+            <PointNav onClick={handleClick}>
+              <PressMotion>
+                <NavContent>
+                  <CurrentNav>{selectedValue}</CurrentNav>
+                  <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
+                </NavContent>
+              </PressMotion>
+            </PointNav>
+          </PointFilter>
+          <Overlay clicked={clicked} onClick={closeFilter} />
+          <FilterList clicked={clicked}>
+            <SelectTitle>내역 선택</SelectTitle>
+            <SelectMenu>
+              {filterOptions.map((item) => {
+                return (
+                  <SelectItem
+                    key={item}
+                    onClick={() => handleSelect(item)}
+                    isSelected={selectedValue === item}
+                  >
+                    <div>{item}</div>
+                    <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />
+                  </SelectItem>
+                );
+              })}
+            </SelectMenu>
+          </FilterList>
+          <PointUsage>
+            {Object.keys(groupedHistory).map((date) => (
+              <>
+                <PointDate>{date}</PointDate>
+                {groupedHistory[date].map((history) => (
+                  <PointBox
+                    key={history._id}
+                    time={history.time}
+                    name={history.name}
+                    point={history.finalPoints}
+                    transPoint={history.change}
+                  />
+                ))}
+              </>
+            ))}
+          </PointUsage>
+        </div>
       </Wrap>
     </>
   );
