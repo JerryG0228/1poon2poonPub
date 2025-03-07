@@ -18,8 +18,14 @@ import styled, { keyframes } from 'styled-components';
 import PoonStapm from '@/assets/donatePage/PoonStamp.png';
 import { FaXmark } from 'react-icons/fa6';
 import DonateNonTitleBox from '@/components/Donate/DonateNonTitleBox';
-import { color } from 'framer-motion';
+import wave from '@/assets/donatePage/wave.json';
+import paper from '@/assets/donatePage/paper.json';
+import feather from '@/assets/donatePage/feather.json';
+import cloud from '@/assets/donatePage/cloud.json';
+import beat from '@/assets/donatePage/beat.json';
+import dog from '@/assets/donatePage/dog.json';
 import { colors } from '@/styles/colors';
+import Lottie from 'lottie-react';
 
 const FadeIn = keyframes`
   0% {
@@ -134,16 +140,16 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1.5rem;
   z-index: 2;
   animation: ${FadeIn} 0.5s ease-in-out;
 `;
 
 const ModalButton = styled.button`
-  position: relative;
-  top: -18rem; /* 왼쪽 위에 배치 */
-  left: 20.3rem;
+  margin-left: 19rem;
   background-color: transparent;
   color: white;
   font-size: 1.5rem;
@@ -153,7 +159,7 @@ const ModalButton = styled.button`
 
 const ModalContent = styled.div<{ certSrc: URL }>`
   position: relative; /* 부모 div에 상대 위치 설정 */
-  right: 0.8rem;
+
   border-radius: 3px;
   width: 21rem;
   height: 30rem;
@@ -207,6 +213,22 @@ const StampImg = styled.img`
   width: 1.2rem;
 `;
 
+const ModalContentWrapper = styled.div`
+  position: relative; /* Lottie를 absolute로 띄우기 위한 기준 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledLottie = styled(Lottie)`
+  position: absolute;
+  top: 23rem; /* 모달 콘텐츠 위로 이동 */
+  left: 13rem;
+  width: 8rem;
+  height: 8rem;
+  z-index: 3; /* 모달 콘텐츠보다 위에 배치 */
+`;
+
 const Achive = [
   { badge: DoveBadge, page: DovePage },
   { badge: EarthBadge, page: EarthPage },
@@ -227,9 +249,9 @@ export default function DonateHome() {
   }, [location.state.data]);
 
   // data가 변경되었을 때, target, categoryImg, currentPrice를 안전하게 사용하기
-  const target = data?.price || 0; // 목표 금액
+  const target: number = data?.price || 0; // 목표 금액
   const categoryImg = data?.image || ''; // 기부 카테고리 이미지
-  const currentPrice = data?.currentPrice || 0; // 현재 기부 금액
+  const currentPrice: number = data?.currentPrice || 0; // 현재 기부 금액
 
   const handleClick = (item: any) => {
     setSelectBadge(item);
@@ -237,7 +259,7 @@ export default function DonateHome() {
   };
   const closeModal = () => setIsOpen(false);
   const badgePage = selectBadge?.page || DovePage;
-
+  console.log(currentPrice, target);
   return (
     <Box>
       <TitleWrapper>
@@ -259,13 +281,23 @@ export default function DonateHome() {
       <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
       <DonateNonTitleBox>
         <Guage currDonate={currentPrice} targetDonate={target}></Guage>
-        <Link to="/donate" state={{ data }}>
-          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
-            <PressMotion>
-              <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
-            </PressMotion>
-          </Btn>
-        </Link>
+        {currentPrice == target ? (
+          <Link to="/donate" state={{ data }}>
+            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+              <PressMotion>
+                <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
+              </PressMotion>
+            </Btn>
+          </Link>
+        ) : (
+          <Link to="/donate" state={{ data }}>
+            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+              <PressMotion>
+                <div style={{ width: '19.5rem' }}>기부 하러 가기</div>
+              </PressMotion>
+            </Btn>
+          </Link>
+        )}
       </DonateNonTitleBox>
 
       <TitleBox title="기부 뱃지">
@@ -287,30 +319,35 @@ export default function DonateHome() {
           <ModalButton onClick={closeModal}>
             <FaXmark />
           </ModalButton>
-          <ModalContent certSrc={badgePage}>
-            <CertWrapper>
-              <CertTitle>기 부 증 서</CertTitle>
-              <InfoBox>
-                <hr />
-                이름 기부자님 <br />
-                카테고리
-                <br /> 기부금: 금액
-                <hr />
-              </InfoBox>
-              <Content>
-                따뜻한 마음으로 보내주신 기부금은 <br />
-                소외된 이웃과 어려운 가정을 돕고
-                <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
-                <br /> 이에 깊은 존경과 감사의 마음을 담아
-                <br /> 이 증서를 드립니다.
-              </Content>
-              <DayInfo>2025년 03월 18일</DayInfo>
-              <Footer>
-                토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
-                <StampImg src={PoonStapm}></StampImg>
-              </Footer>
-            </CertWrapper>
-          </ModalContent>
+          <ModalContentWrapper>
+            <ModalContent certSrc={badgePage}>
+              <CertWrapper>
+                <div style={{ display: 'flex' }}>
+                  <CertTitle>기 부 증 서</CertTitle>
+                  <StyledLottie animationData={feather} loop={true}></StyledLottie>
+                </div>
+                <InfoBox>
+                  <hr />
+                  이름 기부자님 <br />
+                  카테고리
+                  <br /> 기부금: 금액
+                  <hr />
+                </InfoBox>
+                <Content>
+                  따뜻한 마음으로 보내주신 기부금은 <br />
+                  소외된 이웃과 어려운 가정을 돕고
+                  <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
+                  <br /> 이에 깊은 존경과 감사의 마음을 담아
+                  <br /> 이 증서를 드립니다.
+                </Content>
+                <DayInfo>2025년 03월 18일</DayInfo>
+                <Footer>
+                  토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
+                  <StampImg src={PoonStapm}></StampImg>
+                </Footer>
+              </CertWrapper>
+            </ModalContent>
+          </ModalContentWrapper>
         </ModalWrapper>
       )}
     </Box>
