@@ -21,7 +21,8 @@ const PointMainContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
 `;
 const PointTitle = styled.div`
   font-size: 1rem;
@@ -29,7 +30,7 @@ const PointTitle = styled.div`
 const PointRecord = styled.div<{ transPoint: number }>`
   font-size: 1rem;
   color: ${(props) => {
-    return props.transPoint && props.transPoint > 0 ? colors.Red : colors.Blue;
+    return props.transPoint && props.transPoint > 0 ? colors.LightBlue : colors.White;
   }};
 `;
 const PointSubContent = styled.div`
@@ -40,10 +41,12 @@ const PointSubContent = styled.div`
   color: #c5c5c5;
 `;
 const PointTime = styled.div`
-  font-size: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 300;
 `;
 const PointAcc = styled.div`
-  font-size: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 300;
 `;
 
 interface Props {
