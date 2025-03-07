@@ -49,16 +49,12 @@ const VerticalLine = styled.div`
   background: linear-gradient(to bottom, #313845 0%, #4d596e 24%, #4d596e 73%, #313845 100%);
 `;
 
-const InvestProgressRate = styled.div`
+const InvestProgressRate = styled.div<{ totalReturnPercent: number }>`
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 0.2rem;
-  color: ${colors.Red};
+  color: ${(props) => (props.totalReturnPercent > 0 ? colors.Red : colors.LightBlue)};
 `;
-interface CashbackServiceProps {
-  currentDonations: number;
-  goalDonations: number;
-}
 
 export default function CashbackServiceSection() {
   const { currentDonations, goalDonations, badges } = useStore();
@@ -70,8 +66,24 @@ export default function CashbackServiceSection() {
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
   //주식 총 수익율 계산
-  //1.구매 가격
-  // const quantity = 가격 / (1 + 변화율);
+  //주식 데이터 가져오기
+  const stock = useStore((state) => state.ownedStocks);
+
+  //총 손실/수익율 계산
+  const totalLoss = stock.reduce((acc, etf) => {
+    return acc + etf.quantity * etf.price * (etf.changeRate / 100);
+  }, 0);
+
+  console.log(`totalLoss;${totalLoss}`);
+
+  //총 투자 금액 계산
+  const totalInvestment = stock.reduce((acc, etf) => {
+    return acc + etf.quantity * etf.price;
+  }, 0);
+
+  //이율 퍼센트 계산
+  const totalReturnPercent = totalInvestment !== 0 ? totalLoss / totalInvestment : 0;
+  console.log(totalReturnPercent);
 
   return (
     <>
@@ -92,9 +104,15 @@ export default function CashbackServiceSection() {
           <Link to="/investBefore">
             <PressMotion>
               <Button varient="invest">
-                <img src={investUpImage} />
+                <img src={totalReturnPercent > 0 ? investUpImage : investDownImage} />
                 <ServiceTitle>투자</ServiceTitle>
-                <InvestProgressRate varient="invest">+1.2%</InvestProgressRate>
+                <InvestProgressRate varient="invest">
+                  {!stock
+                    ? '0%'
+                    : totalReturnPercent > 0
+                      ? `+${totalReturnPercent.toFixed(1)}%`
+                      : `${totalReturnPercent.toFixed(1)}%`}
+                </InvestProgressRate>
               </Button>
             </PressMotion>
           </Link>
