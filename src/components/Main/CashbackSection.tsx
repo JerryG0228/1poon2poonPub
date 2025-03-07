@@ -15,21 +15,21 @@ const StampBoxWrap = styled.div`
 `;
 
 interface CashbackSectionProps {
-  todayCategories: string[];
+  cashbackStatus: { [key: string]: boolean };
 }
 
-export default function CashbackSection({ todayCategories }: CashbackSectionProps) {
+export default function CashbackSection({ cashbackStatus }: CashbackSectionProps) {
   //가져온 카테고리의 active를 false로 변경
   const stampItem = [
-    { title: '대중교통', img: busImage, bgColor: '#6E5230' },
-    { title: '택시', img: taxiImage, bgColor: '#6E5E3D' },
-    { title: '편의점', img: storeImage, bgColor: '#304E7B' },
-    { title: '영화관', img: movieImage, bgColor: '#683745' },
-    { title: '패스트푸드', img: foodImage, bgColor: '#6E5E3D' },
-    { title: '카페', img: cafeImage, bgColor: '#264038' },
+    { title: '대중교통', key: 'bus', img: busImage, bgColor: '#6E5230' },
+    { title: '택시', key: 'taxi', img: taxiImage, bgColor: '#6E5E3D' },
+    { title: '편의점', key: 'convenienceStore', img: storeImage, bgColor: '#304E7B' },
+    { title: '영화관', key: 'movie', img: movieImage, bgColor: '#683745' },
+    { title: '패스트푸드', key: 'fastFood', img: foodImage, bgColor: '#6E5E3D' },
+    { title: '카페', key: 'cafe', img: cafeImage, bgColor: '#264038' },
   ].map((stamp) => ({
     ...stamp, //stampItem의 title, img, bgColor의 값 가져오기
-    active: !todayCategories.includes(stamp.title),
+    active: cashbackStatus[stamp.key],
   }));
 
   return (
