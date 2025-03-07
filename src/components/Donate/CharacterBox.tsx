@@ -7,12 +7,13 @@ import lv2 from '@/assets/characterbox/25.png';
 import lv3 from '@/assets/characterbox/50.png';
 import lv4 from '@/assets/characterbox/75.png';
 import present from '@/assets/characterbox/present.json';
+import coin from '@/assets/characterbox/getCoin.json';
 import Lottie from 'lottie-react';
 
 const Jello = keyframes` // 모찌 리액션
   0% { transform: scale3d(1,1,1); }
-  30% { transform: scale3d(0.65,1.35,1); }
-  40% { transform: scale3d(1.35,0.65,1); }
+  30% { transform: scale3d(0.65,1.15,1); }
+  40% { transform: scale3d(1.15,0.65,1); }
   50% { transform: scale3d(0.75,1.25,1); }
   65% { transform: scale3d(1.05,0.95,1); }
   75% { transform: scale3d(0.95,1.05,1); }
@@ -26,26 +27,9 @@ const RunAway = keyframes` //easeInBack - 도망가는 모션 cubic-bezier(0.68,
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateX(-1000px) rotate(-540deg);
-            transform: translateX(-1000px) rotate(-540deg);
+    -webkit-transform: translateX(-800px) rotate(-540deg);
+            transform: translateX(-800px) rotate(-540deg);
     opacity: 0;
-  }
-`;
-
-const Enter = keyframes` // 등장 모션
-  0% {
-    -webkit-transform: translateY(600px) rotateX(30deg) scale(0);
-            transform: translateY(600px) rotateX(30deg) scale(0);
-    -webkit-transform-origin: 50% 100%;
-            transform-origin: 50% 100%;
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0) rotateX(0) scale(1);
-            transform: translateY(0) rotateX(0) scale(1);
-    -webkit-transform-origin: 50% -1400px;
-            transform-origin: 50% -1400px;
-    opacity: 1;
   }
 `;
 
@@ -72,7 +56,7 @@ const Jump = keyframes` // 점프 모션
     transform: scale3d(0.8, 0.9, 1) translateY(-7rem); /* 점프 후반 */
   }
   70% {
-    transform: scale3d(0.7, 1, 1) translateY(-10rem); /* 점프 최고점 */
+    transform: scale3d(0.7, 1, 1) translateY(-9rem); /* 점프 최고점 */
   }
   80% {
     transform: scale3d(0.8, 1, 1) translateY(-8rem); /* 점프 하강 */
@@ -88,17 +72,23 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+`;
+
+const StyledLottie = styled(Lottie)<{ growth: number }>`
+  width: ${(props) => props.growth * 2 + 'rem'};
+  height: ${(props) => props.growth * 2 + 'rem'};
 `;
 
 const aniList: Record<string, Keyframes> = {
   Jello: Jello,
-  Enter: Enter,
   RunAway: RunAway,
   Jump: Jump,
 };
 
 const CharacterAni = styled.div<{ isActive: boolean; animate: string }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   ${(props) =>
     props.isActive &&
     css`
@@ -107,25 +97,27 @@ const CharacterAni = styled.div<{ isActive: boolean; animate: string }>`
     `}
 `;
 
-const ButtonBox = styled.div`
-  display: flex;
-  gap: 1rem;
+const CharacterImg = styled.img<{ growth: number }>`
+  width: ${(props) => props.growth + 'rem'};
+  height: ${(props) => props.growth + 'rem'};
+  z-index: 10;
 `;
 
-const ActionButton = styled.button<{ percent: number }>`
-  background-color: transparent;
-  color: ${colors.White};
-  border: none;
-  font-size: 1rem;
-
-  &:disabled {
-    color: ${colors.Grey};
-  }
+const CharacterName = styled.div`
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
 `;
 
-const CharacterImg = styled.img`
-  width: 10rem;
-  height: 10rem;
+const LottieWrapper = styled.div<{ isVisible: boolean; growth: number }>`
+  position: absolute; /* 캐릭터 이미지 위에 배치 */
+  top: 50%;
+  left: 52%;
+  transform: translate(-50%, -50%); /* 중앙 정렬 */
+  width: ${(props) => props.growth * 2 + 'rem'};
+  height: ${(props) => props.growth * 2 + 'rem'};
+  pointer-events: none; /* Lottie 애니메이션이 클릭 이벤트를 방해하지 않도록 설정 */
+  z-index: 0;
 `;
 
 const TextBox = styled.div`
@@ -160,23 +152,57 @@ interface Props {
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const [character, setCharacter] = useState<string>('');
+  const [growth, setGrowth] = useState<number>(10);
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
   const [isClickable, setIsClickable] = useState<boolean>(true); // 캐릭터 클릭 가능 상태
   const [animate, setAnimate] = useState<string>('');
+  const [isLottieVisible, setIsLottieVisible] = useState(false);
+  const [getCoinCount, setGetCoinCount] = useState<number>(5);
   const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
   const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
 
+  //랜덤 애니메이션 설정
+  const weightedRandomAnimation = () => {
+    const weightedAnimations = [
+      { name: 'Jello', weight: 55 }, // 55% 확률
+      { name: 'RunAway', weight: 10 }, // 10% 확률
+      { name: 'Jump', weight: 35 }, // 35% 확률
+    ];
+
+    const totalWeight = weightedAnimations.reduce((acc, anim) => acc + anim.weight, 0);
+    const randomNum = Math.random() * totalWeight;
+
+    let cumulativeWeight = 0;
+    for (const anim of weightedAnimations) {
+      cumulativeWeight += anim.weight;
+      if (randomNum < cumulativeWeight) {
+        return anim.name;
+      }
+    }
+    return 'Jello'; // 기본값
+  };
+
   // 애니메이션 트리거 함수
-  const handleClick = (animate: string) => {
+  const handleClick = () => {
     if (!isClickable) return;
-    setAnimate(animate);
+    const randomAni = weightedRandomAnimation();
     setIsActive(true); // 애니메이션 시작
     setIsClickable(false); // 애니메이션 종료 후 클릭 가능
+
+    //코인 얻을 때 까진 말랑말랑, 횟수 끝나면 랜덤 모션 재생
+    if (getCoinCount > 0) {
+      setIsLottieVisible(true);
+      setGetCoinCount(getCoinCount - 1);
+      setAnimate('Jello');
+    } else {
+      setAnimate(randomAni);
+    }
 
     setTimeout(() => {
       setIsActive(false); // 애니메이션 종료
       setIsClickable(true); // 애니메이션 종료 후 클릭 가능
-    }, 1500); // 1.3초 후 애니메이션 후 상태 초기화
+      setIsLottieVisible(false); // 일정 시간이 지나면 Lottie 숨김
+    }, 1000); // 1.3초 후 애니메이션 후 상태 초기화
   };
 
   useEffect(() => {
@@ -184,55 +210,39 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   }, [currDonate, spring]);
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
-    console.log(targetDonate);
-    console.log(per);
-    if (per < 25) setCharacter(lv1);
-    else if (per >= 25 && per < 50) setCharacter(lv2);
-    else if (per >= 50 && per < 75) setCharacter(lv3);
-    else if (per >= 75 && per < 100) setCharacter(lv4);
-    else setCharacter(present);
-  }, [currDonate, targetDonate]);
+    if (per < 25) {
+      setCharacter(lv1);
+      setGrowth(7);
+    } else if (per >= 25 && per < 50) {
+      setCharacter(lv2);
+      setGrowth(8);
+    } else if (per >= 50 && per < 75) {
+      setCharacter(lv3);
+      setGrowth(10);
+    } else if (per >= 75 && per < 100) {
+      setCharacter(lv4);
+      setGrowth(12);
+    } else setCharacter(present);
+  }, [currDonate, targetDonate, character]);
 
   return (
     <Wrapper>
-      <ButtonBox>
-        <ActionButton onClick={() => handleClick('Jello')} disabled={character == present}>
-          말랑말랑
-        </ActionButton>
-        <span>|</span>
-        <ActionButton
-          onClick={() => handleClick('RunAway')}
-          disabled={per < 25 || character == present}
-          percent={per}
-        >
-          도망가기
-        </ActionButton>
-        <span>|</span>
-        <ActionButton
-          onClick={() => handleClick('Jump')}
-          disabled={per < 50 || character == present}
-          percent={per}
-        >
-          점프하기
-        </ActionButton>
-        <span>|</span>
-        <ActionButton
-          onClick={() => handleClick('Enter')}
-          disabled={per < 75 || character == present}
-          percent={per}
-        >
-          날아오기
-        </ActionButton>
-      </ButtonBox>
+      <div style={{ marginBottom: '5rem', marginLeft: '20rem' }}>{getCoinCount}/5</div>
       <div style={{ position: 'relative' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : (
-          <CharacterAni isActive={isActive} animate={animate}>
-            <CharacterImg src={character} alt="캐릭터" />
-          </CharacterAni>
+          <>
+            <LottieWrapper>
+              {isLottieVisible && <StyledLottie animationData={coin} loop={true} growth={growth} />}
+            </LottieWrapper>
+            <CharacterAni isActive={isActive} animate={animate} onClick={() => handleClick()}>
+              <CharacterImg src={character} alt="캐릭터" growth={growth} />
+            </CharacterAni>
+          </>
         )}
       </div>
+      <CharacterName>한푼이</CharacterName>
       <TextBox>
         <Donate>{animatedValue}</Donate>
         <Target>/</Target>
