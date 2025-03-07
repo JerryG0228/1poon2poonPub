@@ -220,11 +220,16 @@ export default function PointHistory() {
   const groupedHistory = groupByDateSorted(filteredHistory);
   console.log(groupedHistory);
 
+  //overlay 클릭시 필터 닫기
+  const closeFilter = () => {
+    setClicked(false);
+  };
+
   return (
     <>
       <GreyBox />
       <Wrap>
-        <HistoryTop>  
+        <HistoryTop>
           <TopText>
             <div>캐시백 포인트</div>
             <Balance>{points.toLocaleString()}원</Balance>
@@ -249,50 +254,52 @@ export default function PointHistory() {
 
         <NavyLine />
 
-        <PointFilter>
-          <PointNav onClick={handleClick}>
-            <PressMotion>
-              <NavContent>
-                <CurrentNav>{selectedValue}</CurrentNav>
-                <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
-              </NavContent>
-            </PressMotion>
-          </PointNav>
-        </PointFilter>
-        <Overlay clicked={clicked}></Overlay>
-        <FilterList clicked={clicked}>
-          <SelectTitle>내역 선택</SelectTitle>
-          <SelectMenu>
-            {filterOptions.map((item) => {
-              return (
-                <SelectItem
-                  key={item}
-                  onClick={() => handleSelect(item)}
-                  isSelected={selectedValue === item}
-                >
-                  <div>{item}</div>
-                  <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />
-                </SelectItem>
-              );
-            })}
-          </SelectMenu>
-        </FilterList>
-        <PointUsage>
-          {Object.keys(groupedHistory).map((date) => (
-            <>
-              <PointDate>{date}</PointDate>
-              {groupedHistory[date].map((history) => (
-                <PointBox
-                  key={history._id}
-                  time={history.time}
-                  name={history.name}
-                  point={history.finalPoints}
-                  transPoint={history.change}
-                />
-              ))}
-            </>
-          ))}
-        </PointUsage>
+        <div style={{ padding: '1rem' }}>
+          <PointFilter>
+            <PointNav onClick={handleClick}>
+              <PressMotion>
+                <NavContent>
+                  <CurrentNav>{selectedValue}</CurrentNav>
+                  <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
+                </NavContent>
+              </PressMotion>
+            </PointNav>
+          </PointFilter>
+          <Overlay clicked={clicked} onClick={closeFilter} />
+          <FilterList clicked={clicked}>
+            <SelectTitle>내역 선택</SelectTitle>
+            <SelectMenu>
+              {filterOptions.map((item) => {
+                return (
+                  <SelectItem
+                    key={item}
+                    onClick={() => handleSelect(item)}
+                    isSelected={selectedValue === item}
+                  >
+                    <div>{item}</div>
+                    <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />
+                  </SelectItem>
+                );
+              })}
+            </SelectMenu>
+          </FilterList>
+          <PointUsage>
+            {Object.keys(groupedHistory).map((date) => (
+              <>
+                <PointDate>{date}</PointDate>
+                {groupedHistory[date].map((history) => (
+                  <PointBox
+                    key={history._id}
+                    time={history.time}
+                    name={history.name}
+                    point={history.finalPoints}
+                    transPoint={history.change}
+                  />
+                ))}
+              </>
+            ))}
+          </PointUsage>
+        </div>
       </Wrap>
     </>
   );

@@ -13,6 +13,7 @@ const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 0 1rem;
 `;
 
 export default function Main() {
