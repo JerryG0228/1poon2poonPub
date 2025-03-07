@@ -183,7 +183,10 @@ const CoinWrapper = styled.div`
 
 const GetCoin = styled.div<{ isClicked: boolean }>`
   display: ${(props) => (props.isClicked ? 'inline-block' : 'none')};
-
+  background-color: ${colors.Grey};
+  border-radius: 0.5rem;
+  width: 2rem;
+  text-align: center;
   animation: ${CoinMessage} 1.3s ease-in-out;
 `;
 

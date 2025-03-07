@@ -324,7 +324,7 @@ export default function DonateHome() {
               <CertWrapper>
                 <div style={{ display: 'flex' }}>
                   <CertTitle>기 부 증 서</CertTitle>
-                  <StyledLottie animationData={feather} loop={true}></StyledLottie>
+                  <StyledLottie animationData={paper} loop={true}></StyledLottie>
                 </div>
                 <InfoBox>
                   <hr />
