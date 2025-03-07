@@ -51,7 +51,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       await baseAxios
-        .get(`/user/tester`)
+        .get(`/user/ooinl77 `)
         .then((res) => res.data)
         .then((data) => {
           setDefault(

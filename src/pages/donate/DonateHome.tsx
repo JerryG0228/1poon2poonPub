@@ -5,15 +5,12 @@ import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-import DoveBadge from '@/assets/donatePage/DoveBadge.png';
-import EarthBadge from '@/assets/donatePage/EarthBadge.png';
-import BooksBadge from '@/assets/donatePage/BooksBadge.png';
-import HosBadge from '@/assets/donatePage/HosBadge.png';
 import EarthPage from '@/assets/donatePage/EarthPage.png';
 import BooksPage from '@/assets/donatePage/BooksPage.png';
 import HosPage from '@/assets/donatePage/HosPage.png';
 import DovePage from '@/assets/donatePage/DovePage.png';
+import HomePage from '@/assets/donatePage/HomePage.png';
+import DogPage from '@/assets/donatePage/DogPage.png';
 import styled, { keyframes } from 'styled-components';
 import PoonStapm from '@/assets/donatePage/PoonStamp.png';
 import { FaXmark } from 'react-icons/fa6';
@@ -24,8 +21,17 @@ import feather from '@/assets/donatePage/feather.json';
 import cloud from '@/assets/donatePage/cloud.json';
 import beat from '@/assets/donatePage/beat.json';
 import dog from '@/assets/donatePage/dog.json';
+import booksImage from '@/assets/categorybox/books_image.png';
+import doveImage from '@/assets/categorybox/dove_image.png';
+import dogImage from '@/assets/categorybox/dog_image.png';
+import earthImage from '@/assets/categorybox/earth_image.png';
+import homeImage from '@/assets/categorybox/home_img.png';
+import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import { colors } from '@/styles/colors';
 import Lottie from 'lottie-react';
+import useStore from '@/store/User';
+import { aw } from 'framer-motion/dist/types.d-6pKw1mTI';
+import baseAxios from '@/apis/axiosInstance';
 
 const FadeIn = keyframes`
   0% {
@@ -33,19 +39,6 @@ const FadeIn = keyframes`
   }
   100% {
     opacity: 1;
-  }
-`;
-
-const FadeOut = keyframes`
-  0% {
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateZ(-80px);
-            transform: translateZ(-80px);
-    opacity: 0;
   }
 `;
 
@@ -229,29 +222,33 @@ const StyledLottie = styled(Lottie)`
   z-index: 3; /* 모달 콘텐츠보다 위에 배치 */
 `;
 
-const Achive = [
-  { badge: DoveBadge, page: DovePage },
-  { badge: EarthBadge, page: EarthPage },
-  { badge: BooksBadge, page: BooksPage },
-  { badge: HosBadge, page: HosPage },
-  { badge: HosBadge, page: HosPage },
-  { badge: HosBadge, page: HosPage },
-];
+const Achive: Record<string, string> = {
+  '교육 문화': BooksPage,
+  '공익 인권': DovePage,
+  '국제 구호': EarthPage,
+  '사회 복지': HomePage,
+  '의료 건강': HosPage,
+  '환경 동물': DogPage,
+};
+
+// 기부중인 카테고리 이미지 주소 매핑
+const categoryList: Record<string, string> = {
+  '교육 문화': booksImage,
+  '공익 인권': doveImage,
+  '국제 구호': earthImage,
+  '사회 복지': homeImage,
+  '의료 건강': hospitalImage,
+  '환경 동물': dogImage,
+};
 
 export default function DonateHome() {
-  const [data, setData] = useState<any>({}); // 전달 데이터
+  const { totalDonations, goalDonations, currentDonations, goalCategory, badges } = useStore();
+  const [donatePage, setDonatePage] = useState<Object | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
-  const location = useLocation();
 
-  useEffect(() => {
-    setData(location.state.data);
-  }, [location.state.data]);
-
-  // data가 변경되었을 때, target, categoryImg, currentPrice를 안전하게 사용하기
-  const target: number = data?.price || 0; // 목표 금액
-  const categoryImg = data?.image || ''; // 기부 카테고리 이미지
-  const currentPrice: number = data?.currentPrice || 0; // 현재 기부 금액
+  // 기부중인 카테고리 이미지 매핑
+  const categoryImg = categoryList[goalCategory];
 
   const handleClick = (item: any) => {
     setSelectBadge(item);
@@ -259,7 +256,13 @@ export default function DonateHome() {
   };
   const closeModal = () => setIsOpen(false);
   const badgePage = selectBadge?.page || DovePage;
-  console.log(currentPrice, target);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await baseAxios.put('/donate/complete', { name: 'tester' }).then((res) => console.log(res));
+    };
+    fetchData();
+  }, []);
   return (
     <Box>
       <TitleWrapper>
@@ -269,7 +272,7 @@ export default function DonateHome() {
         </MainTitle>
         <SubTitle>
           <TotalWrapper>
-            <TotalDonation>100,000</TotalDonation>
+            <TotalDonation>{totalDonations}</TotalDonation>
             <Unit>원</Unit>
           </TotalWrapper>
           <CategoryWrapper>
@@ -278,11 +281,11 @@ export default function DonateHome() {
           </CategoryWrapper>
         </SubTitle>
       </TitleWrapper>
-      <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
+      <CharacterBox currDonate={currentDonations} targetDonate={goalDonations}></CharacterBox>
       <DonateNonTitleBox>
-        <Guage currDonate={currentPrice} targetDonate={target}></Guage>
-        {currentPrice == target ? (
-          <Link to="/donate" state={{ data }}>
+        <Guage currDonate={currentDonations} targetDonate={goalDonations}></Guage>
+        {currentDonations == goalDonations ? (
+          <Link to="/donate">
             <Btn bgColor={colors.Navy} handleBtn={() => {}}>
               <PressMotion>
                 <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
@@ -290,7 +293,7 @@ export default function DonateHome() {
             </Btn>
           </Link>
         ) : (
-          <Link to="/donate" state={{ data }}>
+          <Link to="/donate">
             <Btn bgColor={colors.Navy} handleBtn={() => {}}>
               <PressMotion>
                 <div style={{ width: '19.5rem' }}>기부 하러 가기</div>
@@ -302,10 +305,10 @@ export default function DonateHome() {
 
       <TitleBox title="기부 뱃지">
         <BadgeBox>
-          {Achive.map((item) => {
+          {badges.map((item) => {
             return (
               <Badge
-                src={item.badge}
+                src={categoryList[item]}
                 alt="클릭 가능 이미지"
                 onClick={() => handleClick(item)}
               ></Badge>
