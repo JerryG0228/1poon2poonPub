@@ -26,6 +26,7 @@ export default function Main() {
     pointHistory,
     badges,
     interests,
+    ownedStocks,
     goalCategory,
     totalDonations,
     goalDonations,
@@ -48,6 +49,7 @@ export default function Main() {
             data.cashback.history,
             data.donate.badges,
             data.invest.category,
+            data.invest.ownedETFs,
             data.donate.category,
             data.donate.totalAmount,
             data.donate.targetAmount,
@@ -61,6 +63,7 @@ export default function Main() {
             pointHistory: pointHistory,
             badges: badges,
             interests: interests,
+            ownedETFs: ownedStocks,
             goalCategory: goalCategory,
             totalDonations: totalDonations,
             goalDonations: goalDonations,
@@ -73,6 +76,7 @@ export default function Main() {
 
   console.log(currentDonations);
   console.log(goalDonations);
+  console.log(ownedStocks);
 
   return (
     <MainWrap>

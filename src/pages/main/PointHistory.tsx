@@ -164,7 +164,7 @@ interface PointHistoryProps {
 }
 
 export default function PointHistory() {
-  const { points, pointHistory } = useStore();
+  const { points, pointHistory, badges, goalDonations } = useStore();
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
   //클릭 됐는지 안됐는지
   const [clicked, setClicked] = useState(false);
@@ -225,6 +225,9 @@ export default function PointHistory() {
     setClicked(false);
   };
 
+  //상황별 기부 페이지 이동 경로
+  const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
+
   return (
     <>
       <GreyBox />
@@ -235,7 +238,7 @@ export default function PointHistory() {
             <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
-            <Link to={'/donatebefore'}>
+            <Link to={donateLink}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
                   <div style={{ width: '10rem' }}>기부하러 가기</div>

@@ -10,6 +10,14 @@ interface PointHistory {
   _id: string;
 }
 
+interface OwnedStocks {
+  name: string;
+  price: number;
+  changeRate: number;
+  quantity: number;
+  _id: string;
+}
+
 interface UserState {
   username: string;
   cashbackStatus: { [key: string]: boolean };
@@ -18,6 +26,7 @@ interface UserState {
   pointHistory: PointHistory[];
   badges: string[];
   interests: string[];
+  ownedStocks: OwnedStocks[];
   goalCategory: string;
   totalDonations: number;
   goalDonations: number;
@@ -31,6 +40,7 @@ interface UserState {
     pointHistory: PointHistory[],
     badge: string[],
     interest: string[],
+    ownedETFs: OwnedStocks[],
     goalCategory: string,
     totalDonation: number,
     goalDonation: number,
@@ -60,6 +70,7 @@ const useStore = create<UserState>()(
       pointHistory: [],
       badges: [],
       interests: [],
+      ownedStocks: [],
       goalCategory: '',
       totalDonations: 0,
       goalDonations: 0,
@@ -73,6 +84,7 @@ const useStore = create<UserState>()(
         pointHistory,
         badge,
         interest,
+        ownedStocks,
         goalCategory,
         totalDonation,
         goalDonation,
@@ -86,6 +98,7 @@ const useStore = create<UserState>()(
           pointHistory: pointHistory,
           badges: badge,
           interests: interest,
+          ownedStocks: ownedStocks,
           goalCategory: goalCategory,
           totalDonations: totalDonation,
           goalDonations: goalDonation,
