@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 const WrapperTitle = styled.div`
   color: ${colors.White};
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 600;
 `;
 
 type TitleBoxProps = {

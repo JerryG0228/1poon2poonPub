@@ -41,7 +41,8 @@ const CashBackTextWrap = styled.div`
 
 const Balance = styled.div`
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
 `;
 
 const Point = styled.div`
@@ -68,7 +69,7 @@ export default function PointHistorySection({ points }: PointHistorySectionProps
           </CashBackImageWrap>
           <ContentBox>
             <CashBackTextWrap>
-              <Balance>{points}원</Balance>
+              <Balance>{points.toLocaleString()}원</Balance>
               <Point>캐시백 포인트</Point>
             </CashBackTextWrap>
             <CashBacArrowWrap>

@@ -21,28 +21,24 @@ import DonateNonTitleBox from '@/components/Donate/DonateNonTitleBox';
 import { color } from 'framer-motion';
 import { colors } from '@/styles/colors';
 
-const TiltIn = keyframes`
+const FadeIn = keyframes`
   0% {
-    -webkit-transform: rotateY(30deg) translateY(-300px) skewY(-30deg);
-            transform: rotateY(30deg) translateY(-300px) skewY(-30deg);
     opacity: 0;
   }
   100% {
-    -webkit-transform: rotateY(0deg) translateY(0) skewY(0deg);
-            transform: rotateY(0deg) translateY(0) skewY(0deg);
     opacity: 1;
   }
 `;
 
 const FadeOut = keyframes`
   0% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateY(-1000px);
-            transform: translateY(-1000px);
+    -webkit-transform: translateZ(-80px);
+            transform: translateZ(-80px);
     opacity: 0;
   }
 `;
@@ -137,9 +133,11 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  display: ${(props) => (props.isOpen ? 'flex' : 'none')};
+  display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+  animation: ${FadeIn} 0.5s ease-in-out;
 `;
 
 const ModalButton = styled.button`
@@ -264,7 +262,7 @@ export default function DonateHome() {
         <Link to="/donate" state={{ data }}>
           <Btn bgColor={colors.Navy} handleBtn={() => {}}>
             <PressMotion>
-              <div style={{ width: '18.5rem' }}>기부 포인트 교환</div>
+              <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
             </PressMotion>
           </Btn>
         </Link>
@@ -284,35 +282,37 @@ export default function DonateHome() {
         </BadgeBox>
       </TitleBox>
       <div style={{ marginTop: '1rem' }}></div>
-      <ModalWrapper isOpen={isOpen}>
-        <ModalButton onClick={closeModal}>
-          <FaXmark />
-        </ModalButton>
-        <ModalContent certSrc={badgePage}>
-          <CertWrapper>
-            <CertTitle>기 부 증 서</CertTitle>
-            <InfoBox>
-              <hr />
-              이름 기부자님 <br />
-              카테고리
-              <br /> 기부금: 금액
-              <hr />
-            </InfoBox>
-            <Content>
-              따뜻한 마음으로 보내주신 기부금은 <br />
-              소외된 이웃과 어려운 가정을 돕고
-              <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
-              <br /> 이에 깊은 존경과 감사의 마음을 담아
-              <br /> 이 증서를 드립니다.
-            </Content>
-            <DayInfo>2025년 03월 18일</DayInfo>
-            <Footer>
-              토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
-              <StampImg src={PoonStapm}></StampImg>
-            </Footer>
-          </CertWrapper>
-        </ModalContent>
-      </ModalWrapper>
+      {isOpen && (
+        <ModalWrapper isOpen={isOpen}>
+          <ModalButton onClick={closeModal}>
+            <FaXmark />
+          </ModalButton>
+          <ModalContent certSrc={badgePage}>
+            <CertWrapper>
+              <CertTitle>기 부 증 서</CertTitle>
+              <InfoBox>
+                <hr />
+                이름 기부자님 <br />
+                카테고리
+                <br /> 기부금: 금액
+                <hr />
+              </InfoBox>
+              <Content>
+                따뜻한 마음으로 보내주신 기부금은 <br />
+                소외된 이웃과 어려운 가정을 돕고
+                <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
+                <br /> 이에 깊은 존경과 감사의 마음을 담아
+                <br /> 이 증서를 드립니다.
+              </Content>
+              <DayInfo>2025년 03월 18일</DayInfo>
+              <Footer>
+                토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
+                <StampImg src={PoonStapm}></StampImg>
+              </Footer>
+            </CertWrapper>
+          </ModalContent>
+        </ModalWrapper>
+      )}
     </Box>
   );
 }
