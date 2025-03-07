@@ -70,6 +70,9 @@ export default function Main() {
     fetchData();
   }, []);
 
+  console.log(currentDonations);
+  console.log(goalDonations);
+
   return (
     <MainWrap>
       <CashbackSection cashbackStatus={cashbackStatus} />

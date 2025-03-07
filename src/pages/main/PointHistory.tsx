@@ -65,9 +65,6 @@ const Button = styled.div`
 const PointFilter = styled.div`
   display: flex;
   flex-direction: row;
-  height: 2rem;
-  margin: 2rem 0 0.5rem 0;
-  padding: 0 1rem;
 `;
 
 const PointNav = styled.div`
@@ -75,11 +72,16 @@ const PointNav = styled.div`
   font-size: 1rem;
   height: 2rem;
   align-items: center;
-  gap: 1rem;
   > img {
     width: 1rem;
     height: 0.6rem;
   }
+`;
+
+const NavContent = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 `;
 
 const CurrentNav = styled.div`
@@ -249,8 +251,12 @@ export default function PointHistory() {
 
         <PointFilter>
           <PointNav onClick={handleClick}>
-            <CurrentNav>{selectedValue}</CurrentNav>
-            <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
+            <PressMotion>
+              <NavContent>
+                <CurrentNav>{selectedValue}</CurrentNav>
+                <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
+              </NavContent>
+            </PressMotion>
           </PointNav>
         </PointFilter>
         <Overlay clicked={clicked}></Overlay>
