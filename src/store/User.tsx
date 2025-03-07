@@ -1,10 +1,21 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+interface PointHistory {
+  name: string;
+  day: string;
+  time: string;
+  change: number;
+  finalPoints: number;
+  _id: string;
+}
+
 interface UserState {
   username: string;
+  cashbackStatus: { [key: string]: boolean };
   cashbackStamps: number[];
   points: number;
+  pointHistory: PointHistory[];
   badges: string[];
   interests: string[];
   goalCategory: string;
@@ -14,8 +25,10 @@ interface UserState {
 
   setDefault: (
     name: string,
+    cashbackStatus: { [key: string]: boolean },
     stamps: number[],
     point: number,
+    pointHistory: PointHistory[],
     badge: string[],
     interest: string[],
     goalCategory: string,
@@ -41,8 +54,10 @@ const useStore = create<UserState>()(
   persist(
     (set) => ({
       username: '',
+      cashbackStatus: {},
       cashbackStamps: [],
       points: 0,
+      pointHistory: [],
       badges: [],
       interests: [],
       goalCategory: '',
@@ -52,8 +67,10 @@ const useStore = create<UserState>()(
 
       setDefault: (
         name,
+        cashbackStatus,
         stamps,
         point,
+        pointHistory,
         badge,
         interest,
         goalCategory,
@@ -63,8 +80,10 @@ const useStore = create<UserState>()(
       ) =>
         set(() => ({
           username: name,
+          cashbackStatus: cashbackStatus,
           cashbackStamps: stamps,
           points: point,
+          pointHistory: pointHistory,
           badges: badge,
           interests: interest,
           goalCategory: goalCategory,

@@ -37,26 +37,24 @@ const Board = styled.div`
   column-gap: 1rem;
 `;
 
-const Circle = styled.div<{ index: number }>`
+const Circle = styled.div<{ index: number; hasImage: boolean }>`
   display: flex;
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 13vw;
+  height: 13vw;
+  max-width: 56px;
+  max-height: 56px;
   border-radius: 3rem;
-  background-color: #ffffff;
-  > img {
-    width: 3.2rem;
-    height: 3.2rem;
-  }
+  background-color: ${({ hasImage }) => (hasImage ? 'transparent' : '#ffffff')};
 `;
 
 interface StampBoardSectionProps {
-  coins: number[];
+  stamps: number[];
   isFull: boolean;
   handlePointCalculate: () => void;
 }
 
 export default function StampBoardSection({
-  coins,
+  stamps,
   isFull,
   handlePointCalculate,
 }: StampBoardSectionProps) {
@@ -82,18 +80,13 @@ export default function StampBoardSection({
                   _, //빈 배열 생성했으므로 명시
                   index: number, // index 추가
                 ) =>
-                  coins[index] ? (
+                  stamps[index] ? (
                     <AnimatedComponent key={index}>
-                      <Circle>
-                        {/* {coins[index] === 500 ? (
-                          <img src={fiveCoin} alt="500원 동전" />
-                        ) : (
-                          <img src={oneCoin} alt="100원 동전" />
-                        )} */}
+                      <Circle hasImage={true}>
                         <FlipImage
-                          srcA={coins[index] === 500 ? fiveCoin : oneCoin}
-                          srcB={coins[index] === 500 ? fiveCoinBack : oneCoinBack}
-                          alt={`${coins[index]}원 동전`}
+                          srcA={stamps[index] === 500 ? fiveCoin : oneCoin}
+                          srcB={stamps[index] === 500 ? fiveCoinBack : oneCoinBack}
+                          alt={`${stamps[index]}원 동전`}
                         />
                       </Circle>
                     </AnimatedComponent>

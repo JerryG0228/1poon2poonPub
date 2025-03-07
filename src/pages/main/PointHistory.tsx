@@ -3,11 +3,12 @@ import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import usageIcon from '@/assets/Main/UsageIcon.png';
 import { useState } from 'react';
 import blueCheckImage from '@/assets/Main/check_blue.png';
 import greyCheckImage from '@/assets/Main/check_grey.png';
 import { IoIosArrowDown } from 'react-icons/io';
+import useStore from '@/store/User';
+import PointBox from '@/components/PointBox';
 
 const Wrap = styled.div`
   display: flex;
@@ -130,159 +131,17 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
-const PointUsageItem = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1.2rem;
-  align-items: center;
-`;
-
-const UsageIcon = styled.div`
-  display: flex;
-  > img {
-    width: 2.2rem;
-    height: 2.2rem;
-  }
-`;
-
-const UsageText = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 14rem;
-  gap: 0.2rem;
-`;
-
-const Time = styled.div`
-  display: flex;
-  color: #c5c5c5;
-  font-size: 0.8rem;
-`;
-
-const UsagePoint = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  align-items: flex-end;
-  gap: 0.2rem;
-  width: 6rem;
-`;
-
-const NewPoint = styled.div`
-  display: flex;
-  color: ${colors.Red};
-`;
-
-const CurrentPoint = styled.div`
-  display: flex;
-  color: #c5c5c5;
-  font-size: 0.8rem;
-`;
-
-interface dummyPointHistoryProps {
-  id: number;
-  icon: string;
+interface PointHistoryProps {
   name: string;
-  date: string;
+  day: string;
   time: string;
-  newPoint: number;
-  currentPoint: number;
-  type: string;
+  change: number;
+  finalPoints: number;
+  _id: string;
 }
 
-const dummyPointHistory = [
-  {
-    id: 1,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-03',
-    time: '10:59',
-    newPoint: 1,
-    currentPoint: 1,
-    type: 'earned',
-  },
-  {
-    id: 2,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-03',
-    time: '11:30',
-    newPoint: 500,
-    currentPoint: 501,
-    type: 'earned',
-  },
-  {
-    id: 3,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-04',
-    time: '14:20',
-    newPoint: 3500,
-    currentPoint: 4001,
-    type: 'earned',
-  },
-  {
-    id: 4,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-04',
-    time: '16:45',
-    newPoint: 10000,
-    currentPoint: 14001,
-    type: 'earned',
-  },
-  {
-    id: 5,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-04',
-    time: '19:10',
-    newPoint: 2000,
-    currentPoint: 12001,
-    type: 'spent',
-  },
-  {
-    id: 6,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-05',
-    time: '08:22',
-    newPoint: 2000,
-    currentPoint: 10001,
-    type: 'spent',
-  },
-  {
-    id: 7,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-05',
-    time: '11:30',
-    newPoint: 2000,
-    currentPoint: 12001,
-    type: 'earned',
-  },
-  {
-    id: 8,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-05',
-    time: '14:47',
-    newPoint: 2000,
-    currentPoint: 10001,
-    type: 'spent',
-  },
-  {
-    id: 9,
-    icon: usageIcon,
-    name: '토스 뱅크',
-    date: '2025-03-05',
-    time: '19:21',
-    newPoint: 2000,
-    currentPoint: 12001,
-    type: 'earned',
-  },
-];
-
 export default function PointHistory() {
+  const { points, pointHistory } = useStore();
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
   //클릭 됐는지 안됐는지
   const [clicked, setClicked] = useState(false);
@@ -300,34 +159,37 @@ export default function PointHistory() {
     setClicked(!clicked);
   };
 
-  //선택된 필터에 따라 내역을 필터링
-  const filterHistory = (history: dummyPointHistoryProps[], filter: string) => {
+  // 적립/사용에 따라 구분된 데이터
+  const filterHistory = (filterResult: PointHistoryProps[], filter: string) => {
     if (filter === '적립 내역') {
-      return history.filter((item) => item.type === 'earned');
+      return filterResult.filter((item) => item.change > 0);
     } else if (filter === '사용 내역') {
-      return history.filter((item) => item.type === 'spent');
+      return filterResult.filter((item) => item.change < 0);
     }
-    return history;
+    return filterResult;
   };
 
   // 필터링된 내역 가져오기
-  const filteredHistory = filterHistory(dummyPointHistory, selectedValue);
+  const filteredHistory = filterHistory(pointHistory, selectedValue);
 
   //최신순으로 정렬 후 날짜별 그룹화
-  const groupByDateSorted = (history: dummyPointHistoryProps[]) => {
-    const grouped: { [key: string]: dummyPointHistoryProps[] } = {};
+  const groupByDateSorted = (filterResult: PointHistoryProps[]) => {
+    const grouped: { [key: string]: PointHistoryProps[] } = {};
 
-    history
+    filterResult
       .sort((a, b) => {
-        const dateA = new Date(`${a.date} ${a.time}`).getTime();
-        const dateB = new Date(`${b.date} ${b.time}`).getTime();
-        return dateB - dateA;
+        // 날짜 비교 (날짜가 더 최신인 것이 앞으로)
+        if (a.day !== b.day) {
+          return a.day > b.day ? -1 : 1;
+        }
+        // 날짜가 같다면, 시간 비교 (시간이 더 늦은 것이 앞으로)
+        return a.time > b.time ? -1 : 1;
       })
       .forEach((item) => {
-        if (!grouped[item.date]) {
-          grouped[item.date] = [];
+        if (!grouped[item.day]) {
+          grouped[item.day] = [];
         }
-        grouped[item.date].push(item);
+        grouped[item.day].push(item);
       });
     return grouped;
   };
@@ -335,19 +197,13 @@ export default function PointHistory() {
   const groupedHistory = groupByDateSorted(filteredHistory);
   console.log(groupedHistory);
 
-  //합산 포인트 계산
-  const totalCurrentPoint = dummyPointHistory.reduce(
-    (acc, cur) => acc + Number(cur.newPoint) * (cur.type === 'earned' ? 1 : -1),
-    0,
-  );
-
   return (
     <>
       <Wrap>
         <HistoryTop>
           <TopText>
             <div>캐시백 포인트</div>
-            <Balance>{totalCurrentPoint}원</Balance>
+            <Balance>{points}원</Balance>
           </TopText>
           <Button>
             <Link to={'/donatebefore'}>
@@ -395,25 +251,13 @@ export default function PointHistory() {
             <>
               <PointDate>{date}</PointDate>
               {groupedHistory[date].map((history) => (
-                <PointUsageItem key={history.id}>
-                  <UsageIcon>
-                    <img src={history.icon} />
-                  </UsageIcon>
-                  <UsageText>
-                    <div>{history.name}</div>
-                    <Time>{history.time}</Time>
-                  </UsageText>
-                  <UsagePoint>
-                    <NewPoint
-                      style={{ color: history.type === 'earned' ? colors.Red : colors.Blue }}
-                    >
-                      {history.type === 'earned'
-                        ? `+${Number(history.newPoint)}원`
-                        : `-${Number(history.newPoint)}원`}
-                    </NewPoint>
-                    <CurrentPoint>{history.currentPoint}원</CurrentPoint>
-                  </UsagePoint>
-                </PointUsageItem>
+                <PointBox
+                  key={history._id}
+                  time={history.time}
+                  name={history.name}
+                  point={history.finalPoints}
+                  transPoint={history.change}
+                />
               ))}
             </>
           ))}

@@ -6,7 +6,7 @@ interface Props {
 }
 
 const StyledMotion = styled(motion.div)`
-  width: fit-content;
+  width: 100%;
   padding: 0.5rem 0;
   border-radius: 1rem;
 `;
