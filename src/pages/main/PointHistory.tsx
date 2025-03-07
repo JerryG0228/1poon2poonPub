@@ -209,22 +209,22 @@ export default function PointHistory() {
             <Link to={'/donatebefore'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '9rem' }}>기부하러 가기</div>
+                  <div style={{ width: '10rem' }}>기부하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
             <Link to={'/investbefore'}>
               <Btn bgColor={colors.Navy} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '9rem' }}>투자하러 가기</div>
+                  <div style={{ width: '10rem' }}>투자하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
           </Button>
         </HistoryTop>
         <PointFilter>
-          <PointNav>
-            <CurrentNav onClick={handleClick}>{selectedValue}</CurrentNav>
+          <PointNav onClick={handleClick}>
+            <CurrentNav>{selectedValue}</CurrentNav>
             <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
           </PointNav>
         </PointFilter>
