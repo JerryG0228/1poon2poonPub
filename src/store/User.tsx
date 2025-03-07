@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 
 interface UserState {
   username: string;
+  cashbackStamps: number[];
   points: number;
   badges: string[];
   interests: string[];
@@ -13,6 +14,7 @@ interface UserState {
 
   setDefault: (
     name: string,
+    stamps: number[],
     point: number,
     badge: string[],
     interest: string[],
@@ -39,6 +41,7 @@ const useStore = create<UserState>()(
   persist(
     (set) => ({
       username: '',
+      cashbackStamps: [],
       points: 0,
       badges: [],
       interests: [],
@@ -49,6 +52,7 @@ const useStore = create<UserState>()(
 
       setDefault: (
         name,
+        stamps,
         point,
         badge,
         interest,
@@ -59,6 +63,7 @@ const useStore = create<UserState>()(
       ) =>
         set(() => ({
           username: name,
+          cashbackStamps: stamps,
           points: point,
           badges: badge,
           interests: interest,

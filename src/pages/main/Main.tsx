@@ -40,6 +40,7 @@ export default function Main() {
   // 전역 상태 관리
   const {
     username,
+    cashbackStamps,
     points,
     badges,
     interests,
@@ -107,6 +108,7 @@ export default function Main() {
         .then((data) => {
           setDefault(
             data.name,
+            data.cashbackStamps,
             data.cashback.points,
             data.donate.badges,
             data.invest.category,
@@ -117,6 +119,7 @@ export default function Main() {
           );
           console.log({
             name: username,
+            stamps: cashbackStamps,
             points: points,
             badges: badges,
             interests: interests,
