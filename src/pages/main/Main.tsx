@@ -8,7 +8,6 @@ import CashbackServiceSection from '@/components/Main/CashbackServiceSection';
 import AdBanner from '@/components/Main/AdBanner';
 import baseAxios from '@/apis/axiosInstance';
 import useStore from '@/store/User';
-import PressMotion from '@/components/PressMotion';
 
 const MainWrap = styled.div`
   display: flex;

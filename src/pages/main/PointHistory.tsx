@@ -10,6 +10,25 @@ import { IoIosArrowDown } from 'react-icons/io';
 import useStore from '@/store/User';
 import PointBox from '@/components/PointBox';
 
+const GreyBox = styled.div`
+  background-color: #313845;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: 100%;
+`;
+
+const NavyLine = styled.div`
+  background-color: ${colors.Navy};
+  position: absolute;
+  top: 15rem;
+  width: 430px;
+  height: 1.2rem;
+`;
+
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -21,7 +40,7 @@ const Wrap = styled.div`
 const HistoryTop = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 3rem 0;
+  padding: 3rem 1rem;
   gap: 3rem;
 `;
 
@@ -32,8 +51,9 @@ const TopText = styled.div`
 
 const Balance = styled.div`
   display: flex;
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-size: 2.3rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
 `;
 
 const Button = styled.div`
@@ -47,6 +67,7 @@ const PointFilter = styled.div`
   flex-direction: row;
   height: 2rem;
   margin: 2rem 0 0.5rem 0;
+  padding: 0 1rem;
 `;
 
 const PointNav = styled.div`
@@ -199,11 +220,12 @@ export default function PointHistory() {
 
   return (
     <>
+      <GreyBox />
       <Wrap>
-        <HistoryTop>
+        <HistoryTop>  
           <TopText>
             <div>캐시백 포인트</div>
-            <Balance>{points}원</Balance>
+            <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
             <Link to={'/donatebefore'}>
@@ -222,6 +244,9 @@ export default function PointHistory() {
             </Link>
           </Button>
         </HistoryTop>
+
+        <NavyLine />
+
         <PointFilter>
           <PointNav>
             <CurrentNav onClick={handleClick}>{selectedValue}</CurrentNav>
