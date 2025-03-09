@@ -42,12 +42,12 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 `;
 
 const categoryList = [
-  { name: '교육·문화', image: booksImage },
-  { name: '공익·인권', image: doveImage },
-  { name: '국제·구호', image: earthImage },
-  { name: '사회·복지', image: homeImage },
-  { name: '의료·건강', image: hospitalImage },
-  { name: '환경·동물', image: dogImage },
+  { category: '교육 문화', image: booksImage },
+  { category: '공익 인권', image: doveImage },
+  { category: '국제 구호', image: earthImage },
+  { category: '사회 복지', image: homeImage },
+  { category: '의료 건강', image: hospitalImage },
+  { category: '환경 동물', image: dogImage },
 ];
 
 export default function DonateCategory() {
@@ -65,7 +65,6 @@ export default function DonateCategory() {
     // selectedCategory가 null이면 회색, 아니면 파란색
     setBgColor(selectedCategory == null ? colors.Grey : colors.LightBlue);
   }, [selectedCategory]); // selectedCategory가 변경될 때마다 실행
-
   return (
     <Box>
       <Title>
@@ -76,8 +75,8 @@ export default function DonateCategory() {
       <DonateCategoryBox>
         {categoryList.map((item) => (
           <CategoryBox
-            key={item.name}
-            title={item.name}
+            key={item.category}
+            title={item.category}
             imageSrc={item.image}
             active={selectedCategory === item} // 선택된 경우 true로 active 적용
             onClick={() => handleClick(item)} // 클릭 이벤트 추가

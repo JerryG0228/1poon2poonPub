@@ -2,18 +2,6 @@ import styled from 'styled-components';
 import Point from '@/assets/PointBox/PointImg.png';
 import { colors } from '@/styles/colors';
 
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  height: 6rem;
-`;
-const Date = styled.div`
-  color: #c5c5c5;
-  font-size: 0.9rem;
-`;
 const ContentBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -33,7 +21,8 @@ const PointMainContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
 `;
 const PointTitle = styled.div`
   font-size: 1rem;
@@ -41,7 +30,7 @@ const PointTitle = styled.div`
 const PointRecord = styled.div<{ transPoint: number }>`
   font-size: 1rem;
   color: ${(props) => {
-    return props.transPoint && props.transPoint > 0 ? colors.Red : colors.Blue;
+    return props.transPoint && props.transPoint > 0 ? colors.LightBlue : colors.White;
   }};
 `;
 const PointSubContent = styled.div`
@@ -52,45 +41,43 @@ const PointSubContent = styled.div`
   color: #c5c5c5;
 `;
 const PointTime = styled.div`
-  font-size: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 300;
 `;
 const PointAcc = styled.div`
-  font-size: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 300;
 `;
 
 interface Props {
-  date: string;
   time: string;
   name: string;
   point: number;
   transPoint: number;
 }
 
-function PointBox({ date, time, name, point, transPoint }: Props) {
+function PointBox({ time, name, point, transPoint }: Props) {
   //숫자 1000단위마다 ,추가
   const formatPrice = (price: number): string => {
     return price.toLocaleString();
   };
 
   return (
-    <Box>
-      <Date>{date}</Date>
-      <ContentBox>
-        <PointImg src={Point}></PointImg>
-        <PointContent>
-          <PointMainContent>
-            <PointTitle>{name}</PointTitle>
-            <PointRecord transPoint={transPoint}>
-              {transPoint > 0 ? `+${formatPrice(transPoint)}` : formatPrice(transPoint)}원
-            </PointRecord>
-          </PointMainContent>
-          <PointSubContent>
-            <PointTime>{time}</PointTime>
-            <PointAcc>{formatPrice(point)}원</PointAcc>
-          </PointSubContent>
-        </PointContent>
-      </ContentBox>
-    </Box>
+    <ContentBox>
+      <PointImg src={Point}></PointImg>
+      <PointContent>
+        <PointMainContent>
+          <PointTitle>{name}</PointTitle>
+          <PointRecord transPoint={transPoint}>
+            {transPoint > 0 ? `+${formatPrice(transPoint)}` : formatPrice(transPoint)}원
+          </PointRecord>
+        </PointMainContent>
+        <PointSubContent>
+          <PointTime>{time}</PointTime>
+          <PointAcc>{formatPrice(point)}원</PointAcc>
+        </PointSubContent>
+      </PointContent>
+    </ContentBox>
   );
 }
 

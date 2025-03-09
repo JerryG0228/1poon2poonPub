@@ -1,46 +1,44 @@
 import Btn from '@/components/Btn';
-import CharacterBox from '@/components/CharacterBox';
-import Guage from '@/components/Guage';
+import CharacterBox from '@/components/Donate/CharacterBox';
+import Guage from '@/components/Donate/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-import DoveBadge from '@/assets/donatePage/DoveBadge.png';
-import EarthBadge from '@/assets/donatePage/EarthBadge.png';
-import BooksBadge from '@/assets/donatePage/BooksBadge.png';
-import HosBadge from '@/assets/donatePage/HosBadge.png';
 import EarthPage from '@/assets/donatePage/EarthPage.png';
 import BooksPage from '@/assets/donatePage/BooksPage.png';
 import HosPage from '@/assets/donatePage/HosPage.png';
 import DovePage from '@/assets/donatePage/DovePage.png';
+import HomePage from '@/assets/donatePage/HomePage.png';
+import DogPage from '@/assets/donatePage/DogPage.png';
 import styled, { keyframes } from 'styled-components';
 import PoonStapm from '@/assets/donatePage/PoonStamp.png';
 import { FaXmark } from 'react-icons/fa6';
+import DonateNonTitleBox from '@/components/Donate/DonateNonTitleBox';
+import wave from '@/assets/donatePage/wave.json';
+import paper from '@/assets/donatePage/paper.json';
+import feather from '@/assets/donatePage/feather.json';
+import cloud from '@/assets/donatePage/cloud.json';
+import beat from '@/assets/donatePage/beat.json';
+import dog from '@/assets/donatePage/dog.json';
+import booksImage from '@/assets/categorybox/books_image.png';
+import doveImage from '@/assets/categorybox/dove_image.png';
+import dogImage from '@/assets/categorybox/dog_image.png';
+import earthImage from '@/assets/categorybox/earth_image.png';
+import homeImage from '@/assets/categorybox/home_img.png';
+import hospitalImage from '@/assets/categorybox/hospital_image.png';
+import { colors } from '@/styles/colors';
+import Lottie from 'lottie-react';
+import useStore from '@/store/User';
+import { aw } from 'framer-motion/dist/types.d-6pKw1mTI';
+import baseAxios from '@/apis/axiosInstance';
 
-const TiltIn = keyframes`
+const FadeIn = keyframes`
   0% {
-    -webkit-transform: rotateY(30deg) translateY(-300px) skewY(-30deg);
-            transform: rotateY(30deg) translateY(-300px) skewY(-30deg);
     opacity: 0;
   }
   100% {
-    -webkit-transform: rotateY(0deg) translateY(0) skewY(0deg);
-            transform: rotateY(0deg) translateY(0) skewY(0deg);
     opacity: 1;
-  }
-`;
-
-const FadeOut = keyframes`
-  0% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateY(-1000px);
-            transform: translateY(-1000px);
-    opacity: 0;
   }
 `;
 
@@ -48,8 +46,20 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   font-weight: bold;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+`;
+
+const MainTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const DonationTitle = styled.div`
@@ -57,10 +67,15 @@ const DonationTitle = styled.div`
   color: #c5c5c5;
 `;
 
-const TitleWrapper = styled.div`
+const CategoryName = styled.div`
+  font-size: 1rem;
+  color: #c5c5c5;
+`;
+
+const SubTitle = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const TotalWrapper = styled.div`
@@ -79,9 +94,19 @@ const Unit = styled.div`
   margin-top: 0.3rem;
 `;
 
+const CategoryWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const CategoryTitle = styled.div`
+  font-size: 1.2rem;
+  color: white;
+`;
+
 const SelectCatgegory = styled.img`
-  width: 1.5rem;
-  margin-bottom: 3.5rem;
+  width: 1.3rem;
 `;
 
 const BadgeBox = styled.div`
@@ -107,15 +132,17 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  display: ${(props) => (props.isOpen ? 'flex' : 'none')};
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1.5rem;
+  z-index: 2;
+  animation: ${FadeIn} 0.5s ease-in-out;
 `;
 
 const ModalButton = styled.button`
-  position: relative;
-  top: -18rem; /* 왼쪽 위에 배치 */
-  left: 20.3rem;
+  margin-left: 19rem;
   background-color: transparent;
   color: white;
   font-size: 1.5rem;
@@ -125,7 +152,7 @@ const ModalButton = styled.button`
 
 const ModalContent = styled.div<{ certSrc: URL }>`
   position: relative; /* 부모 div에 상대 위치 설정 */
-  right: 0.8rem;
+
   border-radius: 3px;
   width: 21rem;
   height: 30rem;
@@ -179,29 +206,49 @@ const StampImg = styled.img`
   width: 1.2rem;
 `;
 
-const Achive = [
-  { badge: DoveBadge, page: DovePage },
-  { badge: EarthBadge, page: EarthPage },
-  { badge: BooksBadge, page: BooksPage },
-  { badge: HosBadge, page: HosPage },
-  { badge: HosBadge, page: HosPage },
-  { badge: HosBadge, page: HosPage },
-];
+const ModalContentWrapper = styled.div`
+  position: relative; /* Lottie를 absolute로 띄우기 위한 기준 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledLottie = styled(Lottie)`
+  position: absolute;
+  top: 23rem; /* 모달 콘텐츠 위로 이동 */
+  left: 13rem;
+  width: 8rem;
+  height: 8rem;
+  z-index: 3; /* 모달 콘텐츠보다 위에 배치 */
+`;
+
+const Achive: Record<string, string> = {
+  '교육 문화': BooksPage,
+  '공익 인권': DovePage,
+  '국제 구호': EarthPage,
+  '사회 복지': HomePage,
+  '의료 건강': HosPage,
+  '환경 동물': DogPage,
+};
+
+// 기부중인 카테고리 이미지 주소 매핑
+const categoryList: Record<string, string> = {
+  '교육 문화': booksImage,
+  '공익 인권': doveImage,
+  '국제 구호': earthImage,
+  '사회 복지': homeImage,
+  '의료 건강': hospitalImage,
+  '환경 동물': dogImage,
+};
 
 export default function DonateHome() {
-  const [data, setData] = useState<any>({}); // 전달 데이터
+  const { totalDonations, goalDonations, currentDonations, goalCategory, badges } = useStore();
+  const [donatePage, setDonatePage] = useState<Object | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
-  const location = useLocation();
 
-  useEffect(() => {
-    setData(location.state.data);
-  }, [location.state.data]);
-
-  // data가 변경되었을 때, target, categoryImg, currentPrice를 안전하게 사용하기
-  const target = data?.price || 0; // 목표 금액
-  const categoryImg = data?.image || ''; // 기부 카테고리 이미지
-  const currentPrice = data?.currentPrice || 0; // 현재 기부 금액
+  // 기부중인 카테고리 이미지 매핑
+  const categoryImg = categoryList[goalCategory];
 
   const handleClick = (item: any) => {
     setSelectBadge(item);
@@ -210,31 +257,58 @@ export default function DonateHome() {
   const closeModal = () => setIsOpen(false);
   const badgePage = selectBadge?.page || DovePage;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await baseAxios.put('/donate/complete', { name: 'tester' }).then((res) => console.log(res));
+    };
+    fetchData();
+  }, []);
   return (
     <Box>
       <TitleWrapper>
-        <DonationTitle>지금까지 기부한 금액</DonationTitle>
-        <TotalWrapper>
-          <TotalDonation>100,000</TotalDonation>
-          <Unit>원</Unit>
-        </TotalWrapper>
+        <MainTitle>
+          <DonationTitle>지금까지 기부한 금액</DonationTitle>
+          <CategoryName>카테고리</CategoryName>
+        </MainTitle>
+        <SubTitle>
+          <TotalWrapper>
+            <TotalDonation>{totalDonations}</TotalDonation>
+            <Unit>원</Unit>
+          </TotalWrapper>
+          <CategoryWrapper>
+            <CategoryTitle>교육 인권</CategoryTitle>
+            <SelectCatgegory src={categoryImg} alt="기부 카테고리" />
+          </CategoryWrapper>
+        </SubTitle>
       </TitleWrapper>
-      {categoryImg && <SelectCatgegory src={categoryImg} alt="기부 카테고리" />}
-      <CharacterBox currDonate={currentPrice} targetDonate={target}></CharacterBox>
-      <Guage currDonate={currentPrice} targetDonate={target}></Guage>
-      <Link to="/donate" state={{ data }}>
-        <Btn bgColor={'#313845'} handleBtn={() => {}}>
-          <PressMotion>
-            <div style={{ width: '20.5rem' }}>기부 포인트 교환</div>
-          </PressMotion>
-        </Btn>
-      </Link>
+      <CharacterBox currDonate={currentDonations} targetDonate={goalDonations}></CharacterBox>
+      <DonateNonTitleBox>
+        <Guage currDonate={currentDonations} targetDonate={goalDonations}></Guage>
+        {currentDonations == goalDonations ? (
+          <Link to="/donate">
+            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+              <PressMotion>
+                <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
+              </PressMotion>
+            </Btn>
+          </Link>
+        ) : (
+          <Link to="/donate">
+            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+              <PressMotion>
+                <div style={{ width: '19.5rem' }}>기부 하러 가기</div>
+              </PressMotion>
+            </Btn>
+          </Link>
+        )}
+      </DonateNonTitleBox>
+
       <TitleBox title="기부 뱃지">
         <BadgeBox>
-          {Achive.map((item) => {
+          {badges.map((item) => {
             return (
               <Badge
-                src={item.badge}
+                src={categoryList[item]}
                 alt="클릭 가능 이미지"
                 onClick={() => handleClick(item)}
               ></Badge>
@@ -243,35 +317,42 @@ export default function DonateHome() {
         </BadgeBox>
       </TitleBox>
       <div style={{ marginTop: '1rem' }}></div>
-      <ModalWrapper isOpen={isOpen}>
-        <ModalButton onClick={closeModal}>
-          <FaXmark />
-        </ModalButton>
-        <ModalContent certSrc={badgePage}>
-          <CertWrapper>
-            <CertTitle>기 부 증 서</CertTitle>
-            <InfoBox>
-              <hr />
-              이름 기부자님 <br />
-              카테고리
-              <br /> 기부금: 금액
-              <hr />
-            </InfoBox>
-            <Content>
-              따뜻한 마음으로 보내주신 기부금은 <br />
-              소외된 이웃과 어려운 가정을 돕고
-              <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
-              <br /> 이에 깊은 존경과 감사의 마음을 담아
-              <br /> 이 증서를 드립니다.
-            </Content>
-            <DayInfo>2025년 03월 18일</DayInfo>
-            <Footer>
-              토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
-              <StampImg src={PoonStapm}></StampImg>
-            </Footer>
-          </CertWrapper>
-        </ModalContent>
-      </ModalWrapper>
+      {isOpen && (
+        <ModalWrapper isOpen={isOpen}>
+          <ModalButton onClick={closeModal}>
+            <FaXmark />
+          </ModalButton>
+          <ModalContentWrapper>
+            <ModalContent certSrc={badgePage}>
+              <CertWrapper>
+                <div style={{ display: 'flex' }}>
+                  <CertTitle>기 부 증 서</CertTitle>
+                  <StyledLottie animationData={paper} loop={true}></StyledLottie>
+                </div>
+                <InfoBox>
+                  <hr />
+                  이름 기부자님 <br />
+                  카테고리
+                  <br /> 기부금: 금액
+                  <hr />
+                </InfoBox>
+                <Content>
+                  따뜻한 마음으로 보내주신 기부금은 <br />
+                  소외된 이웃과 어려운 가정을 돕고
+                  <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
+                  <br /> 이에 깊은 존경과 감사의 마음을 담아
+                  <br /> 이 증서를 드립니다.
+                </Content>
+                <DayInfo>2025년 03월 18일</DayInfo>
+                <Footer>
+                  토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
+                  <StampImg src={PoonStapm}></StampImg>
+                </Footer>
+              </CertWrapper>
+            </ModalContent>
+          </ModalContentWrapper>
+        </ModalWrapper>
+      )}
     </Box>
   );
 }

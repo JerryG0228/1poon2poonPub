@@ -5,6 +5,8 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { useEffect, useState } from 'react';
+import baseAxios from '@/apis/axiosInstance';
+import useStore from '@/store/User';
 
 const Box = styled.div`
   display: flex;
@@ -80,21 +82,36 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 `;
 
 export default function DonateGoal() {
-  const [price, setPrice] = useState<number | null>(null); // 목표 금액
+  const { setGoalDonations, setGoalCategory } = useStore();
+  const [targetAmount, setTargetAmount] = useState<number | null>(null); // 목표 금액
   const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
   const location = useLocation();
 
-  //input onChange 핸들러러
+  //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
-    setPrice(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
-    setData({ ...location.state.selectedCategory, price: value, currentPrice: 0 });
+    const { category } = location.state.selectedCategory;
+    setTargetAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
+    setData({ category: category, targetAmount: value, name: 'ooinl77' });
+  };
+
+  const fetchData = async () => {
+    await baseAxios
+      .post('/donate/setDonate', data)
+      .then((response) => {
+        const data = response.data;
+        setGoalCategory(data.category);
+        setGoalDonations(data.targetAmount);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   useEffect(() => {
-    setBgColor((price ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
-  }, [price]);
+    setBgColor((targetAmount ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
+  }, [targetAmount]);
 
   return (
     <Box>
@@ -110,14 +127,14 @@ export default function DonateGoal() {
         <InputAmout
           id="inputAmount"
           type="number"
-          value={price}
+          value={targetAmount}
           placeholder="금액"
           onChange={handleInput}
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatehome" state={{ data }} disabled={(price ?? 0) < 10000}>
-        <Btn bgColor={bgColor} handleBtn={() => {}}>
+      <CustomLink to="/donatesetfinish" state={{ data }} disabled={(targetAmount ?? 0) < 10000}>
+        <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>설정하기</div>
           </PressMotion>
