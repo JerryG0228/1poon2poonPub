@@ -77,15 +77,15 @@ export default function Main() {
     fetchData();
   }, []);
 
-  console.log(interestsStock);
-
+  // 스탬프가 10개인지 확인
   const isFull = cashbackStamps.length === 10;
 
+  // 버튼 클릭시 스탬프를 빈 배열로 업데이트
   const handlePointCalculate = () => {
     setDefault(
       username,
       cashbackStatus,
-      [], // ✅ 스탬프를 빈 배열로 업데이트
+      [],
       points,
       pointHistory,
       badges,
