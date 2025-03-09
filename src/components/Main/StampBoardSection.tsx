@@ -52,6 +52,7 @@ const Circle = styled.div<{ index: number; hasImage: boolean }>`
   max-height: 56px;
   border-radius: 3rem;
   background-color: ${({ hasImage }) => (hasImage ? 'transparent' : colors.Navy)};
+  box-shadow: ${({ hasImage }) => (hasImage ? 'inset 0 0 0.5rem rgba(16, 21, 32, 0.6)' : 'none')};
 `;
 
 //props를 받는 부분
