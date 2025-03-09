@@ -48,6 +48,7 @@ const Box = styled.div`
   font-weight: bold;
   gap: 1.5rem;
   margin-top: 1.5rem;
+  padding: 0 1rem;
 `;
 
 const TitleWrapper = styled.div`
@@ -111,17 +112,18 @@ const SelectCatgegory = styled.img`
 
 const BadgeBox = styled.div`
   margin: 1rem 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4개의 열을 균등하게 설정 */
+  justify-items: center; /* 항목들을 가로로 중앙 정렬 */
+  align-items: center; /* 항목들을 세로로 중앙 정렬 */
+  gap: 1rem;
 `;
 
 const Badge = styled.img`
   border: none;
-  padding: 0;
+  padding: 0.5rem;
   cursor: pointer;
-  width: 3.7rem;
-  flex-basis: calc(25% - 1rem); //
+  width: 4rem;
 `;
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>`
@@ -265,6 +267,20 @@ export default function DonateHome() {
   const closeModal = () => setIsOpen(false);
   const badgePage = Achive[selectBadge?.badge] || DovePage;
 
+  const link =
+    goalDonations == 0
+      ? '/donatecategory'
+      : currentDonations == goalDonations
+        ? '/donatecomplete'
+        : '/donate';
+
+  const info =
+    goalDonations == 0
+      ? '카테고리 선택하러 가기'
+      : currentDonations == goalDonations
+        ? '기부 하러 가기'
+        : '기부 포인트 채우기';
+
   return (
     <Box>
       <TitleWrapper>
@@ -292,29 +308,19 @@ export default function DonateHome() {
       <CharacterBox currDonate={currentDonations} targetDonate={goalDonations}></CharacterBox>
       <DonateNonTitleBox>
         <Guage currDonate={currentDonations} targetDonate={goalDonations}></Guage>
-        {currentDonations == goalDonations ? (
-          <Link to="/donatecomplete">
-            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
-              <PressMotion>
-                <div style={{ width: '19.5rem' }}>기부 하러 가기</div>
-              </PressMotion>
-            </Btn>
-          </Link>
-        ) : (
-          <Link to="/donate">
-            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
-              <PressMotion>
-                <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
-              </PressMotion>
-            </Btn>
-          </Link>
-        )}
+
+        <Link to={link}>
+          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+            <PressMotion>
+              <div style={{ width: '19rem' }}>{info}</div>
+            </PressMotion>
+          </Btn>
+        </Link>
       </DonateNonTitleBox>
 
       <TitleBox title="기부 뱃지">
         <BadgeBox>
           {badges.map((item) => {
-            console.log(item);
             return (
               <Badge
                 src={categoryList[item.badge]}

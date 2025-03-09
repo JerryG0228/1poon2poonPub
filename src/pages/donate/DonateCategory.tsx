@@ -11,6 +11,7 @@ import earthImage from '@/assets/categorybox/earth_image.png';
 import homeImage from '@/assets/categorybox/home_img.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import { useEffect, useState } from 'react';
+import useStore from '@/store/User';
 
 const Box = styled.div`
   display: flex;
@@ -18,6 +19,7 @@ const Box = styled.div`
   font-weight: bold;
   gap: 1rem;
   margin-top: 1.5rem;
+  padding: 0 1rem;
 `;
 
 const Title = styled.div`
@@ -33,11 +35,13 @@ const DonateCategoryBox = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin-top: 5rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   row-gap: 1rem;
 `;
 
 const CustomLink = styled(Link)<{ disabled?: boolean }>`
+  display: inline-flex;
+  width: 100%;
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
 `;
 
@@ -51,6 +55,7 @@ const categoryList = [
 ];
 
 export default function DonateCategory() {
+  const { setGoalCategory } = useStore();
   //active적용. 처음엔 선택안함. 다음 페이지에 데이터 전송
   const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
   const [bgColor, setBgColor] = useState(colors.Grey);
@@ -62,9 +67,13 @@ export default function DonateCategory() {
   };
 
   useEffect(() => {
+    if (selectedCategory != null) {
+      setGoalCategory(selectedCategory.category); // selectedCategory가 null이 아닐 때만 호출
+    }
     // selectedCategory가 null이면 회색, 아니면 파란색
     setBgColor(selectedCategory == null ? colors.Grey : colors.LightBlue);
   }, [selectedCategory]); // selectedCategory가 변경될 때마다 실행
+
   return (
     <Box>
       <Title>
@@ -83,10 +92,10 @@ export default function DonateCategory() {
           />
         ))}
       </DonateCategoryBox>
-      <CustomLink to="/donategoal" state={{ selectedCategory }} disabled={selectedCategory == null}>
+      <CustomLink to="/donategoal" disabled={selectedCategory == null}>
         <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
-            <div style={{ width: '20.5rem' }}>다음</div>
+            <div style={{ width: '22rem' }}>다음</div>
           </PressMotion>
         </Btn>
       </CustomLink>

@@ -49,7 +49,10 @@ export default function DonateComplete() {
       })
       .then((response) => {
         const data = response.data;
-        addBadge(data.responseData);
+        console.log('1', data.responseData[data.responseData.length - 1]);
+
+        console.log('2');
+        addBadge(data.responseData[data.responseData.length - 1]);
         updateTotalDonations(goalDonations);
         updateCurrentDonations(-goalDonations);
         setGoalDonations(0);

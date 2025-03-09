@@ -224,7 +224,7 @@ interface Props {
 }
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
-  const { goalDonations } = useStore();
+  const { goalDonations, addPoints } = useStore();
   const [character, setCharacter] = useState<string>('');
   const [growth, setGrowth] = useState<number>(10);
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
@@ -278,6 +278,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       const randomPoint = getRandomPoint();
       setGetPoint(randomPoint);
       setAnimate(randomPoint > 5 ? 'Jello' : 'Shake');
+      addPoints(randomPoint);
     } else {
       setAnimate(weightedRandomAnimation());
     }
@@ -344,7 +345,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
               <GetCoin isClicked={isClicked}>+{getPoint}</GetCoin>
               <div style={{ visibility: 'hidden' }}>1</div>
             </CoinWrapper>
-            <CharacterAni isActive={isActive} animate={animate} onClick={() => handleClick()}>
+            <CharacterAni isActive={isActive} animate={animate} onClick={handleClick}>
               <CharacterImg src={character} alt="캐릭터" growth={growth} />
             </CharacterAni>
           </>

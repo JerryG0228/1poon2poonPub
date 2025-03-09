@@ -38,7 +38,6 @@ const routes = [
       { path: 'donate', element: <Donate /> },
       { path: 'investbefore', element: <InvestMainBefore /> },
       { path: 'etf-detail/:symbol', element: <ETFDetail /> },
-      { path: 'InvestMainBefore', element: <Invest /> },
       { path: 'investCategory', element: <InvestCategory /> },
     ],
   },
@@ -69,8 +68,8 @@ const routes = [
     ],
   },
 
-  { path: 'donatesetfinish', element: <DonateSetFinish /> },
-  { path: 'donatecomplete', element: <DonateComplete /> },
+  { path: '/donatesetfinish', element: <DonateSetFinish /> },
+  { path: '/donatecomplete', element: <DonateComplete /> },
 ];
 
 export default routes;

@@ -13,6 +13,7 @@ const Box = styled.div`
   flex-direction: column;
   gap: 22rem;
   font-weight: bold;
+  padding: 0 1rem;
 `;
 
 const DonateBox = styled.div`
@@ -101,7 +102,7 @@ export default function Donate() {
       <Link to="/donateHome">
         <Btn bgColor={colors.LightBlue} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '20.5rem' }}>기부 하기</div>
+            <div style={{ width: '21rem' }}>기부 하기</div>
           </PressMotion>
         </Btn>
       </Link>

@@ -12,11 +12,11 @@ const Percentage = styled.div<{ per: number }>`
 const GuageWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
 `;
 
 const GuageBg = styled.div`
-  width: 90%;
+  width: 85%;
   height: 1.2rem;
   border-radius: 5rem;
   background-color: ${colors.Navy};
@@ -24,9 +24,9 @@ const GuageBg = styled.div`
 
 const GuageBar = styled.div<{ per: number }>`
   position: absolute;
-  top: 0;
+  top: 0rem;
 
-  width: ${(props) => (props.per * 90) / 100}%;
+  width: ${(props) => (props.per * 85) / 100}%;
   height: 1.2rem;
   border-radius: 5rem;
 
