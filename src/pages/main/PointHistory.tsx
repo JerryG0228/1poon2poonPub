@@ -162,7 +162,7 @@ export default function PointHistory() {
           <Filter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (
-              <>
+              <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <PointDate>{date.slice(6)}</PointDate>
                 {groupedHistory[date].map((history) => (
                   <PointBox
@@ -173,7 +173,7 @@ export default function PointHistory() {
                     transPoint={history.change}
                   />
                 ))}
-              </>
+              </div>
             ))}
           </PointUsage>
         </div>

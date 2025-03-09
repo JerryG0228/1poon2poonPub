@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import TitleBox from '@components/TitleBox';
 import PressMotion from '@components/PressMotion';
 import Btn from '@components/Btn';
-import AnimatedComponent from '@/components/Main/CoinRotate';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 import oneCoinBack from '@/assets/Coin/100coinback.png';
 import fiveCoinBack from '@/assets/Coin/500coinback.png';
 import { colors } from '@/styles/colors';
-import FlipImage from './FlipImage';
+import FlipCoin from './FlipCoin';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import FlipStampBoard from './FlipStampBoard';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -21,6 +21,8 @@ const StampBoard = styled.div<{ isFull: boolean }>`
 const OverLay = styled.div`
   display: flex;
   flex-direction: column;
+  //Board
+  height: 7.4rem;
   padding: 0.8rem 0;
   gap: 1rem;
   align-items: center;
@@ -94,30 +96,34 @@ export default function StampBoardSection({
 
   return (
     <>
-      <TitleBox title="캐시백 스탬프판">
-        <StampBoard isFull={isFull}>
-          {isFull ? (
-            <OverLay>
-              <OverlayText>스탬프 10개를 다 모았습니다!</OverlayText>
-              <div>
-                <Btn bgColor={colors.Blue} handleBtn={handlePoints}>
-                  <PressMotion>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '7rem',
-                        height: '0.6rem',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      포인트 전환
-                    </div>
-                  </PressMotion>
-                </Btn>
-              </div>
-            </OverLay>
-          ) : (
+      <FlipStampBoard isFull={isFull}>
+        {isFull ? (
+          <TitleBox title="캐시백 스탬프판">
+            <StampBoard>
+              <OverLay>
+                <OverlayText>스탬프 10개를 다 모았습니다!</OverlayText>
+                <div>
+                  <Btn bgColor={colors.Blue} handleBtn={handlePoints}>
+                    <PressMotion>
+                      <div
+                        style={{
+                          display: 'flex',
+                          width: '7rem',
+                          height: '0.6rem',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        포인트 전환
+                      </div>
+                    </PressMotion>
+                  </Btn>
+                </div>
+              </OverLay>
+            </StampBoard>
+          </TitleBox>
+        ) : (
+          <TitleBox title="캐시백 스탬프판">
             <Board>
               {[...Array(totalStamps)].map(
                 (
@@ -125,23 +131,21 @@ export default function StampBoardSection({
                   index: number, // index 추가
                 ) =>
                   stamps[index] ? (
-                    <AnimatedComponent key={index}>
-                      <Circle hasImage={true}>
-                        <FlipImage
-                          srcA={stamps[index] === 500 ? fiveCoin : oneCoin}
-                          srcB={stamps[index] === 500 ? fiveCoinBack : oneCoinBack}
-                          alt={`${stamps[index]}원 동전`}
-                        />
-                      </Circle>
-                    </AnimatedComponent>
+                    <Circle hasImage={true}>
+                      <FlipCoin
+                        srcA={stamps[index] === 500 ? fiveCoin : oneCoin}
+                        srcB={stamps[index] === 500 ? fiveCoinBack : oneCoinBack}
+                        alt={`${stamps[index]}원 동전`}
+                      />
+                    </Circle>
                   ) : (
                     <Circle key={index} />
                   ),
               )}
             </Board>
-          )}
-        </StampBoard>
-      </TitleBox>
+          </TitleBox>
+        )}
+      </FlipStampBoard>
     </>
   );
 }
