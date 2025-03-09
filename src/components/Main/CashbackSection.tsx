@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import TitleBox from '@/components/TitleBox';
-import StampBox from '@/components/StampBox';
+import StampBox from './StampBox';
 import busImage from '@/assets/StampBox/BusIcon.png';
 import cafeImage from '@/assets/StampBox/CafeIcon.png';
 import foodImage from '@/assets/StampBox/FoodIcon.png';
@@ -19,7 +19,6 @@ interface CashbackSectionProps {
 }
 
 export default function CashbackSection({ cashbackStatus }: CashbackSectionProps) {
-  //가져온 카테고리의 active를 false로 변경
   const stampItem = [
     { title: '대중교통', key: 'bus', img: busImage, bgColor: '#6E5230' },
     { title: '택시', key: 'taxi', img: taxiImage, bgColor: '#6E5E3D' },
@@ -28,7 +27,7 @@ export default function CashbackSection({ cashbackStatus }: CashbackSectionProps
     { title: '패스트푸드', key: 'fastFood', img: foodImage, bgColor: '#6E5E3D' },
     { title: '카페', key: 'cafe', img: cafeImage, bgColor: '#264038' },
   ].map((stamp) => ({
-    ...stamp, //stampItem의 title, img, bgColor의 값 가져오기
+    ...stamp, //모든 값 가져오기
     active: cashbackStatus[stamp.key],
   }));
 

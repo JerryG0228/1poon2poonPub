@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import TitleBox from '@components/TitleBox';
 import PressMotion from '@components/PressMotion';
 import Btn from '@components/Btn';
-import AnimatedComponent from '@components/CoinRotate';
+import AnimatedComponent from '@/components/Main/CoinRotate';
 import oneCoin from '@/assets/Coin/100coin.png';
 import fiveCoin from '@/assets/Coin/500coin.png';
 import oneCoinBack from '@/assets/Coin/100coinback.png';
@@ -11,7 +11,6 @@ import { colors } from '@/styles/colors';
 import FlipImage from './FlipImage';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import StampBoardAnimation from './StampBoardAnimation';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -53,26 +52,28 @@ const Circle = styled.div<{ index: number; hasImage: boolean }>`
   background-color: ${({ hasImage }) => (hasImage ? 'transparent' : colors.Navy)};
 `;
 
+//props를 받는 부분
 interface StampBoardSectionProps {
   stamps: number[];
   isFull: boolean;
+  totalStamps: number;
   handlePointCalculate: () => void;
 }
 
 export default function StampBoardSection({
   stamps,
-  isFull: initialIsFull,
+  isFull: initialIsFull, //부모 컴포넌트에서 전달한 isFull 값을 initialIsFull이라는 이름으로 받음
+  totalStamps,
   handlePointCalculate,
 }: StampBoardSectionProps) {
-  const totalStamps = 10;
-  const [updatedStamps, setUpdatedStamps] = useState<number[]>(stamps); // 스탬프 상태 저장
   const [isFull, setIsFull] = useState(initialIsFull); // 상태로 관리
 
+  //스탬프 10개 이상이면 isFull=true로 설정
   useEffect(() => {
-    setUpdatedStamps(stamps);
-    setIsFull(stamps.length >= 10); // 스탬프 개수에 따라 isFull 업데이트
+    setIsFull(stamps.length >= totalStamps);
   }, [stamps]);
 
+  // 버튼 클릭시 실행되는 함수
   const handlePoints = async () => {
     try {
       const response = await axios.put('http://localhost:3000/user/resetStamp', {
@@ -81,11 +82,10 @@ export default function StampBoardSection({
 
       console.log('초기화된 스탬프:', response.data);
 
-      // ✅ 부모 컴포넌트의 상태 업데이트 호출 (빈 배열 반영)
+      // 빈 배열로 변경
       handlePointCalculate();
 
-      // ✅ 컴포넌트 내부 상태도 업데이트
-      setUpdatedStamps([]);
+      //isFull 상태 변경
       setIsFull(false);
     } catch (error) {
       console.error('Error:', error);

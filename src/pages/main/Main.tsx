@@ -78,7 +78,9 @@ export default function Main() {
   }, []);
 
   // 스탬프가 10개인지 확인
-  const isFull = cashbackStamps.length === 10;
+  const TOTAL_STAMPS = 10;
+
+  const isFull = cashbackStamps.length === TOTAL_STAMPS;
 
   // 버튼 클릭시 스탬프를 빈 배열로 업데이트
   const handlePointCalculate = () => {
@@ -105,6 +107,7 @@ export default function Main() {
       <StampBoardSection
         stamps={cashbackStamps}
         isFull={isFull}
+        totalStamps={TOTAL_STAMPS}
         handlePointCalculate={handlePointCalculate}
       />
       <Link to="/pointhistory">
