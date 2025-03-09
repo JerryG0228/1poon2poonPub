@@ -38,7 +38,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       await baseAxios
-        .get(`/user/tester `)
+        .get(`/user/ooinl77`)
         .then((res) => res.data)
         .then((data) => {
           setDefault(
@@ -47,7 +47,7 @@ export default function Main() {
             data.cashbackStamps,
             data.cashback.points,
             data.cashback.history,
-            data.donate.badges,
+            data.donate.history,
             data.invest.category,
             data.invest.ownedETFs,
             data.donate.category,
@@ -77,6 +77,7 @@ export default function Main() {
   console.log(currentDonations);
   console.log(goalDonations);
   console.log(ownedStocks);
+  console.log(badges);
 
   return (
     <MainWrap>

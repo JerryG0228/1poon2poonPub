@@ -84,8 +84,7 @@ export default function Donate() {
     <Box>
       <DonateBox>
         <TitleBox title="목표 금액까지 남은 금액">
-          {remainAmount}
-          <div></div>
+          {remainAmount.toLocaleString()}원<div></div>
         </TitleBox>
         <TitleBox title="기부 금액">
           <DonateInput

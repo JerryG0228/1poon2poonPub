@@ -47,7 +47,7 @@ export default function Guage({ currDonate, targetDonate }: Props) {
         <GuageWrapper>
           <GuageBg />
           <GuageBar per={per} />
-          <Percentage per={per}>{per}%</Percentage>
+          <Percentage per={per}>{per > 0 ? per : 0} %</Percentage>
         </GuageWrapper>
       </div>
     </div>

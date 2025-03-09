@@ -21,14 +21,16 @@ import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 import HomeLayout from './layout/HomeLayout';
 import DonateSetFinish from './pages/donate/DonateSetFinish';
+import DonateComplete from './pages/donate/DonateComplete';
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="donatesetfinish" element={<DonateSetFinish />} /> {/* 기부 목표 설정 완료 페이지 */}
-
+        <Route path="donatesetfinish" element={<DonateSetFinish />} />{' '}
+        {/* 기부 목표 설정 완료 페이지 */}
+        <Route path="donatecomplete" element={<DonateComplete />} /> {/* 기부 완료 페이지 */}
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
           <Route path="/pointhistory" element={<PointHistory />} />
@@ -41,15 +43,12 @@ function App() {
           <Route path="/InvestMainBefore" element={<Invest />} /> {/* 투자 시작 페이지 */}
           <Route path="/investCategory" element={<InvestCategory />} /> {/* 투자 카테고리 페이지 */}
         </Route>
-
         <Route element={<DonateMainLayout />}>
           <Route path="/donatehome" element={<DonateHome />} /> {/* 기부 메인 페이지 */}
         </Route>
-
         <Route element={<PlusLayout />}>
           <Route path="/InvestmentHome" element={<InvestmentHome />} /> {/* 내 페이지 */}
         </Route>
-
         <Route element={<HomeLayout />}>
           <Route path="/etf-list" element={<ETFList />} /> {/* 내가 선택한 ETF 목록 */}
           <Route path="/etf-category/:category" element={<ETFCategoryList />} />{' '}
