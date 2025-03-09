@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import CandlestickChart from '@/components/invest/CandlestickChart';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa'; // ✅ 하트 아이콘 추가
+import Btn from '@/components/Btn';
+import { colors } from '@/styles/colors';
+import PressMotion from '@/components/PressMotion';
 
 const Container = styled.div`
   /* margin-left: 0.5rem; */
@@ -148,21 +151,6 @@ const BtnBox = styled.div`
   gap: 1rem; /* ✅ 버튼 사이 간격 */
   margin-top: 2.5rem;
 `;
-
-const LargeBtn1 = styled.button`
-  width: 11rem; /* ✅ 버튼 너비 */
-  height: 4rem; /* ✅ 버튼 높이 */
-  font-size: 1.2rem; /* ✅ 글자 크기 */
-  border-radius: 1.3rem; /* ✅ 버튼 둥글게 */
-  background-color: #ef4452;
-`;
-const LargeBtn2 = styled.button`
-  width: 11rem; /* ✅ 버튼 너비 */
-  height: 4rem; /* ✅ 버튼 높이 */
-  font-size: 1.2rem; /* ✅ 글자 크기 */
-  border-radius: 1.3rem; /* ✅ 버튼 둥글게 */
-  background-color: #0064ff;
-`;
 /* ✅ 하트(즐겨찾기) 버튼 스타일 추가 */
 const FavoriteButton = styled.button`
   background: transparent;
@@ -249,7 +237,7 @@ function ETFDetail() {
   const changePercentColor =
     changePercent !== null ? (changePercent > 0 ? 'red' : 'blue') : 'white';
 
-  const priceChange = Number((currentPrice - previousClose).toFixed(2));
+  const priceChange = Math.floor(currentPrice - previousClose);
   const changeColor = priceChange > 0 ? 'red' : priceChange < 0 ? 'blue' : 'white';
   const formattedPriceChange =
     priceChange !== 0 ? `${priceChange > 0 ? '+' : ''}${priceChange}` : '0';
@@ -260,7 +248,7 @@ function ETFDetail() {
   return (
     <Container>
       <FavoriteButton onClick={toggleFavorite}>
-        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} />
+        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} /> {/* ❤️ 빨강 / 🤍 회색 */}
       </FavoriteButton>
 
       <EtfTile>{symbol} ETF</EtfTile>
@@ -364,24 +352,31 @@ function ETFDetail() {
       </GaugeContainer>
 
       <BtnBox>
-        <LargeBtn1
-          onClick={() =>
+        <Btn
+          bgColor={colors.Blue}
+          handleBtn={() =>
             navigate(`/etf-buy/${symbol}`, {
               state: { symbol, currentPrice, priceChange, changePercent },
             })
           }
         >
-          구매하기
-        </LargeBtn1>
-        <LargeBtn2
-          onClick={() =>
+          <PressMotion>
+            <div style={{ width: '10rem' }}>구매하기</div>
+          </PressMotion>
+        </Btn>
+
+        <Btn
+          bgColor={colors.Red} // 기존 판매 버튼 색상에 맞게 설정 (필요시 수정)
+          handleBtn={() =>
             navigate(`/etf-sell/${symbol}`, {
               state: { symbol, currentPrice, priceChange, changePercent },
             })
           }
         >
-          판매하기
-        </LargeBtn2>
+          <PressMotion>
+            <div style={{ width: '10rem' }}>판매하기</div>
+          </PressMotion>
+        </Btn>
       </BtnBox>
     </Container>
   );

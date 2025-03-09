@@ -5,9 +5,6 @@ import axios from 'axios';
 import TopGainersChart from '@/components/invest/TopGainersChart';
 import ETFBox from '@/components/invest/ETFBox';
 import ETFQuantityBox from '@/components/invest/ETFQuantityBox';
-import Btn from '@/components/Btn';
-import { colors } from '@/styles/colors';
-import PressMotion from '@/components/PressMotion';
 
 const Container = styled.div`
   color: white;
@@ -58,17 +55,17 @@ const EmptyStateBox = styled.div`
   /* margin-top: 1rem; */
 `;
 
-// const BuyButton = styled.button`
-//   background-color: #0064ff;
-//   color: white;
-//   font-size: 1rem;
-//   padding: 0.7rem 1.2rem;
-//   border-radius: 0.5rem;
-//   font-weight: bold;
-//   border: none;
-//   cursor: pointer;
-//   width: 100%;
-// `;
+const BuyButton = styled.button`
+  background-color: #0064ff;
+  color: white;
+  font-size: 1rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+`;
 
 const InvestmentHome = () => {
   const navigate = useNavigate();
@@ -187,16 +184,7 @@ const InvestmentHome = () => {
         <ChartWrapper>
           <Title>내 ETF 차트</Title>
           <EmptyStateBox>
-            <Btn
-              bgColor={colors.Blue}
-              handleBtn={() => {
-                navigate('/etf-list'); // ✅ 버튼 클릭 시 /etf-list로 이동
-              }}
-            >
-              <PressMotion>
-                <div style={{ width: '18rem' }}>내 첫 주식을 가져볼까요?</div>
-              </PressMotion>
-            </Btn>
+            <BuyButton onClick={() => navigate('/etf-list')}>내 첫 주식을 가져볼까요?</BuyButton>
           </EmptyStateBox>
         </ChartWrapper>
       )}
@@ -248,8 +236,6 @@ const InvestmentHome = () => {
                 isRecommend={false}
                 isImageVisible={true}
                 onClick={() => navigate(`/etf-detail/${etf}`)}
-                // onFavoriteToggle={toggleFavorite} // ✅ 여기 추가
-                // isFavorite={watchlist.includes(etf)} // ✅ 관심 ETF 여부 전달
               />
             );
           })}
