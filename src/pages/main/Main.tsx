@@ -27,6 +27,7 @@ export default function Main() {
     badges,
     interests,
     ownedStocks,
+    interestsStock,
     goalCategory,
     totalDonations,
     goalDonations,
@@ -50,42 +51,64 @@ export default function Main() {
             data.donate.history,
             data.invest.category,
             data.invest.ownedETFs,
+            data.invest.interestedETFs,
             data.donate.category,
             data.donate.totalAmount,
             data.donate.targetAmount,
             data.donate.currentAmount,
           );
-          console.log({
-            name: username,
-            cashbackStatus: cashbackStatus,
-            stamps: cashbackStamps,
-            points: points,
-            pointHistory: pointHistory,
-            badges: badges,
-            interests: interests,
-            ownedETFs: ownedStocks,
-            goalCategory: goalCategory,
-            totalDonations: totalDonations,
-            goalDonations: goalDonations,
-            currentDonations: currentDonations,
-          });
+          // console.log({
+          //   name: username,
+          //   cashbackStatus: cashbackStatus,
+          //   stamps: cashbackStamps,
+          //   points: points,
+          //   pointHistory: pointHistory,
+          //   badges: badges,
+          //   interests: interests,
+          //   ownedETFs: ownedStocks,
+          //   interestsStock: interestsStock,
+          //   goalCategory: goalCategory,
+          //   totalDonations: totalDonations,
+          //   goalDonations: goalDonations,
+          //   currentDonations: currentDonations,
+          // });
         });
     };
     fetchData();
   }, []);
 
-  console.log(currentDonations);
-  console.log(goalDonations);
-  console.log(ownedStocks);
-  console.log(badges);
+  // 스탬프가 10개인지 확인
+  const TOTAL_STAMPS = 10;
+
+  const isFull = cashbackStamps.length === TOTAL_STAMPS;
+
+  // 버튼 클릭시 스탬프를 빈 배열로 업데이트
+  const handlePointCalculate = () => {
+    setDefault(
+      username,
+      cashbackStatus,
+      [],
+      points,
+      pointHistory,
+      badges,
+      interests,
+      ownedStocks,
+      interestsStock,
+      goalCategory,
+      totalDonations,
+      goalDonations,
+      currentDonations,
+    );
+  };
 
   return (
     <MainWrap>
       <CashbackSection cashbackStatus={cashbackStatus} />
       <StampBoardSection
         stamps={cashbackStamps}
-        // isFull={isFull}
-        // handlePointCalculate={handlePointCalculate}
+        isFull={isFull}
+        totalStamps={TOTAL_STAMPS}
+        handlePointCalculate={handlePointCalculate}
       />
       <Link to="/pointhistory">
         <PointHistorySection points={points} />

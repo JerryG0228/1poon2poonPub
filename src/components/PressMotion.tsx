@@ -15,7 +15,7 @@ export default function PressMotion({ children }: Props) {
   return (
     <StyledMotion
       whileTap={{
-        scale: 0.95,
+        scale: 0.97,
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
       }}
     >
