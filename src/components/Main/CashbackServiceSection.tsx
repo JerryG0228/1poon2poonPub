@@ -57,13 +57,16 @@ const InvestProgressRate = styled.div<{ totalReturnPercent: number }>`
 `;
 
 export default function CashbackServiceSection() {
-  const { currentDonations, goalDonations, badges } = useStore();
+  const { currentDonations, goalDonations, badges, interestsStock } = useStore();
   console.log(currentDonations);
   console.log(goalDonations);
   console.log(badges);
 
   //상황별 기부 페이지 이동 경로
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
+
+  //상황별 투자 페이지 이동 경로
+  const investLink = interestsStock.length === 0 ? '/donatebefore' : '/donate';
 
   //주식 총 수익율 계산
   //주식 데이터 가져오기
@@ -101,7 +104,7 @@ export default function CashbackServiceSection() {
             </PressMotion>
           </Link>
           <VerticalLine></VerticalLine>
-          <Link to="/investBefore">
+          <Link to={investLink}>
             <PressMotion>
               <Button varient="invest">
                 <img src={totalReturnPercent > 0 ? investUpImage : investDownImage} />

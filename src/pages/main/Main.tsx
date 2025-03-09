@@ -27,6 +27,7 @@ export default function Main() {
     badges,
     interests,
     ownedStocks,
+    interestsStock,
     goalCategory,
     totalDonations,
     goalDonations,
@@ -50,6 +51,7 @@ export default function Main() {
             data.donate.badges,
             data.invest.category,
             data.invest.ownedETFs,
+            data.invest.interestedETFs,
             data.donate.category,
             data.donate.totalAmount,
             data.donate.targetAmount,
@@ -64,6 +66,7 @@ export default function Main() {
             badges: badges,
             interests: interests,
             ownedETFs: ownedStocks,
+            interestsStock: interestsStock,
             goalCategory: goalCategory,
             totalDonations: totalDonations,
             goalDonations: goalDonations,
@@ -74,9 +77,7 @@ export default function Main() {
     fetchData();
   }, []);
 
-  console.log(currentDonations);
-  console.log(goalDonations);
-  console.log(ownedStocks);
+  console.log(interestsStock);
 
   return (
     <MainWrap>
