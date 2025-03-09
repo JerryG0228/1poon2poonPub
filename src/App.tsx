@@ -5,8 +5,8 @@ import Transitions from '@/components/Transitions';
 
 const App = () => {
   const content = useRoutes(routes, location);
-  const transition = useTransitionSelect();
-  console.log('Transition:', transition);
+  //const transition = useTransitionSelect();
+  //console.log('Transition:', transition);
 
   return (
     // <Transitions pageKey={location.pathname} transition={transition}>

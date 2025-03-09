@@ -326,7 +326,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
           />
         ) : (
           <>
-            {getPoint >= 5 ? (
+            {getPoint > 5 ? (
               <LottieWrapperTop>
                 {isLottieVisible && (
                   <StyledLottieMore animationData={coin} loop={true} growth={growth} />

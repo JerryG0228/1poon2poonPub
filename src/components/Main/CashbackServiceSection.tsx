@@ -66,7 +66,7 @@ export default function CashbackServiceSection() {
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
   //상황별 투자 페이지 이동 경로
-  const investLink = interestsStock.length === 0 ? '/donatebefore' : '/donate';
+  const investLink = interestsStock.length === 0 ? '/investbefore' : '/InvestmentHome';
 
   //주식 총 수익율 계산
   //주식 데이터 가져오기

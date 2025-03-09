@@ -22,6 +22,7 @@ import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 import DonateSetFinish from './pages/donate/DonateSetFinish';
+import DonateComplete from './pages/donate/DonateComplete';
 
 const routes = [
   // DefaultLayout
@@ -69,6 +70,7 @@ const routes = [
   },
 
   { path: 'donatesetfinish', element: <DonateSetFinish /> },
+  { path: 'donatecomplete', element: <DonateComplete /> },
 ];
 
 export default routes;
