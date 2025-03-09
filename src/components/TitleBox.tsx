@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  width: 100%;
 `;
 
 const WrapperTitle = styled.div`

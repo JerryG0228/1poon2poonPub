@@ -69,6 +69,7 @@ export default function PointHistorySection({ points }: PointHistorySectionProps
           </CashBackImageWrap>
           <ContentBox>
             <CashBackTextWrap>
+              {/* toLocaleString : 숫자에 3자리마다 쉼표(,)를 자동으로 추가해주는 기능 */}
               <Balance>{points.toLocaleString()}원</Balance>
               <Point>캐시백 포인트</Point>
             </CashBackTextWrap>

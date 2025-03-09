@@ -110,6 +110,7 @@ export default function CashbackServiceSection() {
                 <img src={totalReturnPercent > 0 ? investUpImage : investDownImage} />
                 <ServiceTitle>투자</ServiceTitle>
                 <InvestProgressRate varient="invest">
+                  {/* toFixed(1) : 소수점 1자리까지 */}
                   {!stock
                     ? '0%'
                     : totalReturnPercent > 0

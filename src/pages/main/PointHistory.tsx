@@ -4,11 +4,9 @@ import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState } from 'react';
-import blueCheckImage from '@/assets/Main/check_blue.png';
-import greyCheckImage from '@/assets/Main/check_grey.png';
-import { IoIosArrowDown } from 'react-icons/io';
 import useStore from '@/store/User';
 import PointBox from '@/components/PointBox';
+import Filter from '@/components/Main/Filter';
 
 const GreyBox = styled.div`
   background-color: #313845;
@@ -62,86 +60,6 @@ const Button = styled.div`
   justify-content: space-between;
 `;
 
-const PointFilter = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const PointNav = styled.div`
-  display: flex;
-  font-size: 1rem;
-  height: 2rem;
-  align-items: center;
-  > img {
-    width: 1rem;
-    height: 0.6rem;
-  }
-`;
-
-const NavContent = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-`;
-
-const CurrentNav = styled.div`
-  height: 2rem;
-  line-height: 2rem;
-`;
-
-interface FilterListProps {
-  clicked: boolean;
-}
-
-//오버레이
-const Overlay = styled.div<FilterListProps>`
-  display: ${({ clicked }) => (clicked ? 'block' : 'none')};
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  position: fixed;
-`;
-
-//필터 리스트
-const FilterList = styled.div<FilterListProps>`
-  display: ${({ clicked }) => (clicked ? 'flex' : 'none')};
-  flex-direction: column;
-  position: fixed;
-  background-color: ${colors.Navy};
-  width: 100%;
-  max-width: 92%;
-  border-radius: 1.2rem;
-  padding: 1rem;
-  z-index: 10;
-  bottom: 1rem;
-  left: 1rem;
-`;
-
-const SelectTitle = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 1rem 0;
-`;
-
-const SelectMenu = styled.ul`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SelectItem = styled.li<{ isSelected: boolean }>`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  color: ${({ isSelected }) => (isSelected ? colors.White : colors.Grey)};
-  padding: 1rem 0;
-  > img {
-    width: 1rem;
-    height: 1rem;
-  }
-`;
-
 const PointUsage = styled.div`
   display: flex;
   flex-direction: column;
@@ -165,22 +83,8 @@ interface PointHistoryProps {
 
 export default function PointHistory() {
   const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
-  const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
-  //클릭 됐는지 안됐는지
-  const [clicked, setClicked] = useState(false);
+
   const [selectedValue, setSelectedValue] = useState('전체');
-
-  //필터링
-  const handleClick = () => {
-    setClicked(!clicked);
-    console.log(clicked);
-  };
-
-  //클릭한 값으로 값이 바뀜
-  const handleSelect = (filter: string) => {
-    setSelectedValue(filter);
-    setClicked(!clicked);
-  };
 
   // 적립/사용에 따라 구분된 데이터
   const filterHistory = (filterResult: PointHistoryProps[], filter: string) => {
@@ -219,11 +123,6 @@ export default function PointHistory() {
 
   const groupedHistory = groupByDateSorted(filteredHistory);
 
-  //overlay 클릭시 필터 닫기
-  const closeFilter = () => {
-    setClicked(false);
-  };
-
   //상황별 기부 페이지 이동 경로
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
@@ -260,38 +159,11 @@ export default function PointHistory() {
         <NavyLine />
 
         <div style={{ padding: '1rem' }}>
-          <PointFilter>
-            <PointNav onClick={handleClick}>
-              <PressMotion>
-                <NavContent>
-                  <CurrentNav>{selectedValue}</CurrentNav>
-                  <IoIosArrowDown style={{ fontSize: '1.5rem' }} />
-                </NavContent>
-              </PressMotion>
-            </PointNav>
-          </PointFilter>
-          <Overlay clicked={clicked} onClick={closeFilter} />
-          <FilterList clicked={clicked}>
-            <SelectTitle>내역 선택</SelectTitle>
-            <SelectMenu>
-              {filterOptions.map((item) => {
-                return (
-                  <SelectItem
-                    key={item}
-                    onClick={() => handleSelect(item)}
-                    isSelected={selectedValue === item}
-                  >
-                    <div>{item}</div>
-                    <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />
-                  </SelectItem>
-                );
-              })}
-            </SelectMenu>
-          </FilterList>
+          <Filter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (
-              <>
-                <PointDate>{date}</PointDate>
+              <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <PointDate>{date.slice(6)}</PointDate>
                 {groupedHistory[date].map((history) => (
                   <PointBox
                     key={history._id}
@@ -301,7 +173,7 @@ export default function PointHistory() {
                     transPoint={history.change}
                   />
                 ))}
-              </>
+              </div>
             ))}
           </PointUsage>
         </div>
