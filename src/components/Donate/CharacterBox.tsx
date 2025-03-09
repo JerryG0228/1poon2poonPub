@@ -12,6 +12,7 @@ import getCoin from '@/assets/characterbox/coin.json';
 import donateComplete from '@/assets/characterbox/donateComplete.json';
 import Lottie from 'lottie-react';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const Jello = keyframes` // 모찌 리액션
   0% { transform: scale3d(1,1,1); }
@@ -224,7 +225,7 @@ interface Props {
 }
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
-  const { goalDonations, addPoints } = useStore();
+  const { goalDonations, addPoints, username } = useStore();
   const [character, setCharacter] = useState<string>('');
   const [growth, setGrowth] = useState<number>(10);
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
@@ -263,6 +264,21 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
     return Math.floor(Math.random() * 10) + 1;
   };
 
+  const fetchData = async (data: number) => {
+    await baseAxios
+      .post('/user/setPoint', {
+        name: username,
+        point: data,
+        origin: '캐릭터 이벤트',
+      })
+      .then((response) => {
+        console.log('data:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
   // 애니메이션 트리거 함수
   const handleClick = () => {
     if (!isClickable) return;
@@ -279,6 +295,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       setGetPoint(randomPoint);
       setAnimate(randomPoint > 5 ? 'Jello' : 'Shake');
       addPoints(randomPoint);
+      fetchData(randomPoint);
     } else {
       setAnimate(weightedRandomAnimation());
     }
