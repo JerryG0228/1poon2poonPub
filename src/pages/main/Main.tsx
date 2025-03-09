@@ -39,7 +39,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       await baseAxios
-        .get(`/user/tester`)
+        .get(`/user/tester `)
         .then((res) => res.data)
         .then((data) => {
           setDefault(
@@ -57,21 +57,21 @@ export default function Main() {
             data.donate.targetAmount,
             data.donate.currentAmount,
           );
-          console.log({
-            name: username,
-            cashbackStatus: cashbackStatus,
-            stamps: cashbackStamps,
-            points: points,
-            pointHistory: pointHistory,
-            badges: badges,
-            interests: interests,
-            ownedETFs: ownedStocks,
-            interestsStock: interestsStock,
-            goalCategory: goalCategory,
-            totalDonations: totalDonations,
-            goalDonations: goalDonations,
-            currentDonations: currentDonations,
-          });
+          // console.log({
+          //   name: username,
+          //   cashbackStatus: cashbackStatus,
+          //   stamps: cashbackStamps,
+          //   points: points,
+          //   pointHistory: pointHistory,
+          //   badges: badges,
+          //   interests: interests,
+          //   ownedETFs: ownedStocks,
+          //   interestsStock: interestsStock,
+          //   goalCategory: goalCategory,
+          //   totalDonations: totalDonations,
+          //   goalDonations: goalDonations,
+          //   currentDonations: currentDonations,
+          // });
         });
     };
     fetchData();
