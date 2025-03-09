@@ -1,29 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CrosshairMode } from 'lightweight-charts';
 import axios from 'axios';
-import styled from 'styled-components';
 
 type CandlestickChartProps = {
   symbol: string;
   timeRange: '1d' | '1w' | '1mo' | '1y';
 };
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center; /* 가로 가운데 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
-  width: 100%;
-  height: auto;
-`;
 
-const ChartContainer = styled.div`
-  width: 100%; /* 차트 크기 조정 */
-  margin-top: 0.8rem;
-  display: flex;
-  margin-right: 1.2rem;
-  position: relative;
-`;
-
-const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
+const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps) => {
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<any>(null);
   const seriesRef = useRef<any>(null);
@@ -34,7 +18,9 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
       if (!symbol) return;
 
       try {
-        const res = await axios.get(`http://localhost:5001/api/etf/${symbol}?range=${timeRange}`);
+        const res = await axios.get(
+          `http://localhost:3000/invest/getData/${symbol}?range=${timeRange}`,
+        );
         console.log('📊 차트 데이터:', res.data);
 
         const quote = res.data?.chart?.result?.[0]?.indicators?.quote?.[0];
@@ -70,17 +56,31 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
     }
 
     const chart = createChart(chartContainerRef.current, {
-      width: chartContainerRef.current.clientWidth,
-      height: 270, // 차트 크기 확대
-      layout: { background: { color: '#202632' }, textColor: '#8f9298' },
+      width: 140,
+      height: 100,
+      layout: { background: { color: 'transparent' }, textColor: '#FFFFFF' }, // ✅ 배경 투명 처리
       grid: {
-        vertLines: { visible: false }, // 배경선 제거
-        horzLines: { visible: false }, // 배경선 제거
+        vertLines: { visible: false }, // ✅ 세로선 제거
+        horzLines: { visible: false }, // ✅ 가로선 제거
       },
       crosshair: { mode: CrosshairMode.Normal },
-      timeScale: { timeVisible: true, borderColor: 'transparent' },
-      rightPriceScale: { visible: false }, // 기존 오른쪽 눈금 제거
-      leftPriceScale: { visible: true, borderColor: 'transparent' }, // 왼쪽 눈금 활성화
+      timeScale: {
+        visible: false, // ✅ X축 눈금 제거
+        borderVisible: false, // ✅ X축 경계선 제거
+        fixLeftEdge: true, // ✅ 왼쪽 경계 고정
+        fixRightEdge: true, // ✅ 오른쪽 경계 고정
+        lockVisibleTimeRangeOnResize: true,
+      },
+      rightPriceScale: {
+        visible: false, // ✅ 오른쪽 가격 눈금 제거
+        borderVisible: false, // ✅ 가격 축 경계선 제거
+      },
+      leftPriceScale: {
+        visible: false, // ✅ 왼쪽 가격 눈금 제거
+        borderVisible: false, // ✅ 가격 축 경계선 제거
+      },
+      handleScroll: false, // ✅ 차트 스크롤 방지
+      handleScale: false, // ✅ 차트 확대/축소 방지
       watermark: { visible: false }, // ✅ 워터마크 제거
     });
 
@@ -91,7 +91,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
       borderDownColor: '#FF0000',
       wickUpColor: '#0064FF',
       wickDownColor: '#FF0000',
-      priceLineVisible: false, // ✅ 가격 라벨(마크) 제거
+      priceLineVisible: false, // ✅ 가격 라벨 제거
     });
 
     candleSeries.setData(chartData);
@@ -100,10 +100,11 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
   }, [chartData]);
 
   return (
-    <Wrapper>
-      <ChartContainer ref={chartContainerRef} />
-    </Wrapper>
+    <div
+      ref={chartContainerRef}
+      style={{ width: '100%', height: '40%', background: 'transparent' }}
+    />
   );
 };
 
-export default CandlestickChart;
+export default CandlestickTopGainersChart;

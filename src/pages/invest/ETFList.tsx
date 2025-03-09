@@ -2,8 +2,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import EtfCategoryBox from '@/components/EtfCategoryBox';
-import ETFBox from '@/components/ETFBox';
+import EtfCategoryBox from '@/components/invest/EtfCategoryBox';
+import ETFBox from '@/components/invest/ETFBox';
 import buildingImage from '@/assets/categorybox/building_image.png';
 import computerImage from '@/assets/categorybox/computer_image.png';
 import moneyImage from '@/assets/categorybox/money_image.png';
@@ -133,7 +133,7 @@ function ETFList() {
         .flat()
         .map(async (etf) => {
           try {
-            const res = await axios.get(`http://localhost:5001/api/etf/${etf}`);
+            const res = await axios.get(`http://localhost:3000/invest/getData/${etf}`);
             console.log(`✅ API 응답 (${etf}):`, res.data);
 
             const marketPrice = res.data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 0;

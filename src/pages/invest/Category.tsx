@@ -1,13 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styled from 'styled-components';
-import CategoryBox from '@/components/CategoryBox';
+import CategoryBox from '@/components/invest/CategoryBox';
 import buildingImage from '@/assets/categorybox/building_image.png';
 import computerImage from '@/assets/categorybox/computer_image.png';
 import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
+import Btn from '@/components/Btn';
+import { colors } from '@/styles/colors';
+import PressMotion from '@/components/PressMotion';
 
 const categories = [
   '기술 & AI 관련',
@@ -60,19 +63,7 @@ const Grid = styled.div`
 const NextButtonBox = styled.div`
   display: flex;
   justify-content: center;
-`;
-const NextButton = styled.button`
-  margin-top: 3rem;
-  padding: 1rem 5rem;
-  width: 22rem;
-  background: ${({ disabled }) => (disabled ? 'gray' : '#007bff')};
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  transition: 0.3s;
+  margin-top: 5.5rem;
 `;
 
 function Category() {
@@ -110,12 +101,18 @@ function Category() {
       </Grid>
 
       <NextButtonBox>
-        <NextButton
-          disabled={selectedCategories.length !== 3}
-          onClick={() => navigate('/etf-list', { state: { selectedCategories } })} // ✅ 경로 확인
+        <Btn
+          bgColor={colors.Blue}
+          handleBtn={() => {
+            if (selectedCategories.length === 3) {
+              navigate('/etf-list', { state: { selectedCategories } });
+            }
+          }}
         >
-          다음
-        </NextButton>
+          <PressMotion>
+            <div style={{ width: '20.5rem' }}>다음</div>
+          </PressMotion>
+        </Btn>
       </NextButtonBox>
     </Container>
   );

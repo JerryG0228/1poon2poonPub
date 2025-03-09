@@ -1,4 +1,4 @@
-import CategoryBox from '@/components/CategoryBox';
+import CategoryBox from '@/components/invest/CategoryBox';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Btn from '@/components/Btn';

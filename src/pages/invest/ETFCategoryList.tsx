@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import ETFBox from '@/components/ETFBox';
-import TopGainersChart from '@/components/TopGainersChart'; // ✅ 신규 차트 추가
+import ETFBox from '@/components/invest/ETFBox';
+import TopGainersChart from '@/components/invest/TopGainersChart'; // ✅ 신규 차트 추가
 import etfData from '@/data/etfData'; // ✅ etfData 가져오기
 
 const Container = styled.div`
@@ -125,7 +125,7 @@ function ETFCategoryList() {
 
       const requests = etfs.map(async (etf) => {
         try {
-          const res = await axios.get(`http://localhost:5001/api/etf/${etf}`);
+          const res = await axios.get(`http://localhost:3000/invest/getData/${etf}`);
 
           // ✅ API에서 현재가와 전일 종가 가져오기
           const marketPrice = res.data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 0;
@@ -199,8 +199,8 @@ function ETFCategoryList() {
               changePercent={changePercent}
               isRecommend={false}
               onClick={() => navigate(`/etf-detail/${etf}`)}
-              onFavoriteToggle={toggleFavorite} // ✅ 관심 ETF 토글
-              isFavorite={watchlist.includes(etf)} // ✅ 현재 ETF가 관심 ETF인지 여부
+              // onFavoriteToggle={toggleFavorite} // ✅ 관심 ETF 토글
+              // isFavorite={watchlist.includes(etf)} // ✅ 현재 ETF가 관심 ETF인지 여부
             />
           );
         })}

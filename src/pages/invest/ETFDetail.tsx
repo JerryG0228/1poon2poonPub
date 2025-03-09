@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import CandlestickChart from '@/components/CandlestickChart';
+import CandlestickChart from '@/components/invest/CandlestickChart';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa'; // ✅ 하트 아이콘 추가
 
@@ -191,7 +191,7 @@ function ETFDetail() {
       if (!symbol) return;
 
       try {
-        const res = await axios.get(`http://localhost:5001/api/etf/${symbol}`);
+        const res = await axios.get(`http://localhost:3000/invest/getData/${symbol}`);
         console.log('📢 ETF API 응답:', res.data);
         setData(res.data);
       } catch (err) {
@@ -249,7 +249,7 @@ function ETFDetail() {
   const changePercentColor =
     changePercent !== null ? (changePercent > 0 ? 'red' : 'blue') : 'white';
 
-  const priceChange = Math.floor(currentPrice - previousClose);
+  const priceChange = Number((currentPrice - previousClose).toFixed(2));
   const changeColor = priceChange > 0 ? 'red' : priceChange < 0 ? 'blue' : 'white';
   const formattedPriceChange =
     priceChange !== 0 ? `${priceChange > 0 ? '+' : ''}${priceChange}` : '0';
@@ -260,7 +260,7 @@ function ETFDetail() {
   return (
     <Container>
       <FavoriteButton onClick={toggleFavorite}>
-        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} /> {/* ❤️ 빨강 / 🤍 회색 */}
+        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} />
       </FavoriteButton>
 
       <EtfTile>{symbol} ETF</EtfTile>
@@ -288,9 +288,9 @@ function ETFDetail() {
         <Button $active={timeRange === '1y'} onClick={() => setTimeRange('1y')}>
           년
         </Button>
-        <Button $active={timeRange === '1y'} onClick={() => setTimeRange('1y')}>
+        {/* <Button $active={timeRange === '1y'} onClick={() => setTimeRange('1y')}>
           📊
-        </Button>
+        </Button> */}
       </ButtonContainer>
 
       <OrderBookContainer>

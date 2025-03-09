@@ -3,7 +3,7 @@ import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
 import { IoChevronBackSharp } from 'react-icons/io5';
-import { FaPlus } from 'react-icons/fa6';
+import { CgArrowsExchangeAlt } from 'react-icons/cg';
 
 const Top = styled.div`
   display: flex;
@@ -30,14 +30,18 @@ export default function PlusLayout() {
     navigate(-1);
   };
 
+  const HandleHomeClick = () => {
+    navigate('/investCategory'); // ✅ 홈 아이콘 클릭 시 이동
+  };
+
   return (
     <div>
       <Top>
         <Icon onClick={HandleIcon}>
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
         </Icon>
-        <Icon>
-          <FaPlus color={colors.White} size="1.5rem" />
+        <Icon onClick={HandleHomeClick}>
+          <CgArrowsExchangeAlt color={colors.White} size="1.6rem" />
         </Icon>
       </Top>
       <Outlet />
