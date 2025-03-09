@@ -4,10 +4,15 @@ import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 import adImage1 from '@/assets/banner1.png';
 import adImage2 from '@/assets/banner2.png';
+import { createGlobalStyle } from 'styled-components';
 
-const SliderContainer = styled.div`
-  width: 100%;
-  margin: 0 auto;
+const GlobalStyles = createGlobalStyle`
+  .slick-track {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 5rem !important;  /* 슬라이드 트랙 높이 강제 조정 */
+  }
 `;
 
 const SlideItem = styled.div`
@@ -40,7 +45,8 @@ function AutoPlaySlider() {
   };
 
   return (
-    <SliderContainer>
+    <>
+      <GlobalStyles />
       <Slider {...settings}>
         <SlideItem>
           <img src={adImage1} alt="배너 이미지1" />
@@ -49,7 +55,7 @@ function AutoPlaySlider() {
           <img src={adImage2} alt="배너 이미지2" />
         </SlideItem>
       </Slider>
-    </SliderContainer>
+    </>
   );
 }
 

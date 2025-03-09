@@ -8,7 +8,10 @@ import fiveCoin from '@/assets/Coin/500coin.png';
 import oneCoinBack from '@/assets/Coin/100coinback.png';
 import fiveCoinBack from '@/assets/Coin/500coinback.png';
 import { colors } from '@/styles/colors';
-import FlipImage from '../FlipImage';
+import FlipImage from './FlipImage';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import StampBoardAnimation from './StampBoardAnimation';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -22,10 +25,13 @@ const OverLay = styled.div`
   padding: 0.8rem 0;
   gap: 1rem;
   align-items: center;
+  justify-content: center;
 `;
 
 const OverlayText = styled.div`
   font-size: 1.2rem;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Board = styled.div`
@@ -44,7 +50,7 @@ const Circle = styled.div<{ index: number; hasImage: boolean }>`
   max-width: 56px;
   max-height: 56px;
   border-radius: 3rem;
-  background-color: ${({ hasImage }) => (hasImage ? 'transparent' : '#ffffff')};
+  background-color: ${({ hasImage }) => (hasImage ? 'transparent' : colors.Navy)};
 `;
 
 interface StampBoardSectionProps {
@@ -55,10 +61,36 @@ interface StampBoardSectionProps {
 
 export default function StampBoardSection({
   stamps,
-  isFull,
+  isFull: initialIsFull,
   handlePointCalculate,
 }: StampBoardSectionProps) {
   const totalStamps = 10;
+  const [updatedStamps, setUpdatedStamps] = useState<number[]>(stamps); // 스탬프 상태 저장
+  const [isFull, setIsFull] = useState(initialIsFull); // 상태로 관리
+
+  useEffect(() => {
+    setUpdatedStamps(stamps);
+    setIsFull(stamps.length >= 10); // 스탬프 개수에 따라 isFull 업데이트
+  }, [stamps]);
+
+  const handlePoints = async () => {
+    try {
+      const response = await axios.put('http://localhost:3000/user/resetStamp', {
+        name: 'tester',
+      });
+
+      console.log('초기화된 스탬프:', response.data);
+
+      // ✅ 부모 컴포넌트의 상태 업데이트 호출 (빈 배열 반영)
+      handlePointCalculate();
+
+      // ✅ 컴포넌트 내부 상태도 업데이트
+      setUpdatedStamps([]);
+      setIsFull(false);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <>
@@ -67,11 +99,23 @@ export default function StampBoardSection({
           {isFull ? (
             <OverLay>
               <OverlayText>스탬프 10개를 다 모았습니다!</OverlayText>
-              <PressMotion>
-                <Btn bgColor={colors.Blue} handleBtn={handlePointCalculate}>
-                  포인트 전환
+              <div>
+                <Btn bgColor={colors.Blue} handleBtn={handlePoints}>
+                  <PressMotion>
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '7rem',
+                        height: '0.6rem',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      포인트 전환
+                    </div>
+                  </PressMotion>
                 </Btn>
-              </PressMotion>
+              </div>
             </OverLay>
           ) : (
             <Board>
