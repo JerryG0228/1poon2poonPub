@@ -134,7 +134,7 @@ export default function DonateGoal() {
       <CustomLink to="/donatesetfinish" state={{ data }} disabled={(targetAmount ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '22rem' }}>설정하기</div>
+            <div style={{ width: '21.3rem' }}>설정하기</div>
           </PressMotion>
         </Btn>
       </CustomLink>

@@ -4,7 +4,7 @@ import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import useStore from '@/store/User';
 import { colors } from '@/styles/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -46,6 +46,7 @@ export default function Donate() {
     useStore();
   const [value, setValue] = useState<number | null>(null); // 기부 할 금액 입력
   const [data, setData] = useState<{ name: string; amount: number }>({ name: username, amount: 0 });
+  const [bgColor, setBgColor] = useState(colors.Grey);
 
   const remainAmount = goalDonations - currentDonations;
 
@@ -81,6 +82,10 @@ export default function Donate() {
       });
   };
 
+  useEffect(() => {
+    setBgColor(value == null ? colors.Grey : colors.LightBlue);
+  }, [value]); // selectedCategory가 변경될 때마다 실행
+
   return (
     <Box>
       <DonateBox>
@@ -100,9 +105,9 @@ export default function Donate() {
         </TitleBox>
       </DonateBox>
       <Link to="/donateHome">
-        <Btn bgColor={colors.LightBlue} handleBtn={fetchData}>
+        <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '21rem' }}>기부 하기</div>
+            <div style={{ width: '21.3rem' }}>기부 하기</div>
           </PressMotion>
         </Btn>
       </Link>
