@@ -113,13 +113,13 @@ const Wrapper = styled.div`
 `;
 
 const StyledLottieMore = styled(Lottie)<{ growth: number }>`
-  width: ${(props) => props.growth * 2.3 + 'rem'};
-  height: ${(props) => props.growth * 2.3 + 'rem'};
+  width: ${(props) => props.growth * 2 + 'rem'};
+  height: ${(props) => props.growth * 2 + 'rem'};
 `;
 
 const StyledLottieLess = styled(Lottie)<{ growth: number }>`
-  width: ${(props) => props.growth * 2.8 + 'rem'};
-  height: ${(props) => props.growth * 2.8 + 'rem'};
+  width: ${(props) => props.growth * 2 + 'rem'};
+  height: ${(props) => props.growth * 2 + 'rem'};
 `;
 
 const aniList: Record<string, Keyframes> = {
@@ -183,7 +183,10 @@ const CoinWrapper = styled.div`
 
 const GetCoin = styled.div<{ isClicked: boolean }>`
   display: ${(props) => (props.isClicked ? 'inline-block' : 'none')};
-
+  background-color: ${colors.Grey};
+  border-radius: 0.5rem;
+  width: 2rem;
+  text-align: center;
   animation: ${CoinMessage} 1.3s ease-in-out;
 `;
 
@@ -267,8 +270,10 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       setIsLottieVisible(true);
       setGetCoinCount(getCoinCount - 1);
       setIsClicked(true);
-      setGetPoint(getRandomPoint());
-      setAnimate('Jello');
+
+      const randomPoint = getRandomPoint();
+      setGetPoint(randomPoint);
+      setAnimate(randomPoint > 5 ? 'Jello' : 'Shake');
     } else {
       setAnimate(weightedRandomAnimation());
     }
@@ -297,14 +302,14 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       setGrowth(10);
     } else if (per >= 75 && per < 100) {
       setCharacter(lv4);
-      setGrowth(12);
+      setGrowth(11);
     } else setCharacter(present);
   }, [currDonate, targetDonate, character]);
 
   return (
     <Wrapper>
-      <div style={{ marginBottom: '5rem', marginLeft: '20rem' }}>{getCoinCount}/5</div>
-      <div style={{ position: 'relative' }}>
+      <div style={{ marginLeft: '20rem' }}>{getCoinCount}/5</div>
+      <div style={{ position: 'relative', marginTop: (13 % growth) + 1 + 'rem' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : (

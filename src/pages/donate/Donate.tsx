@@ -1,10 +1,11 @@
+import baseAxios from '@/apis/axiosInstance';
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
+import useStore from '@/store/User';
 import { colors } from '@/styles/colors';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Box = styled.div`
@@ -40,19 +41,45 @@ const PointBalance = styled.div`
 `;
 
 export default function Donate() {
-  const [data, setData] = useState<any>({}); // 전달 데이터
-  const [value, setValue] = useState('');
+  const { points, goalDonations, currentDonations, username, updateCurrentDonations, subPoints } =
+    useStore();
+  const [value, setValue] = useState<number | null>(null); // 기부 할 금액 입력
+  const [data, setData] = useState<{ name: string; amount: number }>({ name: username, amount: 0 });
 
-  const location = useLocation();
-  const state = location.state.data;
-  const remainAmount = state.price - state.currentPrice;
+  const remainAmount = goalDonations - currentDonations;
 
-  useEffect(() => {
-    const currentBalance = state.currentPrice + Number(value);
-    console.log(currentBalance);
+  //input onChange 핸들러
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let amount: number = Number(event.target.value); // 입력값을 숫자로 변환
 
-    setData({ ...state, currentPrice: currentBalance });
-  }, [value]);
+    const maxAmount = Math.min(remainAmount, points);
+    if (points === 0) {
+      alert('포인트가 없습니다.');
+      setValue(null); // 입력값을 초기화
+      setData({ name: username, amount: 0 }); // 데이터 초기화
+      event.preventDefault(); // 기본 입력 동작을 방지하여 더 이상 입력이 안 되도록
+      return; // 더 이상 실행되지 않도록 early return
+    }
+    if (amount > maxAmount) {
+      amount = maxAmount; // 초과시 최대값으로 설정
+    }
+    setValue(amount > 0 ? amount : null); // 0보다 크면 저장, 아니면 null
+
+    setData({ name: username, amount: amount });
+  };
+
+  const fetchData = async () => {
+    await baseAxios
+      .post('/donate/donation', data)
+      .then(() => {
+        updateCurrentDonations(data.amount);
+        subPoints(data.amount);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
   return (
     <Box>
       <DonateBox>
@@ -62,19 +89,18 @@ export default function Donate() {
         </TitleBox>
         <TitleBox title="기부 금액">
           <DonateInput
+            disabled={points == 0}
             show={value}
             type="number"
             placeholder="기부 금액을 입력해 주세요"
             value={value}
-            onChange={(e: { target: { value: SetStateAction<string> } }) =>
-              setValue(e.target.value)
-            }
+            onChange={handleInput}
           ></DonateInput>
-          <PointBalance>보유 포인트 250,000원</PointBalance>
+          <PointBalance>보유 포인트 {points}원</PointBalance>
         </TitleBox>
       </DonateBox>
-      <Link to="/donateHome" state={{ data }}>
-        <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+      <Link to="/donateHome">
+        <Btn bgColor={colors.LightBlue} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '20.5rem' }}>기부 하기</div>
           </PressMotion>

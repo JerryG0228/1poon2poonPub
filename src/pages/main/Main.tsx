@@ -39,7 +39,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       await baseAxios
-        .get(`/user/tester`)
+        .get(`/user/tester `)
         .then((res) => res.data)
         .then((data) => {
           setDefault(
