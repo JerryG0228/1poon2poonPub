@@ -1,5 +1,6 @@
 import GlobalStyle from '@/styles/GlobalStyles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Main from './pages/main/Main';
 import DonateMainBefore from './pages/donate/DonateMainBefore';
 import DefaultLayout from './layout/DefaultLayout';
@@ -27,8 +28,8 @@ function App() {
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="donatesetfinish" element={<DonateSetFinish />} /> {/* 기부 목표 설정 완료 페이지 */}
-
+        <Route path="donatesetfinish" element={<DonateSetFinish />} />{' '}
+        {/* 기부 목표 설정 완료 페이지 */}
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Main />} /> {/* 메인 페이지 */}
           <Route path="/pointhistory" element={<PointHistory />} />
@@ -41,15 +42,12 @@ function App() {
           <Route path="/InvestMainBefore" element={<Invest />} /> {/* 투자 시작 페이지 */}
           <Route path="/investCategory" element={<InvestCategory />} /> {/* 투자 카테고리 페이지 */}
         </Route>
-
         <Route element={<DonateMainLayout />}>
           <Route path="/donatehome" element={<DonateHome />} /> {/* 기부 메인 페이지 */}
         </Route>
-
         <Route element={<PlusLayout />}>
           <Route path="/InvestmentHome" element={<InvestmentHome />} /> {/* 내 페이지 */}
         </Route>
-
         <Route element={<HomeLayout />}>
           <Route path="/etf-list" element={<ETFList />} /> {/* 내가 선택한 ETF 목록 */}
           <Route path="/etf-category/:category" element={<ETFCategoryList />} />{' '}
