@@ -5,7 +5,7 @@ import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
 import ReactConfetti from 'react-confetti';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;

@@ -71,6 +71,8 @@ export default function Donate() {
   };
 
   const fetchData = async () => {
+    console.log('data: ', data);
+
     await baseAxios
       .post('/donate/donation', data)
       .then(() => {

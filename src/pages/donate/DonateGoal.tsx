@@ -1,7 +1,6 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { useEffect, useState } from 'react';
@@ -91,7 +90,7 @@ export default function DonateGoal() {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
     setTargetAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
-    setData({ category: goalCategory, targetAmount: value, name: 'ooinl77' });
+    setData({ category: goalCategory, targetAmount: value, name: 'tester' });
   };
 
   const fetchData = async () => {

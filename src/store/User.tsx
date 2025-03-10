@@ -1,5 +1,4 @@
 import baseAxios from '@/apis/axiosInstance';
-import { L } from 'framer-motion/dist/types.d-6pKw1mTI';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -128,27 +127,41 @@ const useStore = create<UserState>()(
 
       setPoints: async (amount, origin) => {
         const state = useStore.getState();
+        if (origin === '기부') {
+          await baseAxios
+            .get(`/user/getPointInfo/${state.username}`)
+            .then((response) => {
+              console.log('point:', response.data);
+              useStore.setState({
+                points: response.data.points,
+                pointHistory: response.data.history,
+              });
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        } else {
+          try {
+            const response = await baseAxios.post('/user/setPoint', {
+              name: state.username,
+              point: amount,
+              origin: origin,
+            });
 
-        try {
-          const response = await baseAxios.post('/user/setPoint', {
-            name: state.username,
-            point: amount,
-            origin: origin,
-          });
+            const data = response.data;
+            console.log('data: ', data);
 
-          const data = response.data;
-          console.log('data: ', data);
+            if (!data) {
+              throw new Error('잘못된 응답 형식');
+            }
 
-          if (!data) {
-            throw new Error('잘못된 응답 형식');
+            useStore.setState({
+              points: data.points,
+              pointHistory: data.history,
+            });
+          } catch (error) {
+            console.error('포인트 업데이트 실패:', error);
           }
-
-          useStore.setState({
-            points: data.points,
-            pointHistory: data.history,
-          });
-        } catch (error) {
-          console.error('포인트 업데이트 실패:', error);
         }
       }, // 포인트 추가/감소
 
