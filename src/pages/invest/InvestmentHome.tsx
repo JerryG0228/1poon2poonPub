@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import useStore from '@/store/User';
 import TopGainersChart from '@/components/invest/TopGainersChart';
 import ETFBox from '@/components/invest/ETFBox';
 import ETFQuantityBox from '@/components/invest/ETFQuantityBox';
+import baseAxios from '@/apis/axiosInstance';
 
 const Container = styled.div`
   color: white;
@@ -78,14 +78,14 @@ const InvestmentHome = () => {
   >([]);
   const [topETFs, setTopETFs] = useState<any[]>([]);
 
-  // ✅ 페이지 진입 시 관심 ETF 가져오기
+  // 페이지 진입 시 관심 ETF 가져오기
   useEffect(() => {
     async function fetchInterestETFs() {
       try {
-        const res = await axios.get(`http://localhost:3000/invest/getInterestEtf/${username}`);
+        const res = await baseAxios.get(`/invest/getInterestEtf/${username}`);
         setInterestsStock(res.data); // zustand에 관심 ETF 저장
       } catch (error) {
-        console.error('❌ 관심 ETF 불러오기 실패:', error);
+        console.error('관심 ETF 불러오기 실패:', error);
       }
     }
 
@@ -97,9 +97,9 @@ const InvestmentHome = () => {
   useEffect(() => {
     async function fetchOwnedETFs() {
       try {
-        const res = await axios.get(`http://localhost:3000/invest/getUser/${username}`);
+        const res = await baseAxios.get(`/invest/getUser/${username}`);
         if (res.data.ownedETFs) {
-          setOwnedStocks(res.data.ownedETFs); // 🟢 zustand에 보유 ETF 저장
+          setOwnedStocks(res.data.ownedETFs); // zustand에 보유 ETF 저장
         }
       } catch (error) {
         console.error('❌ 보유 ETF 불러오기 실패:', error);
@@ -111,7 +111,7 @@ const InvestmentHome = () => {
     }
   }, [username]);
 
-  // ✅ 보유 ETF + 관심 ETF 병합 후 데이터 요청
+  // 보유 ETF + 관심 ETF 병합 후 데이터 요청
   useEffect(() => {
     const interestOnly = interestsStock.filter(
       (interest) => !ownedStocks.some((own) => own.name === interest.name),
@@ -129,14 +129,14 @@ const InvestmentHome = () => {
     }
   }, [ownedStocks, interestsStock]);
 
-  // ✅ 종목별 API 호출
+  // 종목별 API 호출
   const fetchStockData = async (stockList: { name: string; quantity: number }[]) => {
     try {
       const validResponses = [];
 
       for (const stock of stockList) {
         try {
-          const res = await axios.get(`http://localhost:3000/invest/getData/${stock.name}`);
+          const res = await baseAxios.get(`/invest/getData/${stock.name}`);
           const meta = res.data?.chart?.result?.[0]?.meta;
           const price = meta?.regularMarketPrice ?? 0;
           const prevClose = meta?.chartPreviousClose ?? price;
@@ -152,7 +152,7 @@ const InvestmentHome = () => {
             quantity: stock.quantity,
           });
         } catch (err) {
-          console.warn(`❗️ ${stock.name} 종목 데이터를 불러올 수 없습니다. 건너뜁니다.`);
+          console.warn(`${stock.name} 종목 데이터를 불러올 수 없습니다. 건너뜁니다.`);
         }
       }
 
@@ -164,7 +164,7 @@ const InvestmentHome = () => {
       setStocks(validResponses);
       setTopETFs(sorted);
     } catch (error) {
-      console.error('❌ 주식 데이터 전체 요청 실패:', error);
+      console.error('주식 데이터 전체 요청 실패:', error);
     }
   };
 
@@ -184,7 +184,7 @@ const InvestmentHome = () => {
         </ChartWrapper>
       )}
 
-      {/* ✅ 탭 UI */}
+      {/* 탭 UI */}
       <TabContainer>
         <Tab $isActive={activeTab === '내 ETF'} onClick={() => setActiveTab('내 ETF')}>
           내 ETF
@@ -194,12 +194,12 @@ const InvestmentHome = () => {
         </Tab>
       </TabContainer>
 
-      {/* ✅ 선택한 탭에 따라 다른 리스트 표시 */}
+      {/* 선택한 탭에 따라 다른 리스트 표시 */}
       {activeTab === '내 ETF' ? (
         stocks.length > 0 ? (
           <StockList>
             {stocks
-              .filter((stock) => stock.quantity > 0) // ✅ 보유 수량이 1주 이상인 주식만 표시
+              .filter((stock) => stock.quantity > 0) // 보유 수량이 1주 이상인 주식만 표시
               .map((stock, index) => (
                 <ETFQuantityBox
                   key={index}

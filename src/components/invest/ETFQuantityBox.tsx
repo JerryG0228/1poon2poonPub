@@ -73,7 +73,7 @@ interface Props {
   price: number;
   transPrice?: number;
   changePercent?: string;
-  quantity?: number; // ✅ 보유 수량 추가
+  quantity?: number; // 보유 수량 추가
   isRecommend: boolean;
   isImageVisible?: boolean;
   onClick?: () => void;
@@ -96,7 +96,7 @@ function ETFQuantityBox({
         <div>
           <ETFTitle>{name}</ETFTitle>
           {quantity > 0 && <ETFQuantity>보유 수량: {quantity}주</ETFQuantity>}{' '}
-          {/* ✅ 보유 수량 표시 */}
+          {/* 보유 수량 표시 */}
         </div>
         <ETFContent>
           <ETFPrice>{price.toLocaleString()} USD</ETFPrice>

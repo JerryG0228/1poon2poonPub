@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import ETFBox from '@/components/invest/ETFBox';
 import TopGainersChart from '@/components/invest/TopGainersChart'; // ✅ 신규 차트 추가
-import etfData from '@/data/etfData'; // ✅ etfData 가져오기
+import etfData from '@/data/etfData'; // etfData 가져오기
+import baseAxios from '@/apis/axiosInstance';
 
 const Container = styled.div`
   padding-bottom: 2rem;
@@ -61,7 +61,7 @@ const Divider = styled.div`
 `;
 
 function ETFCategoryList() {
-  const { category } = useParams(); // ✅ URL 파라미터에서 category 가져오기
+  const { category } = useParams(); // URL 파라미터에서 category 가져오기
   const navigate = useNavigate();
 
   const [etfs, setEtfs] = useState<string[]>([]);
@@ -71,7 +71,7 @@ function ETFCategoryList() {
     [],
   );
 
-  // ✅ 카테고리 매핑
+  // 카테고리 매핑
   const categoryMapping: { [key: string]: string } = {
     tech: '기술 & AI 관련',
     finance: '금융 & 경제 성장 관련',
@@ -83,14 +83,14 @@ function ETFCategoryList() {
 
   useEffect(() => {
     if (!category) {
-      console.error('❌ category 값이 없음');
+      console.error('category 값이 없음');
       return;
     }
 
     const mappedCategory = categoryMapping[category];
 
     if (!mappedCategory || !etfData[category]) {
-      console.error(`❌ etfData에서 ${category} (${mappedCategory}) 데이터 없음`);
+      console.error(`etfData에서 ${category} (${mappedCategory}) 데이터 없음`);
       return;
     }
 
@@ -106,16 +106,16 @@ function ETFCategoryList() {
 
       const requests = etfs.map(async (etf) => {
         try {
-          const res = await axios.get(`http://localhost:3000/invest/getData/${etf}`);
+          const res = await baseAxios.get(`/invest/getData/${etf}`);
 
-          // ✅ API에서 현재가와 전일 종가 가져오기
+          // API에서 현재가와 전일 종가 가져오기
           const marketPrice = res.data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 0;
           const previousClose = res.data?.chart?.result?.[0]?.meta?.chartPreviousClose ?? 0;
 
           priceData[etf] = marketPrice;
           previousClosePriceData[etf] = previousClose;
         } catch (error) {
-          console.error(`❌ ${etf} 데이터 불러오기 실패:`, error);
+          console.error(`${etf} 데이터 불러오기 실패:`, error);
           priceData[etf] = 0;
           previousClosePriceData[etf] = 0;
         }
@@ -126,7 +126,7 @@ function ETFCategoryList() {
       setPrices(priceData);
       setPreviousCloseData(previousClosePriceData);
 
-      // ✅ 상위 상승률 ETF 5개 선택
+      // 상위 상승률 ETF 5개 선택
       const sortedETFs = etfs
         .map((etf) => {
           const price = priceData[etf] ?? 0;

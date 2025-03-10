@@ -11,8 +11,8 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
-import axios from 'axios';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const categories = [
   '기술 & AI 관련',
@@ -64,7 +64,7 @@ const Grid = styled.div`
 const NextButtonBox = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 5.5rem;
+  margin-top: 5rem;
 `;
 
 function Category() {
@@ -108,16 +108,16 @@ function Category() {
           handleBtn={async () => {
             if (selectedCategories.length === 3) {
               try {
-                const response = await axios.post('http://localhost:3000/invest/setCategory', {
+                const response = await baseAxios.post('/invest/setCategory', {
                   name: username, // zustand에서 불러온 유저명
                   categories: selectedCategories,
                 });
 
                 setInterests(selectedCategories); // zustand 상태에도 반영
-                console.log('✅ 카테고리 등록 성공:', response.data);
+                console.log('카테고리 등록 성공:', response.data);
                 navigate('/etf-list', { state: { selectedCategories } });
               } catch (error) {
-                console.error('❌ 카테고리 등록 실패:', error);
+                console.error('카테고리 등록 실패:', error);
                 alert('카테고리 등록 중 오류가 발생했습니다.');
               }
             } else {
@@ -126,7 +126,7 @@ function Category() {
           }}
         >
           <PressMotion>
-            <div style={{ width: '20.5rem' }}>다음</div>
+            <div style={{ width: '21.5rem' }}>다음</div>
           </PressMotion>
         </Btn>
       </NextButtonBox>
