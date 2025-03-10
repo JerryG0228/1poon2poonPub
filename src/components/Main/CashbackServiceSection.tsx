@@ -49,11 +49,11 @@ const VerticalLine = styled.div`
   background: linear-gradient(to bottom, #313845 0%, #4d596e 24%, #4d596e 73%, #313845 100%);
 `;
 
-const InvestProgressRate = styled.div<{ totalReturnPercent: number }>`
+const InvestProgressRate = styled.div<{ $totalReturnPercent: number }>`
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 0.2rem;
-  color: ${(props) => (props.totalReturnPercent > 0 ? colors.Red : colors.LightBlue)};
+  color: ${(props) => (props.$totalReturnPercent > 0 ? colors.Red : colors.LightBlue)};
 `;
 
 export default function CashbackServiceSection() {
@@ -105,7 +105,7 @@ export default function CashbackServiceSection() {
               <Button varient="invest">
                 <img src={totalReturnPercent > 0 ? investUpImage : investDownImage} />
                 <ServiceTitle>투자</ServiceTitle>
-                <InvestProgressRate totalReturnPercent={totalReturnPercent}>
+                <InvestProgressRate $totalReturnPercent={totalReturnPercent}>
                   {/* toFixed(1) : 소수점 1자리까지 */}
                   {!stock
                     ? '0%'
