@@ -21,7 +21,7 @@ const StampBoard = styled.div<{ isFull: boolean }>`
 const OverLay = styled.div`
   display: flex;
   flex-direction: column;
-  //Board
+  //Board와 같은 크기
   height: 7.4rem;
   padding: 0.8rem 0;
   gap: 1rem;
