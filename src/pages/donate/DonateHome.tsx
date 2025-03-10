@@ -48,6 +48,7 @@ const Box = styled.div`
   font-weight: bold;
   gap: 1.5rem;
   margin-top: 1.5rem;
+  padding: 0 1rem;
 `;
 
 const TitleWrapper = styled.div`
@@ -111,17 +112,18 @@ const SelectCatgegory = styled.img`
 
 const BadgeBox = styled.div`
   margin: 1rem 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4개의 열을 균등하게 설정 */
+  justify-items: center; /* 항목들을 가로로 중앙 정렬 */
+  align-items: center; /* 항목들을 세로로 중앙 정렬 */
+  gap: 1rem;
 `;
 
 const Badge = styled.img`
   border: none;
-  padding: 0;
+  padding: 0.5rem;
   cursor: pointer;
-  width: 3.7rem;
-  flex-basis: calc(25% - 1rem); //
+  width: 4rem;
 `;
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>`
@@ -241,9 +243,17 @@ const categoryList: Record<string, string> = {
   '환경 동물': dogImage,
 };
 
+const Animation: Record<string, string> = {
+  dog: dog,
+  feather: feather,
+  cloud: cloud,
+  wave: wave,
+  beat: beat,
+  paper: paper,
+};
+
 export default function DonateHome() {
   const { totalDonations, goalDonations, currentDonations, goalCategory, badges } = useStore();
-  const [donatePage, setDonatePage] = useState<Object | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
 
@@ -255,14 +265,22 @@ export default function DonateHome() {
     setIsOpen(true);
   };
   const closeModal = () => setIsOpen(false);
-  const badgePage = selectBadge?.page || DovePage;
+  const badgePage = Achive[selectBadge?.badge] || DovePage;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await baseAxios.put('/donate/complete', { name: 'tester' }).then((res) => console.log(res));
-    };
-    fetchData();
-  }, []);
+  const link =
+    goalDonations == 0
+      ? '/donatecategory'
+      : currentDonations == goalDonations
+        ? '/donatecomplete'
+        : '/donate';
+
+  const info =
+    goalDonations == 0
+      ? '카테고리 선택하러 가기'
+      : currentDonations == goalDonations
+        ? '기부 하러 가기'
+        : '기부 포인트 채우기';
+
   return (
     <Box>
       <TitleWrapper>
@@ -272,48 +290,47 @@ export default function DonateHome() {
         </MainTitle>
         <SubTitle>
           <TotalWrapper>
-            <TotalDonation>{totalDonations}</TotalDonation>
+            <TotalDonation>{totalDonations.toLocaleString()}</TotalDonation>
             <Unit>원</Unit>
           </TotalWrapper>
           <CategoryWrapper>
-            <CategoryTitle>교육 인권</CategoryTitle>
-            <SelectCatgegory src={categoryImg} alt="기부 카테고리" />
+            {goalCategory == '' || goalCategory == 'none' ? (
+              <div>카테고리 미선택</div>
+            ) : (
+              <>
+                <CategoryTitle>{goalCategory}</CategoryTitle>{' '}
+                <SelectCatgegory src={categoryImg} alt="기부 카테고리" />
+              </>
+            )}
           </CategoryWrapper>
         </SubTitle>
       </TitleWrapper>
       <CharacterBox currDonate={currentDonations} targetDonate={goalDonations}></CharacterBox>
       <DonateNonTitleBox>
         <Guage currDonate={currentDonations} targetDonate={goalDonations}></Guage>
-        {currentDonations == goalDonations ? (
-          <Link to="/donate">
-            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
-              <PressMotion>
-                <div style={{ width: '19.5rem' }}>기부 포인트 교환</div>
-              </PressMotion>
-            </Btn>
-          </Link>
-        ) : (
-          <Link to="/donate">
-            <Btn bgColor={colors.Navy} handleBtn={() => {}}>
-              <PressMotion>
-                <div style={{ width: '19.5rem' }}>기부 하러 가기</div>
-              </PressMotion>
-            </Btn>
-          </Link>
-        )}
+
+        <Link to={link}>
+          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+            <PressMotion>
+              <div style={{ width: '19rem' }}>{info}</div>
+            </PressMotion>
+          </Btn>
+        </Link>
       </DonateNonTitleBox>
 
       <TitleBox title="기부 뱃지">
         <BadgeBox>
-          {badges.map((item) => {
-            return (
-              <Badge
-                src={categoryList[item]}
-                alt="클릭 가능 이미지"
-                onClick={() => handleClick(item)}
-              ></Badge>
-            );
-          })}
+          {badges &&
+            badges.map((item) => {
+              return (
+                <Badge
+                  key={item._id.$oid}
+                  src={categoryList[item.badge]}
+                  alt="클릭 가능 이미지"
+                  onClick={() => handleClick(item)}
+                ></Badge>
+              );
+            })}
         </BadgeBox>
       </TitleBox>
       <div style={{ marginTop: '1rem' }}></div>
@@ -327,23 +344,20 @@ export default function DonateHome() {
               <CertWrapper>
                 <div style={{ display: 'flex' }}>
                   <CertTitle>기 부 증 서</CertTitle>
-                  <StyledLottie animationData={paper} loop={true}></StyledLottie>
+                  <StyledLottie
+                    animationData={Animation[selectBadge.donateInfo.animation]}
+                    loop={true}
+                  ></StyledLottie>
                 </div>
                 <InfoBox>
                   <hr />
-                  이름 기부자님 <br />
-                  카테고리
-                  <br /> 기부금: 금액
+                  {selectBadge.donateInfo.username} 기부자님 <br />
+                  {selectBadge.badge}
+                  <br /> 기부금 {selectBadge.donateInfo.donateAmount.toLocaleString()}원
                   <hr />
                 </InfoBox>
-                <Content>
-                  따뜻한 마음으로 보내주신 기부금은 <br />
-                  소외된 이웃과 어려운 가정을 돕고
-                  <br /> 누구나 행복한 사회를 만들기 위해 사용됩니다.
-                  <br /> 이에 깊은 존경과 감사의 마음을 담아
-                  <br /> 이 증서를 드립니다.
-                </Content>
-                <DayInfo>2025년 03월 18일</DayInfo>
+                <Content>{selectBadge.donateInfo.content}</Content>
+                <DayInfo>{selectBadge.donateInfo.day}</DayInfo>
                 <Footer>
                   토스뱅크X한국경제신문 <b style={{ marginLeft: '0.3rem' }}>한 푼 두 푼</b>{' '}
                   <StampImg src={PoonStapm}></StampImg>

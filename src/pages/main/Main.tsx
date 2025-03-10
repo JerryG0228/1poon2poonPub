@@ -48,7 +48,7 @@ export default function Main() {
             data.cashbackStamps,
             data.cashback.points,
             data.cashback.history,
-            data.donate.badges,
+            data.donate.history,
             data.invest.category,
             data.invest.ownedETFs,
             data.invest.interestedETFs,

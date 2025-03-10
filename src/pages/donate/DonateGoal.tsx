@@ -14,6 +14,7 @@ const Box = styled.div`
   gap: 5rem;
   margin-top: 1.5rem;
   font-weight: bold;
+  padding: 0 1rem;
 `;
 
 const TitleBox = styled.div`
@@ -34,7 +35,7 @@ const Info = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   display: inline-block;
-  margin-bottom: 19.45rem;
+  margin-bottom: 17rem;
   &:focus-within label {
     color: white;
   }
@@ -82,18 +83,15 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 `;
 
 export default function DonateGoal() {
-  const { setGoalDonations, setGoalCategory } = useStore();
+  const { setGoalDonations, goalCategory } = useStore();
   const [targetAmount, setTargetAmount] = useState<number | null>(null); // 목표 금액
   const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
-  const location = useLocation();
-
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
-    const { category } = location.state.selectedCategory;
     setTargetAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
-    setData({ category: category, targetAmount: value, name: 'ooinl77' });
+    setData({ category: goalCategory, targetAmount: value, name: 'ooinl77' });
   };
 
   const fetchData = async () => {
@@ -101,7 +99,6 @@ export default function DonateGoal() {
       .post('/donate/setDonate', data)
       .then((response) => {
         const data = response.data;
-        setGoalCategory(data.category);
         setGoalDonations(data.targetAmount);
       })
       .catch((error) => {
@@ -133,10 +130,10 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatesetfinish" state={{ data }} disabled={(targetAmount ?? 0) < 10000}>
+      <CustomLink to="/donatesetfinish" disabled={(targetAmount ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '20.5rem' }}>설정하기</div>
+            <div style={{ width: '21.3rem' }}>설정하기</div>
           </PressMotion>
         </Btn>
       </CustomLink>

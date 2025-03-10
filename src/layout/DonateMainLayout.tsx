@@ -11,6 +11,9 @@ const Top = styled.div`
 `;
 
 const Icon = styled.div`
+  z-index: 999;
+  padding-top: 1rem;
+  padding-left: 1rem;
   width: 1.5rem;
 
   margin-bottom: 1rem;
