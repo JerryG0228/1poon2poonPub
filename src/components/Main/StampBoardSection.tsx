@@ -34,6 +34,7 @@ const OverlayText = styled.div`
   font-size: 1.2rem;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 const Board = styled.div`
@@ -61,17 +62,15 @@ interface StampBoardSectionProps {
   stamps: number[];
   isFull: boolean;
   totalStamps: number;
-  handlePointCalculate: () => void;
 }
 
 export default function StampBoardSection({
   stamps,
   isFull: initialIsFull, //부모 컴포넌트에서 전달한 isFull 값을 initialIsFull이라는 이름으로 받음
   totalStamps,
-  handlePointCalculate,
 }: StampBoardSectionProps) {
   const [isFull, setIsFull] = useState(initialIsFull); // 상태로 관리
-  const { setPoints } = useStore();
+  const { setPoints, resetStamp } = useStore();
 
   //스탬프 10개 이상이면 isFull=true로 설정
   useEffect(() => {
@@ -85,16 +84,13 @@ export default function StampBoardSection({
       const totalAddPoints = stamps.reduce((acc, cur) => {
         return acc + cur;
       }, 0);
-
-      //스탬프판 초기화 API 호출
-      const response = await baseAxios.put('/user/resetStamp', {
-        name: 'tester',
-      });
-
       setPoints(totalAddPoints, '포인트 적립');
 
-      // 빈 배열로 변경
-      handlePointCalculate();
+      //스탬프판 초기화 API 호출
+      await baseAxios.put('/user/resetStamp', {
+        name: 'tester',
+      });
+      resetStamp();
 
       //isFull 상태 변경
       setIsFull(false);

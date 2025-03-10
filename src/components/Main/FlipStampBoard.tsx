@@ -23,7 +23,6 @@ const FlipWrapper = styled.div<{ isFlipping: boolean }>`
   width: 100%;
   height: 100%;
   perspective: 1000px;
-  /* border: 1px solid red; */
   // 회전 중 뒷면이 보이지 않도록 설정
   backface-visibility: hidden;
 
@@ -59,12 +58,12 @@ const FlipStampBoard: React.FC<FlipStampBoardProps> = ({ isFull, children }) => 
     if (prevIsFull.current !== isFull) {
       setIsFlipping(true);
 
-      // ✅ 90도(애니메이션 50%)에서 화면 변경
+      // 90도(애니메이션 50%)에서 화면 변경
       setTimeout(() => {
         setCurrentChildren(children);
       }, 250); // 전체 0.5s 중 0.25s에서 변경
 
-      // ✅ 180도(애니메이션 종료)에서 애니메이션 끝내기
+      // 180도(애니메이션 종료)에서 애니메이션 끝내기
       setTimeout(() => {
         setIsFlipping(false);
       }, 500);
