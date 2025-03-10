@@ -192,23 +192,37 @@ function ETFDetail() {
 
   // ✅ 관심 ETF 목록 불러오기
   useEffect(() => {
-    const favoriteETFs = JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
-    setIsFavorite(favoriteETFs.includes(symbol));
+    async function fetchFavorites() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/invest/getInterestEtfs?name=tester',
+        );
+        const favoriteList = response.data.interestedETFs || [];
+        setIsFavorite(favoriteList.some((etf: any) => etf.name === symbol));
+      } catch (error) {
+        console.error('❌ 관심 ETF 불러오기 실패:', error);
+      }
+    }
+    fetchFavorites();
   }, [symbol]);
 
   // ✅ 관심 ETF 토글 함수
-  const toggleFavorite = () => {
-    const favoriteETFs = JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
-
-    let updatedFavorites;
-    if (favoriteETFs.includes(symbol)) {
-      updatedFavorites = favoriteETFs.filter((item: string) => item !== symbol);
-    } else {
-      updatedFavorites = [...favoriteETFs, symbol];
+  const toggleFavorite = async () => {
+    try {
+      const url = 'http://localhost:3000/invest/setInterestEtf';
+      const payload = {
+        name: 'tester',
+        etfName: symbol,
+        price: currentPrice,
+        changeRate: changePercent,
+      };
+      const response = await axios.post(url, payload);
+      console.log(response.data.message);
+      setIsFavorite((prev) => !prev);
+    } catch (error) {
+      console.error('❌ 관심 ETF 등록 실패:', error);
+      alert('관심 ETF 등록 중 오류가 발생했습니다.');
     }
-
-    localStorage.setItem('favoriteETFs', JSON.stringify(updatedFavorites));
-    setIsFavorite(!isFavorite);
   };
 
   if (error)
@@ -355,9 +369,9 @@ function ETFDetail() {
         <Btn
           bgColor={colors.Blue}
           handleBtn={() =>
-            navigate(`/etf-buy/${symbol}`, {
-              state: { symbol, currentPrice, priceChange, changePercent },
-            })
+            navigate(
+              `/etf-buy/${symbol}?currentPrice=${currentPrice}&priceChange=${priceChange}&changePercent=${changePercent}`,
+            )
           }
         >
           <PressMotion>
@@ -366,11 +380,11 @@ function ETFDetail() {
         </Btn>
 
         <Btn
-          bgColor={colors.Red} // 기존 판매 버튼 색상에 맞게 설정 (필요시 수정)
+          bgColor={colors.Red}
           handleBtn={() =>
-            navigate(`/etf-sell/${symbol}`, {
-              state: { symbol, currentPrice, priceChange, changePercent },
-            })
+            navigate(
+              `/etf-sell/${symbol}?currentPrice=${currentPrice}&priceChange=${priceChange}&changePercent=${changePercent}`,
+            )
           }
         >
           <PressMotion>

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -7,7 +7,6 @@ import TopGainersChart from '@/components/invest/TopGainersChart'; // ✅ 신규
 import etfData from '@/data/etfData'; // ✅ etfData 가져오기
 
 const Container = styled.div`
-  /* padding: 1rem 0.7rem; */
   padding-bottom: 2rem;
 `;
 
@@ -47,23 +46,22 @@ const DividerWrapper = styled.div`
 
 const Divider = styled.div`
   position: absolute;
-  width: 100%; /* ✅ 선의 길이 조절 */
+  width: 100%;
   height: 0.15rem;
-  background-color: #555; /* ✅ 어두운 배경 선 */
+  background-color: #555;
   top: 50%;
   transform: translateY(-50%);
 
   &:nth-child(2) {
-    width: 60%; /* ✅ 위에 덮을 선을 조금 짧게 설정 */
+    width: 60%;
     height: 0.15rem;
-    background-color: white; /* ✅ 밝은 색상으로 겹치게 */
+    background-color: white;
   }
 `;
 
 function ETFCategoryList() {
-  const location = useLocation();
+  const { category } = useParams(); // ✅ URL 파라미터에서 category 가져오기
   const navigate = useNavigate();
-  const category = location.state?.category;
 
   const [etfs, setEtfs] = useState<string[]>([]);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
@@ -71,49 +69,31 @@ function ETFCategoryList() {
   const [topETFs, setTopETFs] = useState<{ name: string; price: number; changePercent: string }[]>(
     [],
   );
-  const [watchlist, setWatchlist] = useState<string[]>(() => {
-    return JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
-  });
 
-  // ✅ 관심 ETF 추가/삭제 함수
-  const toggleFavorite = (etfName: string) => {
-    setWatchlist((prevWatchlist) => {
-      const updatedWatchlist = prevWatchlist.includes(etfName)
-        ? prevWatchlist.filter((name) => name !== etfName)
-        : [...prevWatchlist, etfName];
-
-      localStorage.setItem('favoriteETFs', JSON.stringify(updatedWatchlist));
-
-      console.log('✅ 관심 ETF 업데이트됨:', updatedWatchlist); // 🚀 콘솔 확인
-      return updatedWatchlist;
-    });
+  // ✅ 카테고리 매핑
+  const categoryMapping: { [key: string]: string } = {
+    tech: '기술 & AI 관련',
+    finance: '금융 & 경제 성장 관련',
+    esg: '사회적 가치 & ESG 투자',
+    healthcare: '헬스케어 & 바이오',
+    reit: '리츠 & 인프라',
+    consumer: '소비 & 리테일',
   };
 
-  // ✅ 관심 ETF 변경 감지 (스토리지에 저장)
   useEffect(() => {
-    localStorage.setItem('favoriteETFs', JSON.stringify(watchlist));
-  }, [watchlist]);
-
-  useEffect(() => {
-    if (!category) return;
-
-    // ✅ `categoryMapping`을 적용하여 키 변환
-    const categoryMapping: { [key: string]: string } = {
-      '기술 & AI 관련': 'tech',
-      '금융 & 경제 성장 관련': 'finance',
-      '사회적 가치 & ESG 투자': 'esg',
-      '헬스케어 & 바이오': 'healthcare',
-      '리츠 & 인프라': 'reit',
-      '소비 & 리테일': 'consumer',
-    };
+    if (!category) {
+      console.error('❌ category 값이 없음');
+      return;
+    }
 
     const mappedCategory = categoryMapping[category];
 
-    if (mappedCategory && etfData[mappedCategory]) {
-      setEtfs(etfData[mappedCategory]); // ✅ 올바른 키로 ETF 데이터 설정
-    } else {
+    if (!mappedCategory || !etfData[category]) {
       console.error(`❌ etfData에서 ${category} (${mappedCategory}) 데이터 없음`);
+      return;
     }
+
+    setEtfs(etfData[category]);
   }, [category]);
 
   useEffect(() => {
@@ -145,7 +125,7 @@ function ETFCategoryList() {
       setPrices(priceData);
       setPreviousCloseData(previousClosePriceData);
 
-      // ✅ 상위 상승률 ETF 5개 선택 (이전 종가 포함)
+      // ✅ 상위 상승률 ETF 5개 선택
       const sortedETFs = etfs
         .map((etf) => {
           const price = priceData[etf] ?? 0;
@@ -157,7 +137,7 @@ function ETFCategoryList() {
           return { name: etf, price, previousClose, transPrice, changePercent };
         })
         .sort((a, b) => parseFloat(b.changePercent) - parseFloat(a.changePercent))
-        .slice(0, 5); // ✅ 상승률 상위 5개 ETF 선택
+        .slice(0, 5);
 
       setTopETFs(sortedETFs);
     }
@@ -167,21 +147,17 @@ function ETFCategoryList() {
 
   return (
     <Container>
-      {/* ✅ 헤더 */}
-
-      {/* ✅ 상승률 높은 5개 ETF 차트 */}
       <ChartWrapper>
-        <Header1>{category} 차트 상위 5개</Header1>
+        <Header1>{categoryMapping[category] || 'ETF'} 차트 상위 5개</Header1>
         {topETFs.length > 0 && <TopGainersChart topETFs={topETFs} />}
       </ChartWrapper>
 
-      <Header2>{category} ETF</Header2>
+      <Header2>{categoryMapping[category] || 'ETF'} ETF</Header2>
       <DividerWrapper>
         <Divider />
         <Divider />
       </DividerWrapper>
 
-      {/* ✅ ETF 리스트 */}
       <ETFListContainer>
         {etfs.map((etf) => {
           const currentPrice = prices[etf] ?? 0;
@@ -199,8 +175,6 @@ function ETFCategoryList() {
               changePercent={changePercent}
               isRecommend={false}
               onClick={() => navigate(`/etf-detail/${etf}`)}
-              // onFavoriteToggle={toggleFavorite} // ✅ 관심 ETF 토글
-              // isFavorite={watchlist.includes(etf)} // ✅ 현재 ETF가 관심 ETF인지 여부
             />
           );
         })}

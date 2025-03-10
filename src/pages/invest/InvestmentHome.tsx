@@ -80,20 +80,6 @@ const InvestmentHome = () => {
     return JSON.parse(localStorage.getItem('favoriteETFs') || '[]'); // ✅ 수정된 부분
   });
 
-  // ✅ 관심 ETF 추가/제거
-  const toggleFavorite = (etfName: string) => {
-    setWatchlist((prevWatchlist) => {
-      const updatedWatchlist = prevWatchlist.includes(etfName)
-        ? prevWatchlist.filter((name) => name !== etfName)
-        : [...prevWatchlist, etfName];
-
-      localStorage.setItem('favoriteETFs', JSON.stringify(updatedWatchlist));
-
-      console.log('✅ 관심 ETF 업데이트됨:', updatedWatchlist); // 🚀 콘솔로 확인!
-      return updatedWatchlist;
-    });
-  };
-
   useEffect(() => {
     console.log('📌 관심 ETF 업데이트됨:', watchlist);
     localStorage.setItem('favoriteETFs', JSON.stringify(watchlist));

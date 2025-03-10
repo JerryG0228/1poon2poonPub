@@ -186,11 +186,7 @@ function ETFList() {
               active={true}
               onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
             />
-            <MoreButton
-              onClick={() =>
-                navigate(`/etf-category/${categoryMapping[category]}`, { state: { category } })
-              }
-            >
+            <MoreButton onClick={() => navigate(`/etf-category/${categoryMapping[category]}`)}>
               {'+'}
             </MoreButton>
           </CategoryHeader>
