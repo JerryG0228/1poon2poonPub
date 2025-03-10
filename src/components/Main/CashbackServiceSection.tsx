@@ -58,9 +58,6 @@ const InvestProgressRate = styled.div<{ totalReturnPercent: number }>`
 
 export default function CashbackServiceSection() {
   const { currentDonations, goalDonations, badges, interestsStock } = useStore();
-  console.log(currentDonations);
-  console.log(goalDonations);
-  console.log(badges);
 
   //상황별 기부 페이지 이동 경로
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
@@ -94,7 +91,7 @@ export default function CashbackServiceSection() {
         <Service>
           <Link to={donateLink}>
             <PressMotion>
-              <Button varient="donate">
+              <Button>
                 <img src={donateImage} />
                 <ServiceTitle>기부</ServiceTitle>
                 <DonateProgressRate>
@@ -109,7 +106,7 @@ export default function CashbackServiceSection() {
               <Button varient="invest">
                 <img src={totalReturnPercent > 0 ? investUpImage : investDownImage} />
                 <ServiceTitle>투자</ServiceTitle>
-                <InvestProgressRate varient="invest">
+                <InvestProgressRate totalReturnPercent={totalReturnPercent}>
                   {/* toFixed(1) : 소수점 1자리까지 */}
                   {!stock
                     ? '0%'

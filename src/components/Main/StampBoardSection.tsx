@@ -79,11 +79,26 @@ export default function StampBoardSection({
   // 버튼 클릭시 실행되는 함수
   const handlePoints = async () => {
     try {
+      //스탬프판에 있는 동전 합산 계산
+      const totalAddPoints = stamps.reduce((acc, cur) => {
+        return acc + cur;
+      }, 0);
+      console.log(totalAddPoints);
+
+      //스탬프판 초기화 API 호출
       const response = await axios.put('http://localhost:3000/user/resetStamp', {
         name: 'tester',
       });
-
       console.log('초기화된 스탬프:', response.data);
+
+      //포인트 합산 API 호출
+      const setPointResponse = axios.post('http://localhost:3000/user/setPoint', {
+        name: 'tester',
+        point: totalAddPoints,
+        origin: '포인트 교환',
+      });
+
+      console.log('적립된 포인트:', setPointResponse);
 
       // 빈 배열로 변경
       handlePointCalculate();
