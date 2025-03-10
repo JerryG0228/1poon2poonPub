@@ -20,7 +20,7 @@ const ChartBox = styled.div`
   min-height: 10rem;
   display: flex;
   flex-direction: column;
-  cursor: pointer; /* ✅ 클릭 가능하도록 변경 */
+  cursor: pointer; /* 클릭 가능하도록 변경 */
   &:hover {
     background-color: #f0f0f0;
   }
@@ -37,7 +37,7 @@ interface TopGainersChartProps {
 }
 
 const TopGainersChart: React.FC<TopGainersChartProps> = ({ topETFs }) => {
-  const navigate = useNavigate(); // ✅ useNavigate 추가
+  const navigate = useNavigate(); // useNavigate 추가
 
   if (!topETFs || topETFs.length === 0) return null;
 
@@ -45,17 +45,17 @@ const TopGainersChart: React.FC<TopGainersChartProps> = ({ topETFs }) => {
     <ChartContainer>
       {topETFs.map((etf) => (
         <ChartBox key={etf.name} onClick={() => navigate(`/etf-detail/${etf.name}`)}>
-          {/* ✅ ETFBox 사용 (이미지 제거된 버전) */}
+          {/* ETFBox 사용 (이미지 제거된 버전) */}
           <ETFChartBox
             name={etf.name}
             price={etf.price}
             transPrice={etf.transPrice}
             changePercent={etf.changePercent}
             isRecommend={true}
-            isImageVisible={false} // ✅ 이미지 숨기기
+            isImageVisible={false} // 이미지 숨기기
           />
 
-          {/* ✅ 캔들 차트 */}
+          {/* 캔들 차트 */}
           <CandlestickTopGainersChart symbol={etf.name} timeRange="1mo" />
         </ChartBox>
       ))}

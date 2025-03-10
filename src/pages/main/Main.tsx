@@ -82,34 +82,10 @@ export default function Main() {
 
   const isFull = cashbackStamps.length === TOTAL_STAMPS;
 
-  // 버튼 클릭시 스탬프를 빈 배열로 업데이트
-  const handlePointCalculate = () => {
-    setDefault(
-      username,
-      cashbackStatus,
-      [],
-      points,
-      pointHistory,
-      badges,
-      interests,
-      ownedStocks,
-      interestsStock,
-      goalCategory,
-      totalDonations,
-      goalDonations,
-      currentDonations,
-    );
-  };
-
   return (
     <MainWrap>
       <CashbackSection cashbackStatus={cashbackStatus} />
-      <StampBoardSection
-        stamps={cashbackStamps}
-        isFull={isFull}
-        totalStamps={TOTAL_STAMPS}
-        handlePointCalculate={handlePointCalculate}
-      />
+      <StampBoardSection stamps={cashbackStamps} isFull={isFull} totalStamps={TOTAL_STAMPS} />
       <Link to="/pointhistory">
         <PointHistorySection points={points} />
       </Link>

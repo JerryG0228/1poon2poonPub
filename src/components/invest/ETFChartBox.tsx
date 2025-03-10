@@ -65,7 +65,7 @@ interface Props {
   changePercent?: string;
   isRecommend: boolean;
   isImageVisible?: boolean;
-  onClick?: () => void; // ✅ 클릭 이벤트 추가
+  onClick?: () => void; // 클릭 이벤트 추가
 }
 
 function ETFChartBox({
@@ -81,7 +81,7 @@ function ETFChartBox({
     <Box $isRecommend={isRecommend} onClick={onClick}>
       {' '}
       {isImageVisible && <ETFImg src={ETFIcon} alt="ETF Icon" />}
-      {/* ✅ 클릭 이벤트 적용 */}
+      {/* 클릭 이벤트 적용 */}
       <ETFContentBox>
         <ETFTitle>{name}</ETFTitle>
         <ETFContent>

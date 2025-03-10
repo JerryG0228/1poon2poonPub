@@ -60,6 +60,7 @@ interface UserState {
   ) => void;
   setName: (name: string) => void;
   setPoints: (amount: number, origin: string) => void;
+  resetStamp: () => void;
   addBadge: (badge: string) => void;
   setInterests: (interests: string[]) => void;
   setGoalCategory: (category: string) => void;
@@ -164,6 +165,8 @@ const useStore = create<UserState>()(
           }
         }
       }, // 포인트 추가/감소
+
+      resetStamp: () => set(() => ({ cashbackStamps: [] })),
 
       addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
 

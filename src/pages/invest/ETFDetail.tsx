@@ -1,6 +1,5 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import CandlestickChart from '@/components/invest/CandlestickChart';
 import { FaHeart } from 'react-icons/fa';
@@ -8,6 +7,7 @@ import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const Container = styled.div`
   color: white;
@@ -179,29 +179,29 @@ function ETFDetail() {
 
   useEffect(() => {
     if (!symbol) return;
-    axios
-      .get(`http://localhost:3000/invest/getData/${symbol}`)
+    baseAxios
+      .get(`/invest/getData/${symbol}`)
       .then((res) => {
-        console.log('📢 ETF API 응답:', res.data);
+        console.log('ETF API 응답:', res.data);
         setData(res.data);
       })
       .catch((err) => {
-        console.error('❌ 데이터 불러오기 실패:', err);
+        console.error('데이터 불러오기 실패:', err);
         setError('데이터 불러오기 실패');
       });
   }, [symbol]);
 
   useEffect(() => {
     if (username && symbol) {
-      axios
-        .get(`http://localhost:3000/invest/getInterestEtf/${username}`)
+      baseAxios
+        .get(`/invest/getInterestEtf/${username}`)
         .then((res) => {
           const list = res.data || [];
           setInterestsStock(list);
           setIsFavorite(list.some((etf: any) => etf.name === symbol));
         })
         .catch((err) => {
-          console.error('❌ 관심 ETF 불러오기 실패:', err);
+          console.error('관심 ETF 불러오기 실패:', err);
         });
     }
   }, [symbol, username]);
@@ -216,20 +216,20 @@ function ETFDetail() {
         : 0;
 
     try {
-      const url = 'http://localhost:3000/invest/setInterestEtf';
+      const url = '/invest/setInterestEtf';
 
-      await axios.post(url, {
+      await baseAxios.post(url, {
         name: username,
         etfName: symbol,
         price: currentPrice,
         changeRate,
       });
 
-      const updated = await axios.get(`http://localhost:3000/invest/getInterestEtf/${username}`);
+      const updated = await baseAxios.get(`/invest/getInterestEtf/${username}`);
       setInterestsStock(updated.data);
       setIsFavorite(updated.data.some((etf: any) => etf.name === symbol));
     } catch (err) {
-      console.error('❌ 관심 ETF 등록/해제 실패:', err);
+      console.error('관심 ETF 등록/해제 실패:', err);
       alert('관심 ETF 등록/해제 중 오류가 발생했습니다.');
     }
   };
