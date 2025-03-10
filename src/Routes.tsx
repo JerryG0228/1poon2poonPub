@@ -17,6 +17,8 @@ import DonateGoal from './pages/donate/DonateGoal';
 import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from './pages/donate/DonateHome';
 import Invest from '@/pages/invest/InvestMainBefore';
+import USDExchangeRate from '@/pages/invest/USDExchangeRate';
+import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
 import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
@@ -39,6 +41,8 @@ const routes = [
       { path: 'investbefore', element: <InvestMainBefore /> },
       { path: 'etf-detail/:symbol', element: <ETFDetail /> },
       { path: 'investCategory', element: <InvestCategory /> },
+      { path: 'USDExchangeRate', element: <USDExchangeRate /> },
+      { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
     ],
   },
 
