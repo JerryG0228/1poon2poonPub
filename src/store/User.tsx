@@ -40,6 +40,8 @@ interface UserState {
   goalDonations: number;
   currentDonations: number;
 
+  setOwnedStocks: (stocks: OwnedStocks[]) => void;
+
   setDefault: (
     name: string,
     cashbackStatus: { [key: string]: boolean },
@@ -86,6 +88,8 @@ const useStore = create<UserState>()(
       goalDonations: 0,
       currentDonations: 0,
 
+      setOwnedStocks: (stocks) => set(() => ({ ownedStocks: stocks })),
+
       setDefault: (
         name,
         cashbackStatus,
@@ -116,6 +120,8 @@ const useStore = create<UserState>()(
           goalDonations: goalDonation,
           currentDonations: currentDonation,
         })), // 기본값 설정
+
+      setInterestsStock: (stocks: InterestsStock[]) => set(() => ({ interestsStock: stocks })),
 
       setName: (name) => set(() => ({ username: name })), // 유저 이름 설정
 

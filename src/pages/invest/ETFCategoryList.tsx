@@ -8,6 +8,7 @@ import etfData from '@/data/etfData'; // ✅ etfData 가져오기
 
 const Container = styled.div`
   padding-bottom: 2rem;
+  padding: 1rem;
 `;
 
 const Header1 = styled.div`

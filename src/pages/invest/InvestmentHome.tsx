@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import useStore from '@/store/User';
 import TopGainersChart from '@/components/invest/TopGainersChart';
 import ETFBox from '@/components/invest/ETFBox';
 import ETFQuantityBox from '@/components/invest/ETFQuantityBox';
 
 const Container = styled.div`
   color: white;
+  padding: 1rem;
 `;
 
 const Title = styled.h2`
@@ -52,7 +54,6 @@ const EmptyStateBox = styled.div`
   align-items: center;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  /* margin-top: 1rem; */
 `;
 
 const BuyButton = styled.button`
@@ -69,92 +70,101 @@ const BuyButton = styled.button`
 
 const InvestmentHome = () => {
   const navigate = useNavigate();
+  const { username, interestsStock, setInterestsStock, ownedStocks, setOwnedStocks } = useStore();
+
   const [activeTab, setActiveTab] = useState<'내 ETF' | '관심 ETF'>('내 ETF');
   const [stocks, setStocks] = useState<
     { name: string; price: number; transPrice: number; changePercent: string; quantity: number }[]
   >([]);
-  const [topETFs, setTopETFs] = useState<
-    { name: string; price: number; transPrice: number; changePercent: string }[]
-  >([]);
-  const [watchlist, setWatchlist] = useState<string[]>(() => {
-    return JSON.parse(localStorage.getItem('favoriteETFs') || '[]'); // ✅ 수정된 부분
-  });
+  const [topETFs, setTopETFs] = useState<any[]>([]);
 
+  // ✅ 페이지 진입 시 관심 ETF 가져오기
   useEffect(() => {
-    console.log('📌 관심 ETF 업데이트됨:', watchlist);
-    localStorage.setItem('favoriteETFs', JSON.stringify(watchlist));
-  }, [watchlist]);
-
-  useEffect(() => {
-    const savedStocks = JSON.parse(localStorage.getItem('myStocks') || '[]');
-    const savedWatchlist = JSON.parse(localStorage.getItem('favoriteETFs') || '[]'); // ✅ 수정된 부분
-
-    if (savedStocks.length > 0) {
-      fetchStockData(savedStocks);
-    } else {
-      setStocks([]);
+    async function fetchInterestETFs() {
+      try {
+        const res = await axios.get(`http://localhost:3000/invest/getInterestEtf/${username}`);
+        setInterestsStock(res.data); // zustand에 관심 ETF 저장
+      } catch (error) {
+        console.error('❌ 관심 ETF 불러오기 실패:', error);
+      }
     }
 
-    setWatchlist(savedWatchlist); // ✅ 수정된 부분
-  }, []);
+    if (username) {
+      fetchInterestETFs();
+    }
+  }, [username]);
 
   useEffect(() => {
-    const savedStocks = JSON.parse(localStorage.getItem('myStocks') || '[]');
-    const savedWatchlist = JSON.parse(localStorage.getItem('favoriteETFs') || '[]');
+    async function fetchOwnedETFs() {
+      try {
+        const res = await axios.get(`http://localhost:3000/invest/getUser/${username}`);
+        if (res.data.ownedETFs) {
+          setOwnedStocks(res.data.ownedETFs); // 🟢 zustand에 보유 ETF 저장
+        }
+      } catch (error) {
+        console.error('❌ 보유 ETF 불러오기 실패:', error);
+      }
+    }
 
-    setWatchlist(savedWatchlist);
+    if (username) {
+      fetchOwnedETFs();
+    }
+  }, [username]);
 
-    // ✅ 관심 ETF에만 있는 종목 찾기
-    const watchlistOnly = savedWatchlist.filter(
-      (etf) => !savedStocks.some((stock: any) => stock.name === etf),
+  // ✅ 보유 ETF + 관심 ETF 병합 후 데이터 요청
+  useEffect(() => {
+    const interestOnly = interestsStock.filter(
+      (interest) => !ownedStocks.some((own) => own.name === interest.name),
     );
 
-    const allETFs = [
-      ...savedStocks.map((s: any) => ({ name: s.name, quantity: s.quantity })),
-      ...watchlistOnly.map((name) => ({ name, quantity: 0 })),
+    const allList = [
+      ...ownedStocks.map((own) => ({ name: own.name, quantity: own.quantity })),
+      ...interestOnly.map((it) => ({ name: it.name, quantity: 0 })),
     ];
 
-    if (allETFs.length > 0) {
-      fetchStockData(allETFs);
+    if (allList.length > 0) {
+      fetchStockData(allList);
     } else {
       setStocks([]);
     }
-  }, []);
+  }, [ownedStocks, interestsStock]);
 
-  /** ✅ 실제 주식 데이터를 가져와 차트와 리스트에 반영하는 함수 */
+  // ✅ 종목별 API 호출
   const fetchStockData = async (stockList: { name: string; quantity: number }[]) => {
     try {
-      const responses = await Promise.all(
-        stockList.map(async (stock) => {
+      const validResponses = [];
+
+      for (const stock of stockList) {
+        try {
           const res = await axios.get(`http://localhost:3000/invest/getData/${stock.name}`);
-
-          const price = res.data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 0;
-          const previousClose = res.data?.chart?.result?.[0]?.meta?.chartPreviousClose ?? price;
-
-          // ✅ 변동 가격(transPrice) & 변동률 계산
-          const transPrice = price - previousClose;
+          const meta = res.data?.chart?.result?.[0]?.meta;
+          const price = meta?.regularMarketPrice ?? 0;
+          const prevClose = meta?.chartPreviousClose ?? price;
+          const transPrice = price - prevClose;
           const changePercent =
-            previousClose !== 0 ? ((transPrice / previousClose) * 100).toFixed(2) : '0.00';
+            prevClose !== 0 ? ((transPrice / prevClose) * 100).toFixed(2) : '0.00';
 
-          return {
+          validResponses.push({
             name: stock.name,
             price,
             transPrice,
             changePercent,
             quantity: stock.quantity,
-          };
-        }),
-      );
+          });
+        } catch (err) {
+          console.warn(`❗️ ${stock.name} 종목 데이터를 불러올 수 없습니다. 건너뜁니다.`);
+        }
+      }
 
-      // ✅ 변동률 기준 정렬 후 상위 5개 선택
-      const sortedETFs = responses
+      const sorted = validResponses
+        .slice()
         .sort((a, b) => parseFloat(b.changePercent) - parseFloat(a.changePercent))
         .slice(0, 5);
 
-      setStocks(responses);
-      setTopETFs(sortedETFs);
+      setStocks(validResponses);
+      setTopETFs(sorted);
     } catch (error) {
-      console.error('❌ 주식 데이터 불러오기 실패:', error);
+      console.error('❌ 주식 데이터 전체 요청 실패:', error);
     }
   };
 
@@ -166,7 +176,6 @@ const InvestmentHome = () => {
           <TopGainersChart topETFs={topETFs} />
         </ChartWrapper>
       ) : (
-        // ✅ `:`를 `?`와 함께 사용해야 함
         <ChartWrapper>
           <Title>내 ETF 차트</Title>
           <EmptyStateBox>
@@ -208,20 +217,20 @@ const InvestmentHome = () => {
         ) : (
           <></>
         )
-      ) : watchlist.length > 0 ? (
+      ) : interestsStock.length > 0 ? (
         <StockList>
-          {watchlist.map((etf, index) => {
-            const ownedStock = stocks.find((stock) => stock.name === etf);
+          {interestsStock.map((etf, index) => {
+            const ownedStock = stocks.find((stock) => stock.name === etf.name);
             return (
               <ETFBox
                 key={index}
-                name={etf}
-                price={ownedStock ? ownedStock.price : 0}
+                name={etf.name}
+                price={ownedStock ? ownedStock.price : etf.price}
                 transPrice={ownedStock ? ownedStock.transPrice : 0}
-                changePercent={ownedStock ? ownedStock.changePercent : '0.00'}
+                changePercent={ownedStock ? ownedStock.changePercent : etf.changeRate.toFixed(2)}
                 isRecommend={false}
                 isImageVisible={true}
-                onClick={() => navigate(`/etf-detail/${etf}`)}
+                onClick={() => navigate(`/etf-detail/${etf.name}`)}
               />
             );
           })}

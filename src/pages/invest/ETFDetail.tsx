@@ -1,17 +1,17 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import CandlestickChart from '@/components/invest/CandlestickChart';
-import { useNavigate } from 'react-router-dom';
-import { FaHeart } from 'react-icons/fa'; // ✅ 하트 아이콘 추가
+import { FaHeart } from 'react-icons/fa';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
+import useStore from '@/store/User';
 
 const Container = styled.div`
-  /* margin-left: 0.5rem; */
   color: white;
+  padding: 1rem;
 `;
 
 const EtfTile = styled.h2`
@@ -55,6 +55,7 @@ const ButtonContainer = styled.div`
 const Button = styled.button<{ $active: boolean }>`
   color: ${({ $active }) => ($active ? 'white' : '#8f9298')};
 `;
+
 const OrderBookContainer = styled.div`
   margin-top: 1rem;
   border-radius: 8px;
@@ -127,13 +128,13 @@ const GaugeFill = styled.div<{ width: number; color: string }>`
 const CurrentPriceMarker = styled.div<{ position: number }>`
   position: absolute;
   left: ${({ position }) => position}%;
-  /* top: -4px; */
   width: 0.4rem;
   height: 0.4rem;
   background: lime;
   border-radius: 50%;
   transform: translateX(-50%);
 `;
+
 const GaugeTile = styled.div`
   display: flex;
   flex-direction: column;
@@ -147,11 +148,11 @@ const GaugeTitle = styled.p`
 
 const BtnBox = styled.div`
   display: flex;
-  justify-content: center; /* ✅ 버튼을 중앙 정렬 */
-  gap: 1rem; /* ✅ 버튼 사이 간격 */
+  justify-content: center;
+  gap: 1rem;
   margin-top: 2.5rem;
 `;
-/* ✅ 하트(즐겨찾기) 버튼 스타일 추가 */
+
 const FavoriteButton = styled.button`
   background: transparent;
   border: none;
@@ -163,106 +164,108 @@ const FavoriteButton = styled.button`
 `;
 
 function ETFDetail() {
+  const location = useLocation();
+  console.log('state:', location);
+
   const navigate = useNavigate();
+  const { username, interestsStock, setInterestsStock } = useStore();
   const { symbol } = useParams<{ symbol: string }>();
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState('');
-  const [buyVolume, setBuyVolume] = useState(7500);
-  const [sellVolume, setSellVolume] = useState(3500);
+  const [buyVolume] = useState(7500);
+  const [sellVolume] = useState(3500);
   const [timeRange, setTimeRange] = useState<'1d' | '1w' | '1mo' | '1y'>('1d');
-
-  // ✅ 관심 ETF 상태 추가
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchData() {
-      if (!symbol) return;
-
-      try {
-        const res = await axios.get(`http://localhost:3000/invest/getData/${symbol}`);
+    if (!symbol) return;
+    axios
+      .get(`http://localhost:3000/invest/getData/${symbol}`)
+      .then((res) => {
         console.log('📢 ETF API 응답:', res.data);
         setData(res.data);
-      } catch (err) {
+      })
+      .catch((err) => {
         console.error('❌ 데이터 불러오기 실패:', err);
         setError('데이터 불러오기 실패');
-      }
-    }
-    fetchData();
+      });
   }, [symbol]);
 
-  // ✅ 관심 ETF 목록 불러오기
   useEffect(() => {
-    async function fetchFavorites() {
-      try {
-        const response = await axios.get(
-          'http://localhost:3000/invest/getInterestEtfs?name=tester',
-        );
-        const favoriteList = response.data.interestedETFs || [];
-        setIsFavorite(favoriteList.some((etf: any) => etf.name === symbol));
-      } catch (error) {
-        console.error('❌ 관심 ETF 불러오기 실패:', error);
-      }
+    if (username && symbol) {
+      axios
+        .get(`http://localhost:3000/invest/getInterestEtf/${username}`)
+        .then((res) => {
+          const list = res.data || [];
+          setInterestsStock(list);
+          setIsFavorite(list.some((etf: any) => etf.name === symbol));
+        })
+        .catch((err) => {
+          console.error('❌ 관심 ETF 불러오기 실패:', err);
+        });
     }
-    fetchFavorites();
-  }, [symbol]);
+  }, [symbol, username]);
 
-  // ✅ 관심 ETF 토글 함수
   const toggleFavorite = async () => {
+    const meta = data?.chart?.result?.[0]?.meta;
+    const currentPrice = meta?.regularMarketPrice ?? 0;
+    const previousClose = meta?.chartPreviousClose ?? 0;
+    const changeRate =
+      previousClose && previousClose !== 0
+        ? ((currentPrice - previousClose) / previousClose) * 100
+        : 0;
+
     try {
       const url = 'http://localhost:3000/invest/setInterestEtf';
-      const payload = {
-        name: 'tester',
+
+      await axios.post(url, {
+        name: username,
         etfName: symbol,
         price: currentPrice,
-        changeRate: changePercent,
-      };
-      const response = await axios.post(url, payload);
-      console.log(response.data.message);
-      setIsFavorite((prev) => !prev);
-    } catch (error) {
-      console.error('❌ 관심 ETF 등록 실패:', error);
-      alert('관심 ETF 등록 중 오류가 발생했습니다.');
+        changeRate,
+      });
+
+      const updated = await axios.get(`http://localhost:3000/invest/getInterestEtf/${username}`);
+      setInterestsStock(updated.data);
+      setIsFavorite(updated.data.some((etf: any) => etf.name === symbol));
+    } catch (err) {
+      console.error('❌ 관심 ETF 등록/해제 실패:', err);
+      alert('관심 ETF 등록/해제 중 오류가 발생했습니다.');
     }
   };
 
-  if (error)
+  if (error) {
     return (
       <Container>
         <h2>{symbol} 상세 정보</h2>
         <p>{error}</p>
       </Container>
     );
+  }
 
-  // ✅ 현재가, 최고가, 최저가, 변동률 가져오기
   const meta = data?.chart?.result?.[0]?.meta;
   const currentPrice = meta?.regularMarketPrice ?? 0;
   const todayHigh = meta?.regularMarketDayHigh ?? 0;
   const todayLow = meta?.regularMarketDayLow ?? 0;
   const yearHigh = meta?.fiftyTwoWeekHigh ?? 0;
   const yearLow = meta?.fiftyTwoWeekLow ?? 0;
-  const previousClose = meta?.chartPreviousClose ?? null;
-
-  // ✅ 변동률(%) 계산
-  const changePercent =
-    previousClose && previousClose !== 0
-      ? ((currentPrice - previousClose) / previousClose) * 100
-      : null;
-
-  const changePercentColor =
-    changePercent !== null ? (changePercent > 0 ? 'red' : 'blue') : 'white';
-
+  const previousClose = meta?.chartPreviousClose ?? 0;
   const priceChange = Math.floor(currentPrice - previousClose);
+  const changePercent =
+    previousClose !== 0 ? ((currentPrice - previousClose) / previousClose) * 100 : null;
   const changeColor = priceChange > 0 ? 'red' : priceChange < 0 ? 'blue' : 'white';
   const formattedPriceChange =
     priceChange !== 0 ? `${priceChange > 0 ? '+' : ''}${priceChange}` : '0';
+  const changePercentColor =
+    changePercent !== null ? (changePercent > 0 ? 'red' : 'blue') : 'white';
 
-  // ✅ 게이지 바 위치 계산 함수
   const calculatePosition = (value: number, min: number, max: number) =>
     max !== min ? ((value - min) / (max - min)) * 100 : 50;
+
   return (
     <Container>
       <FavoriteButton onClick={toggleFavorite}>
-        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} /> {/* ❤️ 빨강 / 🤍 회색 */}
+        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} />
       </FavoriteButton>
 
       <EtfTile>{symbol} ETF</EtfTile>
@@ -278,21 +281,11 @@ function ETFDetail() {
       {symbol && <CandlestickChart symbol={symbol} timeRange={timeRange} />}
 
       <ButtonContainer>
-        <Button $active={timeRange === '1d'} onClick={() => setTimeRange('1d')}>
-          일
-        </Button>
-        <Button $active={timeRange === '1w'} onClick={() => setTimeRange('1w')}>
-          주
-        </Button>
-        <Button $active={timeRange === '1mo'} onClick={() => setTimeRange('1mo')}>
-          월
-        </Button>
-        <Button $active={timeRange === '1y'} onClick={() => setTimeRange('1y')}>
-          년
-        </Button>
-        {/* <Button $active={timeRange === '1y'} onClick={() => setTimeRange('1y')}>
-          📊
-        </Button> */}
+        {(['1d', '1w', '1mo', '1y'] as const).map((range) => (
+          <Button key={range} $active={timeRange === range} onClick={() => setTimeRange(range)}>
+            {range === '1d' ? '일' : range === '1w' ? '주' : range === '1mo' ? '월' : '년'}
+          </Button>
+        ))}
       </ButtonContainer>
 
       <OrderBookContainer>
@@ -306,30 +299,19 @@ function ETFDetail() {
             width={sellVolume + buyVolume > 0 ? (buyVolume / (sellVolume + buyVolume)) * 100 : 50}
           />
         </OrderBookBar>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '0.5rem',
-            fontSize: '0.9rem',
-            color: '#d9d9d9',
-          }}
-        >
-          <div>
+        <GaugeLabel>
+          <GaugeTile>
             <span>판매대기</span>
-            <br />
             <strong>{sellVolume.toLocaleString()}주</strong>
-          </div>
-          <div>
+          </GaugeTile>
+          <GaugeTile>
             <span>구매대기</span>
-            <br />
             <strong>{buyVolume.toLocaleString()}주</strong>
-          </div>
-        </div>
+          </GaugeTile>
+        </GaugeLabel>
       </OrderBookContainer>
 
       <GaugeTitle>종목정보</GaugeTitle>
-      {/* ✅ 1일 가격 범위 */}
       <GaugeContainer>
         <GaugeBar>
           <CurrentPriceMarker position={calculatePosition(currentPrice, todayLow, todayHigh)} />
@@ -347,7 +329,6 @@ function ETFDetail() {
         </GaugeLabel>
       </GaugeContainer>
 
-      {/* ✅ 1년 가격 범위 */}
       <GaugeContainer>
         <GaugeBar>
           <CurrentPriceMarker position={calculatePosition(currentPrice, yearLow, yearHigh)} />

@@ -11,6 +11,8 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
+import axios from 'axios';
+import useStore from '@/store/User';
 
 const categories = [
   '기술 & AI 관련',
@@ -31,8 +33,7 @@ const categoryImages: { [key: string]: string } = {
 };
 
 const Container = styled.div`
-  /* padding: 0 0.7rem;
-  min-height: 100vh; */
+  padding: 1rem;
   color: white;
 `;
 
@@ -68,7 +69,8 @@ const NextButtonBox = styled.div`
 
 function Category() {
   const navigate = useNavigate();
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const { username, interests, setInterests } = useStore();
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(interests || []);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
@@ -103,9 +105,23 @@ function Category() {
       <NextButtonBox>
         <Btn
           bgColor={colors.Blue}
-          handleBtn={() => {
+          handleBtn={async () => {
             if (selectedCategories.length === 3) {
-              navigate('/etf-list', { state: { selectedCategories } });
+              try {
+                const response = await axios.post('http://localhost:3000/invest/setCategory', {
+                  name: username, // zustand에서 불러온 유저명
+                  categories: selectedCategories,
+                });
+
+                setInterests(selectedCategories); // zustand 상태에도 반영
+                console.log('✅ 카테고리 등록 성공:', response.data);
+                navigate('/etf-list', { state: { selectedCategories } });
+              } catch (error) {
+                console.error('❌ 카테고리 등록 실패:', error);
+                alert('카테고리 등록 중 오류가 발생했습니다.');
+              }
+            } else {
+              alert('카테고리를 3개 선택해 주세요!');
             }
           }}
         >

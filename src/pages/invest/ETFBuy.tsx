@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import useStore from '@/store/User';
 
 const Box = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
   font-weight: bold;
+  padding: 1rem;
 `;
 
 const Title = styled.div`
@@ -94,17 +96,18 @@ const ETFTradeSetting = () => {
   const priceChange = parseFloat(searchParams.get('priceChange') || '0');
   const changePercent = parseFloat(searchParams.get('changePercent') || '0');
 
-  const userPoints = 25000; // 예제 값
-  const maxBuyableShares = currentPrice > 0 ? Math.floor(userPoints / currentPrice) : 0;
+  const { username, points, subPoints, setOwnedStocks } = useStore(); // ✅ zustand에서 가져옴
+  const maxBuyableShares = currentPrice > 0 ? Math.floor(points / currentPrice) : 0;
 
   const [quantity, setQuantity] = useState<number | null>(null);
   const totalPrice = quantity ? currentPrice * quantity : 0;
 
   const handleBtn = async () => {
-    if (quantity === null || quantity <= 0) {
+    if (!quantity || quantity <= 0) {
       alert('수량을 입력해 주세요!');
       return;
     }
+
     if (quantity > maxBuyableShares) {
       alert(`보유 포인트가 부족합니다. 최대 구매 가능 수량은 ${maxBuyableShares}주입니다.`);
       return;
@@ -112,25 +115,27 @@ const ETFTradeSetting = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/invest/purchase', {
-        name: 'tester',
+        name: username,
         etfName: symbol,
         price: currentPrice,
         changeRate: changePercent,
-        quantity: quantity,
+        quantity,
       });
 
-      console.log('✅ 구매 성공:', response.data);
       alert(`${symbol} ETF ${quantity}주 구매 완료!`);
 
-      // ✅ 구매한 주식 업데이트하여 저장
+      // ✅ 포인트 차감
+      subPoints(totalPrice);
+
       if (response.data.ownedETFs) {
-        localStorage.setItem('ownedETFs', JSON.stringify(response.data.ownedETFs));
+        setOwnedStocks(response.data.ownedETFs);
       }
 
+      // ✅ 페이지 이동
       navigate('/InvestmentHome');
     } catch (error) {
       console.error('❌ 구매 실패:', error);
-      alert('구매 처리 중 오류가 발생했습니다.');
+      alert(error?.response?.data?.message || '구매 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -172,7 +177,7 @@ const ETFTradeSetting = () => {
           />
         </AmountBox>
         <Text>
-          보유 포인트 {userPoints.toLocaleString()} USD · 구매 가능 수량 {maxBuyableShares}주
+          보유 포인트 {points.toLocaleString()} USD · 구매 가능 수량 {maxBuyableShares}주
         </Text>
       </InputWrapper>
 

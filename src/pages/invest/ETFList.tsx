@@ -13,7 +13,7 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import etfData from '@/data/etfData';
 
 const Container = styled.div`
-  padding: 0 0.7rem;
+  padding: 1rem;
   padding-bottom: 2rem;
   color: white;
 `;
