@@ -15,7 +15,7 @@ const rotate180 = keyframes`
 `;
 
 // StampBoard 전체를 감싸는 컨테이너
-const FlipWrapper = styled.div<{ isFlipping: boolean }>`
+const FlipWrapper = styled.div<{ $isFlipping: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -26,8 +26,8 @@ const FlipWrapper = styled.div<{ isFlipping: boolean }>`
   // 회전 중 뒷면이 보이지 않도록 설정
   backface-visibility: hidden;
 
-  ${({ isFlipping }) =>
-    isFlipping &&
+  ${({ $isFlipping }) =>
+    $isFlipping &&
     css`
       animation: ${rotate180} 0.5s ease-in-out;
     `}
@@ -72,7 +72,7 @@ const FlipStampBoard: React.FC<FlipStampBoardProps> = ({ isFull, children }) => 
     }
   }, [isFull, children]);
 
-  return <FlipWrapper isFlipping={isFlipping}>{currentChildren}</FlipWrapper>;
+  return <FlipWrapper $isFlipping={isFlipping}>{currentChildren}</FlipWrapper>;
 };
 
 export default FlipStampBoard;
