@@ -96,7 +96,7 @@ const ETFTradeSetting = () => {
   const priceChange = parseFloat(searchParams.get('priceChange') || '0');
   const changePercent = parseFloat(searchParams.get('changePercent') || '0');
 
-  const { username, points, subPoints, setOwnedStocks } = useStore(); // ✅ zustand에서 가져옴
+  const { username, points, setOwnedStocks } = useStore(); // ✅ zustand에서 가져옴
   const maxBuyableShares = currentPrice > 0 ? Math.floor(points / currentPrice) : 0;
 
   const [quantity, setQuantity] = useState<number | null>(null);
@@ -124,8 +124,8 @@ const ETFTradeSetting = () => {
 
       alert(`${symbol} ETF ${quantity}주 구매 완료!`);
 
-      // ✅ 포인트 차감
-      subPoints(totalPrice);
+      // // ✅ 포인트 차감
+      // setPoints(totalPrice, '포인트 차감');
 
       if (response.data.ownedETFs) {
         setOwnedStocks(response.data.ownedETFs);
