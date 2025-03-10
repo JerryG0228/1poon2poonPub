@@ -9,7 +9,11 @@ import lv4 from '@/assets/characterbox/75.png';
 import present from '@/assets/characterbox/present.json';
 import coin from '@/assets/characterbox/getCoin.json';
 import getCoin from '@/assets/characterbox/coin.json';
+import donateComplete from '@/assets/characterbox/donateComplete.json';
 import Lottie from 'lottie-react';
+import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
+import heartD from '@/assets/donatePage/heartD.json';
 
 const Jello = keyframes` // 모찌 리액션
   0% { transform: scale3d(1,1,1); }
@@ -118,8 +122,8 @@ const StyledLottieMore = styled(Lottie)<{ growth: number }>`
 `;
 
 const StyledLottieLess = styled(Lottie)<{ growth: number }>`
-  width: ${(props) => props.growth * 2 + 'rem'};
-  height: ${(props) => props.growth * 2 + 'rem'};
+  width: ${(props) => props.growth * 2.2 + 'rem'};
+  height: ${(props) => props.growth * 2.2 + 'rem'};
 `;
 
 const aniList: Record<string, Keyframes> = {
@@ -187,6 +191,7 @@ const GetCoin = styled.div<{ isClicked: boolean }>`
   border-radius: 0.5rem;
   width: 2rem;
   text-align: center;
+  padding: 0.3rem, 0.6rem;
   animation: ${CoinMessage} 1.3s ease-in-out;
 `;
 
@@ -221,6 +226,7 @@ interface Props {
 }
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
+  const { goalDonations, setPoints, username, goalCategory } = useStore();
   const [character, setCharacter] = useState<string>('');
   const [growth, setGrowth] = useState<number>(10);
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
@@ -236,10 +242,10 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   //랜덤 애니메이션 설정
   const weightedRandomAnimation = () => {
     const weightedAnimations = [
-      { name: 'Jello', weight: 50 }, // 55% 확률
+      { name: 'Jello', weight: 40 }, // 40% 확률
       { name: 'RunAway', weight: 10 }, // 10% 확률
       { name: 'Jump', weight: 20 }, // 20% 확률
-      { name: 'Shake', weight: 20 }, // 20% 확률
+      { name: 'Shake', weight: 30 }, // 30% 확률
     ];
 
     const totalWeight = weightedAnimations.reduce((acc, anim) => acc + anim.weight, 0);
@@ -274,6 +280,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       const randomPoint = getRandomPoint();
       setGetPoint(randomPoint);
       setAnimate(randomPoint > 5 ? 'Jello' : 'Shake');
+      setPoints(randomPoint, '캐릭터 이벤트');
     } else {
       setAnimate(weightedRandomAnimation());
     }
@@ -291,7 +298,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   }, [currDonate, spring]);
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
-    if (per < 25) {
+    if (per < 25 && goalDonations > 0) {
       setCharacter(lv1);
       setGrowth(7);
     } else if (per >= 25 && per < 50) {
@@ -303,18 +310,26 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
     } else if (per >= 75 && per < 100) {
       setCharacter(lv4);
       setGrowth(11);
+    } else if (goalDonations == 0) {
+      setCharacter(donateComplete);
     } else setCharacter(present);
   }, [currDonate, targetDonate, character]);
 
   return (
     <Wrapper>
-      <div style={{ marginLeft: '20rem' }}>{getCoinCount}/5</div>
-      <div style={{ position: 'relative', marginTop: (13 % growth) + 1 + 'rem' }}>
+      {goalCategory == '' || goalCategory == 'none' ? (
+        <div style={{ visibility: 'hidden' }}>1</div>
+      ) : (
+        <div style={{ marginLeft: '20rem' }}>{getCoinCount}/5</div>
+      )}
+      <div style={{ position: 'relative', marginTop: (13 % growth) + 2 + 'rem' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
+        ) : goalDonations == 0 ? (
+          <Lottie animationData={heartD} loop={true} style={{ width: '14rem', height: '14rem' }} />
         ) : (
           <>
-            {getPoint >= 5 ? (
+            {getPoint > 5 ? (
               <LottieWrapperTop>
                 {isLottieVisible && (
                   <StyledLottieMore animationData={coin} loop={true} growth={growth} />
@@ -332,7 +347,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
               <GetCoin isClicked={isClicked}>+{getPoint}</GetCoin>
               <div style={{ visibility: 'hidden' }}>1</div>
             </CoinWrapper>
-            <CharacterAni isActive={isActive} animate={animate} onClick={() => handleClick()}>
+            <CharacterAni isActive={isActive} animate={animate} onClick={handleClick}>
               <CharacterImg src={character} alt="캐릭터" growth={growth} />
             </CharacterAni>
           </>
@@ -340,9 +355,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       </div>
       <CharacterName>한푼이</CharacterName>
       <TextBox>
-        <Donate>{animatedValue}</Donate>
+        <Donate>{targetDonate > 0 ? animatedValue : '?'}</Donate>
         <Target>/</Target>
-        <Target>{targetDonate.toLocaleString()}</Target>
+        <Target>{targetDonate > 0 ? targetDonate.toLocaleString() : '?'}</Target>
       </TextBox>
     </Wrapper>
   );

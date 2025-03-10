@@ -17,6 +17,7 @@ const Box = styled.div`
   align-items: center;
   gap: 2rem;
   height: auto;
+  padding: 0 1rem;
 `;
 
 const StyledLottie = styled(Lottie)`

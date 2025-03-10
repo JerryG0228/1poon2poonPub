@@ -30,12 +30,10 @@ const StyledLottie = styled(Lottie)`
 `;
 
 export default function DonateSetFinish() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const data = location.state.data;
 
   const handleBtn = () => {
-    navigate('/donatehome', { state: { data } });
+    navigate('/donatehome');
   };
 
   return (
