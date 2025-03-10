@@ -1,3 +1,5 @@
+import baseAxios from '@/apis/axiosInstance';
+import { L } from 'framer-motion/dist/types.d-6pKw1mTI';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -58,8 +60,7 @@ interface UserState {
     currentDonation: number,
   ) => void;
   setName: (name: string) => void;
-  addPoints: (amount: number) => void;
-  subPoints: (amount: number) => void;
+  setPoints: (amount: number, origin: string) => void;
   addBadge: (badge: string) => void;
   setInterests: (interests: string[]) => void;
   setGoalCategory: (category: string) => void;
@@ -125,8 +126,31 @@ const useStore = create<UserState>()(
 
       setName: (name) => set(() => ({ username: name })), // 유저 이름 설정
 
-      addPoints: (amount) => set((state) => ({ points: state.points + amount })), // 포인트 추가
-      subPoints: (amount) => set((state) => ({ points: state.points - amount })), // 포인트 감소
+      setPoints: async (amount, origin) => {
+        const state = useStore.getState();
+
+        try {
+          const response = await baseAxios.post('/user/setPoint', {
+            name: state.username,
+            point: amount,
+            origin: origin,
+          });
+
+          const data = response.data;
+          console.log('data: ', data);
+
+          if (!data) {
+            throw new Error('잘못된 응답 형식');
+          }
+
+          useStore.setState({
+            points: data.points,
+            pointHistory: data.history,
+          });
+        } catch (error) {
+          console.error('포인트 업데이트 실패:', error);
+        }
+      }, // 포인트 추가/감소
 
       addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
 
