@@ -136,7 +136,7 @@ export default function PointHistory() {
   let groupedHistory = groupByDateSorted(filteredHistory);
 
   //상황별 기부 페이지 이동 경로
-  const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
+  const donateLink = badges.length == 0 && goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
   //상황별 투자 페이지 이동 경로
   const investLink = interestsStock.length === 0 ? '/donatebefore' : '/donate';

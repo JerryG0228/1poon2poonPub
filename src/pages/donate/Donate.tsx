@@ -4,7 +4,7 @@ import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
 import useStore from '@/store/User';
 import { colors } from '@/styles/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,6 +13,7 @@ const Box = styled.div`
   flex-direction: column;
   gap: 22rem;
   font-weight: bold;
+  padding: 0 1rem;
 `;
 
 const DonateBox = styled.div`
@@ -41,10 +42,11 @@ const PointBalance = styled.div`
 `;
 
 export default function Donate() {
-  const { points, goalDonations, currentDonations, username, updateCurrentDonations, subPoints } =
+  const { points, goalDonations, currentDonations, username, updateCurrentDonations, setPoints } =
     useStore();
   const [value, setValue] = useState<number | null>(null); // 기부 할 금액 입력
   const [data, setData] = useState<{ name: string; amount: number }>({ name: username, amount: 0 });
+  const [bgColor, setBgColor] = useState(colors.Grey);
 
   const remainAmount = goalDonations - currentDonations;
 
@@ -73,19 +75,22 @@ export default function Donate() {
       .post('/donate/donation', data)
       .then(() => {
         updateCurrentDonations(data.amount);
-        subPoints(data.amount);
+        setPoints(data.amount, '기부');
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   };
 
+  useEffect(() => {
+    setBgColor(value == null ? colors.Grey : colors.LightBlue);
+  }, [value]); // selectedCategory가 변경될 때마다 실행
+
   return (
     <Box>
       <DonateBox>
         <TitleBox title="목표 금액까지 남은 금액">
-          {remainAmount}
-          <div></div>
+          {remainAmount.toLocaleString()}원<div></div>
         </TitleBox>
         <TitleBox title="기부 금액">
           <DonateInput
@@ -100,9 +105,9 @@ export default function Donate() {
         </TitleBox>
       </DonateBox>
       <Link to="/donateHome">
-        <Btn bgColor={colors.LightBlue} handleBtn={fetchData}>
+        <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '20.5rem' }}>기부 하기</div>
+            <div style={{ width: '21.3rem' }}>기부 하기</div>
           </PressMotion>
         </Btn>
       </Link>
