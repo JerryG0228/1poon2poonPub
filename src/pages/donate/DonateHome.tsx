@@ -294,8 +294,8 @@ export default function DonateHome() {
             <Unit>원</Unit>
           </TotalWrapper>
           <CategoryWrapper>
-            {goalCategory == '' ? (
-              '?'
+            {goalCategory == '' || goalCategory == 'none' ? (
+              <div>카테고리 미선택</div>
             ) : (
               <>
                 <CategoryTitle>{goalCategory}</CategoryTitle>{' '}

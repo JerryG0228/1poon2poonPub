@@ -42,7 +42,7 @@ const PointBalance = styled.div`
 `;
 
 export default function Donate() {
-  const { points, goalDonations, currentDonations, username, updateCurrentDonations, subPoints } =
+  const { points, goalDonations, currentDonations, username, updateCurrentDonations, setPoints } =
     useStore();
   const [value, setValue] = useState<number | null>(null); // 기부 할 금액 입력
   const [data, setData] = useState<{ name: string; amount: number }>({ name: username, amount: 0 });
@@ -75,7 +75,7 @@ export default function Donate() {
       .post('/donate/donation', data)
       .then(() => {
         updateCurrentDonations(data.amount);
-        subPoints(data.amount);
+        setPoints(data.amount, '기부');
       })
       .catch((error) => {
         console.error('Error:', error);
