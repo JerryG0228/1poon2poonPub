@@ -8,10 +8,10 @@ import oneCoinBack from '@/assets/Coin/100coinback.png';
 import fiveCoinBack from '@/assets/Coin/500coinback.png';
 import { colors } from '@/styles/colors';
 import FlipCoin from './FlipCoin';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import FlipStampBoard from './FlipStampBoard';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -85,22 +85,11 @@ export default function StampBoardSection({
       const totalAddPoints = stamps.reduce((acc, cur) => {
         return acc + cur;
       }, 0);
-      console.log(totalAddPoints);
 
       //스탬프판 초기화 API 호출
-      const response = await axios.put('http://localhost:3000/user/resetStamp', {
+      const response = await baseAxios.put('/user/resetStamp', {
         name: 'tester',
       });
-      console.log('초기화된 스탬프:', response.data);
-
-      // //포인트 합산 API 호출
-      // const setPointResponse = axios.post('http://localhost:3000/user/setPoint', {
-      //   name: 'tester',
-      //   point: totalAddPoints,
-      //   origin: '포인트 교환',
-      // });
-
-      // console.log('적립된 포인트:', setPointResponse);
 
       setPoints(totalAddPoints, '포인트 적립');
 

@@ -74,8 +74,6 @@ export default function CashbackServiceSection() {
     return acc + etf.quantity * etf.price * (etf.changeRate / 100);
   }, 0);
 
-  console.log(`totalLoss;${totalLoss}`);
-
   //총 투자 금액 계산
   const totalInvestment = stock.reduce((acc, etf) => {
     return acc + etf.quantity * etf.price;
@@ -83,7 +81,6 @@ export default function CashbackServiceSection() {
 
   //이율 퍼센트 계산
   const totalReturnPercent = totalInvestment !== 0 ? totalLoss / totalInvestment : 0;
-  console.log(totalReturnPercent);
 
   return (
     <>
