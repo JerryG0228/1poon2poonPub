@@ -4,12 +4,12 @@ import ETFIcon from '@/assets/ETFBox/ETFIcon.png';
 const Box = styled.div<{ $isRecommend: boolean }>`
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-left: ${({ $isRecommend }) => ($isRecommend ? '1.5rem' : '0.5rem')};
-  margin-right: 0.1rem;
-  font-weight: bold;
+  gap: 0.8rem;
+  margin-left: ${({ $isRecommend }) => ($isRecommend ? '3rem' : '0.7rem')};
+  margin-right: 0.3rem;
+  font-weight: 500;
+  padding: 1rme;
   border-radius: 8px;
-  position: relative;
 `;
 
 const ETFImg = styled.img`
@@ -34,12 +34,11 @@ const ETFContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-right: 0.1rem;
   gap: 0.1rem;
 `;
 
 const ETFPrice = styled.div`
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: white;
 `;
 
@@ -63,21 +62,29 @@ const EtfPriceContent = styled.div`
   gap: 0.2rem;
 `;
 
+const ETFQuantity = styled.div`
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-top: 3px;
+`;
+
 interface Props {
   name: string;
   price: number;
   transPrice?: number;
   changePercent?: string;
+  quantity?: number; // ✅ 보유 수량 추가
   isRecommend: boolean;
   isImageVisible?: boolean;
   onClick?: () => void;
 }
 
-function ETFBox({
+function ETFQuantityBox({
   name,
   price,
   transPrice = 0,
   changePercent,
+  quantity = 0,
   isRecommend,
   isImageVisible = true,
   onClick,
@@ -85,9 +92,12 @@ function ETFBox({
   return (
     <Box $isRecommend={isRecommend} onClick={onClick}>
       {isImageVisible && <ETFImg src={ETFIcon} alt="ETF Icon" />}
-
       <ETFContentBox>
-        <ETFTitle>{name}</ETFTitle>
+        <div>
+          <ETFTitle>{name}</ETFTitle>
+          {quantity > 0 && <ETFQuantity>보유 수량: {quantity}주</ETFQuantity>}{' '}
+          {/* ✅ 보유 수량 표시 */}
+        </div>
         <ETFContent>
           <ETFPrice>{price.toLocaleString()} USD</ETFPrice>
           <EtfPriceContent>
@@ -106,4 +116,4 @@ function ETFBox({
   );
 }
 
-export default ETFBox;
+export default ETFQuantityBox;

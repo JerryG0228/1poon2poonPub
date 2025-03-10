@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import CandlestickTopGainersChart from '@/components/CandlestickTopGainersChart';
-import ETFChartBox from '@/components/ETFChartBox';
+import CandlestickTopGainersChart from '@/components/invest/CandlestickTopGainersChart';
+import ETFChartBox from '@/components/invest/ETFChartBox';
 
 const ChartContainer = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ const ChartContainer = styled.div`
 `;
 
 const ChartBox = styled.div`
-  background-color: #ffffff;
+  background-color: white;
   padding: 0.5rem;
   border-radius: 10px;
   min-width: 10rem;

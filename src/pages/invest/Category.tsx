@@ -1,13 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styled from 'styled-components';
-import CategoryBox from '@/components/CategoryBox';
+import CategoryBox from '@/components/invest/CategoryBox';
 import buildingImage from '@/assets/categorybox/building_image.png';
 import computerImage from '@/assets/categorybox/computer_image.png';
 import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
+import Btn from '@/components/Btn';
+import { colors } from '@/styles/colors';
+import PressMotion from '@/components/PressMotion';
+import axios from 'axios';
+import useStore from '@/store/User';
 
 const categories = [
   '기술 & AI 관련',
@@ -28,8 +33,7 @@ const categoryImages: { [key: string]: string } = {
 };
 
 const Container = styled.div`
-  /* padding: 0 0.7rem;
-  min-height: 100vh; */
+  padding: 1rem;
   color: white;
 `;
 
@@ -60,24 +64,13 @@ const Grid = styled.div`
 const NextButtonBox = styled.div`
   display: flex;
   justify-content: center;
-`;
-const NextButton = styled.button`
-  margin-top: 3rem;
-  padding: 1rem 5rem;
-  width: 22rem;
-  background: ${({ disabled }) => (disabled ? 'gray' : '#007bff')};
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  transition: 0.3s;
+  margin-top: 5.5rem;
 `;
 
 function Category() {
   const navigate = useNavigate();
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const { username, interests, setInterests } = useStore();
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(interests || []);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
@@ -110,12 +103,32 @@ function Category() {
       </Grid>
 
       <NextButtonBox>
-        <NextButton
-          disabled={selectedCategories.length !== 3}
-          onClick={() => navigate('/etf-list', { state: { selectedCategories } })} // ✅ 경로 확인
+        <Btn
+          bgColor={colors.Blue}
+          handleBtn={async () => {
+            if (selectedCategories.length === 3) {
+              try {
+                const response = await axios.post('http://localhost:3000/invest/setCategory', {
+                  name: username, // zustand에서 불러온 유저명
+                  categories: selectedCategories,
+                });
+
+                setInterests(selectedCategories); // zustand 상태에도 반영
+                console.log('✅ 카테고리 등록 성공:', response.data);
+                navigate('/etf-list', { state: { selectedCategories } });
+              } catch (error) {
+                console.error('❌ 카테고리 등록 실패:', error);
+                alert('카테고리 등록 중 오류가 발생했습니다.');
+              }
+            } else {
+              alert('카테고리를 3개 선택해 주세요!');
+            }
+          }}
         >
-          다음
-        </NextButton>
+          <PressMotion>
+            <div style={{ width: '20.5rem' }}>다음</div>
+          </PressMotion>
+        </Btn>
       </NextButtonBox>
     </Container>
   );
