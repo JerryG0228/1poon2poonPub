@@ -49,7 +49,7 @@ export default function DonateComplete() {
       })
       .then((response) => {
         const data = response.data;
-        console.log('1', data.responseData[data.responseData.length - 1]);
+        console.log('1', data);
 
         console.log('2');
         addBadge(data.responseData[data.responseData.length - 1]);

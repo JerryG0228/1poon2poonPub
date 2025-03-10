@@ -63,7 +63,7 @@ export default function CashbackServiceSection() {
   console.log(badges);
 
   //상황별 기부 페이지 이동 경로
-  const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
+  const donateLink = badges.length == 0 && goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
   //상황별 투자 페이지 이동 경로
   const investLink = interestsStock.length === 0 ? '/investbefore' : '/InvestmentHome';
@@ -98,7 +98,9 @@ export default function CashbackServiceSection() {
                 <img src={donateImage} />
                 <ServiceTitle>기부</ServiceTitle>
                 <DonateProgressRate>
-                  {goalDonations === 0 ? '0%' : `${(currentDonations / goalDonations) * 100}%`}
+                  {goalDonations === 0
+                    ? '0%'
+                    : `${((currentDonations / goalDonations) * 100).toFixed(1)}%`}
                 </DonateProgressRate>
               </Button>
             </PressMotion>

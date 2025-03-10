@@ -320,15 +320,17 @@ export default function DonateHome() {
 
       <TitleBox title="기부 뱃지">
         <BadgeBox>
-          {badges.map((item) => {
-            return (
-              <Badge
-                src={categoryList[item.badge]}
-                alt="클릭 가능 이미지"
-                onClick={() => handleClick(item)}
-              ></Badge>
-            );
-          })}
+          {badges &&
+            badges.map((item) => {
+              return (
+                <Badge
+                  key={item._id.$oid}
+                  src={categoryList[item.badge]}
+                  alt="클릭 가능 이미지"
+                  onClick={() => handleClick(item)}
+                ></Badge>
+              );
+            })}
         </BadgeBox>
       </TitleBox>
       <div style={{ marginTop: '1rem' }}></div>

@@ -90,7 +90,6 @@ export default function DonateGoal() {
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
-    console.log(value);
     setTargetAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
     setData({ category: goalCategory, targetAmount: value, name: 'ooinl77' });
   };
@@ -131,7 +130,7 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatesetfinish" state={{ data }} disabled={(targetAmount ?? 0) < 10000}>
+      <CustomLink to="/donatesetfinish" disabled={(targetAmount ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '21.3rem' }}>설정하기</div>
