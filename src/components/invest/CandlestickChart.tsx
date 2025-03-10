@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CrosshairMode } from 'lightweight-charts';
-import axios from 'axios';
 import styled from 'styled-components';
+import baseAxios from '@/apis/axiosInstance';
 
 type CandlestickChartProps = {
   symbol: string;
@@ -34,16 +34,14 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
       if (!symbol) return;
 
       try {
-        const res = await axios.get(
-          `http://localhost:3000/invest/getData/${symbol}?range=${timeRange}`,
-        );
-        console.log('📊 차트 데이터:', res.data);
+        const res = await baseAxios.get(`/invest/getData/${symbol}?range=${timeRange}`);
+        console.log('차트 데이터:', res.data);
 
         const quote = res.data?.chart?.result?.[0]?.indicators?.quote?.[0];
         const timestamps = res.data?.chart?.result?.[0]?.timestamp;
 
         if (!quote || !timestamps) {
-          console.error('❌ 데이터 형식 오류');
+          console.error('데이터 형식 오류');
           return;
         }
 
@@ -57,7 +55,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
 
         setChartData(formattedData);
       } catch (err) {
-        console.error('❌ 데이터 가져오기 실패:', err);
+        console.error('데이터 가져오기 실패:', err);
       }
     }
 
@@ -88,7 +86,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
       },
       rightPriceScale: { visible: false }, // 기존 오른쪽 눈금 제거
       leftPriceScale: { visible: true, borderColor: 'transparent' }, // 왼쪽 눈금 활성화
-      watermark: { visible: false }, // ✅ 워터마크 제거
+      watermark: { visible: false }, // 워터마크 제거
     });
 
     const candleSeries = chart.addCandlestickSeries({
@@ -98,7 +96,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
       borderDownColor: '#FF0000',
       wickUpColor: '#0064FF',
       wickDownColor: '#FF0000',
-      priceLineVisible: false, // ✅ 가격 라벨(마크) 제거
+      priceLineVisible: false, // 가격 라벨(마크) 제거
     });
 
     candleSeries.setData(chartData);
@@ -118,7 +116,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
     chartRef.current = chart;
   }, [chartData]);
 
-  /** ✅ 기간별 표시할 캔들 개수 계산 */
+  /** 기간별 표시할 캔들 개수 계산 */
   const getVisibleRange = (range: '1d' | '1w' | '1mo' | '1y', lastIndex: number) => {
     switch (range) {
       case '1d':

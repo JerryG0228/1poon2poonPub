@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const Box = styled.div`
   display: flex;
@@ -101,7 +101,7 @@ const ETFSellSetting = () => {
   const [ownedQuantity, setOwnedQuantity] = useState<number>(0);
   const totalPrice = quantity ? currentPrice * quantity : 0;
 
-  // ✅ DB에서 보유 수량 가져오기
+  // DB에서 보유 수량 가져오기
   useEffect(() => {
     if (symbol && ownedStocks.length > 0) {
       const stock = ownedStocks.find((etf) => etf.name === symbol);
@@ -109,7 +109,7 @@ const ETFSellSetting = () => {
     }
   }, [symbol, ownedStocks]);
 
-  // ✅ 판매 처리
+  // 판매 처리
   const handleSell = async () => {
     if (!quantity || quantity <= 0) {
       alert('수량을 입력해 주세요!');
@@ -122,7 +122,7 @@ const ETFSellSetting = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:3000/invest/sell', {
+      const res = await baseAxios.post('/invest/sell', {
         name: username,
         etfName: symbol,
         quantity,
@@ -130,7 +130,7 @@ const ETFSellSetting = () => {
 
       alert(res.data.message || 'ETF 판매가 완료되었습니다.');
 
-      // ✅ 상태 업데이트: 판매 수량 반영
+      // 상태 업데이트: 판매 수량 반영
       const updatedStocks = ownedStocks
         .map((etf) => (etf.name === symbol ? { ...etf, quantity: etf.quantity - quantity } : etf))
         .filter((etf) => etf.quantity > 0); // 수량 0이면 제거
@@ -139,7 +139,7 @@ const ETFSellSetting = () => {
 
       navigate('/InvestmentHome');
     } catch (error: any) {
-      console.error('❌ 판매 실패:', error);
+      console.error('판매 실패:', error);
       alert(error?.response?.data?.message || '판매 처리 중 오류가 발생했습니다.');
     }
   };

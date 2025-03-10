@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const Box = styled.div`
   display: flex;
@@ -114,7 +114,7 @@ const ETFTradeSetting = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/invest/purchase', {
+      const response = await baseAxios.post('/invest/purchase', {
         name: username,
         etfName: symbol,
         price: currentPrice,
@@ -124,9 +124,6 @@ const ETFTradeSetting = () => {
 
       alert(`${symbol} ETF ${quantity}주 구매 완료!`);
 
-      // // ✅ 포인트 차감
-      // setPoints(totalPrice, '포인트 차감');
-
       if (response.data.ownedETFs) {
         setOwnedStocks(response.data.ownedETFs);
       }
@@ -134,7 +131,7 @@ const ETFTradeSetting = () => {
       // ✅ 페이지 이동
       navigate('/InvestmentHome');
     } catch (error) {
-      console.error('❌ 구매 실패:', error);
+      console.error('구매 실패:', error);
       alert(error?.response?.data?.message || '구매 처리 중 오류가 발생했습니다.');
     }
   };
