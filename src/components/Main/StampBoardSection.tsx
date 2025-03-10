@@ -11,6 +11,7 @@ import FlipCoin from './FlipCoin';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import FlipStampBoard from './FlipStampBoard';
+import useStore from '@/store/User';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -70,6 +71,7 @@ export default function StampBoardSection({
   handlePointCalculate,
 }: StampBoardSectionProps) {
   const [isFull, setIsFull] = useState(initialIsFull); // 상태로 관리
+  const { setPoints } = useStore();
 
   //스탬프 10개 이상이면 isFull=true로 설정
   useEffect(() => {
@@ -91,14 +93,16 @@ export default function StampBoardSection({
       });
       console.log('초기화된 스탬프:', response.data);
 
-      //포인트 합산 API 호출
-      const setPointResponse = axios.post('http://localhost:3000/user/setPoint', {
-        name: 'tester',
-        point: totalAddPoints,
-        origin: '포인트 교환',
-      });
+      // //포인트 합산 API 호출
+      // const setPointResponse = axios.post('http://localhost:3000/user/setPoint', {
+      //   name: 'tester',
+      //   point: totalAddPoints,
+      //   origin: '포인트 교환',
+      // });
 
-      console.log('적립된 포인트:', setPointResponse);
+      // console.log('적립된 포인트:', setPointResponse);
+
+      setPoints(totalAddPoints, '포인트 적립');
 
       // 빈 배열로 변경
       handlePointCalculate();

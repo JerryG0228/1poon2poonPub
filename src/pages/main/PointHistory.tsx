@@ -96,19 +96,31 @@ export default function PointHistory() {
     return filterResult;
   };
 
-  // 필터링된 내역 가져오기
+  // selectedValue(선택된 필터로) 구분된 데이터
   const filteredHistory = filterHistory(pointHistory, selectedValue);
 
-  //최신순으로 정렬 후 날짜별 그룹화
+  // selectedValue(선택된 필터로) 구분된 데이터를 날짜별로 정렬
   const groupByDateSorted = (filterResult: PointHistoryProps[]) => {
     const grouped: { [key: string]: PointHistoryProps[] } = {};
 
     filterResult
       .sort((a, b) => {
         // 날짜 비교 (날짜가 더 최신인 것이 앞으로)
-        if (a.day !== b.day) {
-          return a.day > b.day ? -1 : 1;
-        }
+
+        const [aY, aM, aD] = a.day
+          .replace(/년|월|일/g, '')
+          .split(' ')
+          .map(Number);
+
+        const [bY, bM, bD] = b.day
+          .replace(/년|월|일/g, '')
+          .split(' ')
+          .map(Number);
+
+        if (aY !== bY) return bY - aY; // 연도 비교 (내림차순)
+        if (aM !== bM) return bM - aM; // 월 비교 (내림차순)
+        if (aD !== bD) return bD - aD; // 일 비교 (내림차순)
+
         // 날짜가 같다면, 시간 비교 (시간이 더 늦은 것이 앞으로)
         return a.time > b.time ? -1 : 1;
       })
@@ -121,7 +133,7 @@ export default function PointHistory() {
     return grouped;
   };
 
-  const groupedHistory = groupByDateSorted(filteredHistory);
+  let groupedHistory = groupByDateSorted(filteredHistory);
 
   //상황별 기부 페이지 이동 경로
   const donateLink = !badges || goalDonations === 0 ? '/donatebefore' : '/donatehome';
@@ -162,7 +174,7 @@ export default function PointHistory() {
           <Filter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (
-              <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                 <PointDate>{date.slice(6)}</PointDate>
                 {groupedHistory[date].map((history) => (
                   <PointBox
