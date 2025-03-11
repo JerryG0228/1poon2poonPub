@@ -54,8 +54,6 @@ const useStore = create<UserState>()(
 
       setInterestsStock: (stocks: InterestsStock[]) => set(() => ({ interestsStock: stocks })),
 
-      setName: (name) => set(() => ({ username: name })), // 유저 이름 설정
-
       setPoints: async (amount, origin) => {
         const state = useStore.getState();
 
