@@ -128,37 +128,25 @@ const USDExchangeRate = () => {
   const handleExchange = async () => {
     if (!usd || !rate || !won) return;
 
-    const roundedUsd = bankersRound(usd, 2); // 💵 뱅커스 라운딩 적용한 달러 값
+    const roundedUsd = bankersRound(usd, 2);
 
     try {
-      console.log('📤 요청 데이터:', {
-        name: username,
-        amount: Number(won), // ✅ 원화 금액
-        direction: 'dollars', // ✅ 원화 → 달러
-      });
-
       const res = await baseAxios.post('/user/exchange', {
         name: username,
-        amount: Number(won), // ✅ 실제 환전할 원화 금액
+        amount: Number(won),
         direction: 'dollars',
       });
 
-      console.log('✅ 응답 데이터:', res.data);
-
-      if (res.data?.points !== undefined && res.data?.Dollars !== undefined) {
-        setPoints(res.data.points, 'exchange'); // ✅ 포인트 업데이트
-        setDollars(res.data.Dollars); // ✅ 달러 업데이트
-
+      if (res.data?.points !== undefined) {
+        await setPoints(res.data.points, 'exchange'); // 포인트 업데이트
+        await setDollars(); // 💡 반드시 API 호출 후 setDollars
         alert(`환전 성공! 💴 ${Number(won).toLocaleString()}원 → 💵 ${roundedUsd.toFixed(2)} USD`);
 
-        // 입력값 초기화
         setWon('');
         setUsd(null);
       }
     } catch (err: any) {
       console.error('❌ 환전 실패:', err);
-      console.log('❌ 오류 응답:', err.response?.data);
-
       alert(err.response?.data?.message || '환전 중 오류가 발생했습니다.');
     }
   };

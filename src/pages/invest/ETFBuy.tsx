@@ -96,7 +96,7 @@ const ETFTradeSetting = () => {
   const priceChange = parseFloat(searchParams.get('priceChange') || '0');
   const changePercent = parseFloat(searchParams.get('changePercent') || '0');
 
-  const { username, dollars, setOwnedStocks } = useStore(); // ✅ 변경됨
+  const { username, dollars, setDollars, setOwnedStocks } = useStore(); // ✅ 변경됨
   const maxBuyableShares = currentPrice > 0 ? Math.floor(dollars / currentPrice) : 0;
 
   const [quantity, setQuantity] = useState<number | null>(null);
@@ -109,7 +109,7 @@ const ETFTradeSetting = () => {
     }
 
     if (quantity > maxBuyableShares) {
-      alert(`보유 포인트가 부족합니다. 최대 구매 가능 수량은 ${maxBuyableShares}주입니다.`);
+      alert(`보유 달러가 부족합니다. 최대 구매 가능 수량은 ${maxBuyableShares}주입니다.`);
       return;
     }
 
@@ -124,11 +124,12 @@ const ETFTradeSetting = () => {
 
       alert(`${symbol} ETF ${quantity}주 구매 완료!`);
 
+      await setDollars(); // 그 후에 최신 달러 정보 갱신
+
       if (response.data.ownedETFs) {
-        setOwnedStocks(response.data.ownedETFs);
+        setOwnedStocks(response.data.ownedETFs); // ✅ 주식 보유 정보 갱신
       }
 
-      // ✅ 페이지 이동
       navigate('/InvestmentHome');
     } catch (error: any) {
       console.error('❌ 구매 실패 전체 에러:', error);

@@ -133,34 +133,26 @@ const KRWExchangeRate = () => {
     const roundedUsd = bankersRound(Number(usd), 2);
 
     try {
-      console.log('📤 요청 데이터:', {
-        name: username,
-        amount: roundedUsd,
-        direction: 'points',
-      });
-
       const res = await baseAxios.post('/user/exchange', {
         name: username,
         amount: roundedUsd,
         direction: 'points',
       });
 
-      console.log('✅ 응답 데이터:', res.data);
-
-      if (res.data?.points !== undefined && res.data?.Dollars !== undefined) {
-        setPoints(res.data.points, 'exchange');
-        setDollars(res.data.Dollars);
-
-        alert(
-          `환전 성공! 💵 ${roundedUsd.toFixed(2)} USD → 💴 ${res.data.points.toLocaleString()}원`,
-        );
-        // 입력값 초기화
-        setUsd('');
-        setKrw(null);
+      if (res.data?.points !== undefined) {
+        await setPoints(res.data.points, 'exchange'); // 포인트 먼저 반영
+        await setDollars(); // 그 다음에 setDollars 호출 (환전 API 호출 후 반드시 실행)
       }
+
+      alert(
+        `환전 성공! 💵 ${roundedUsd.toFixed(2)} USD → 💴 ${res.data.points.toLocaleString()}원`,
+      );
+
+      // 입력값 초기화
+      setUsd('');
+      setKrw(null);
     } catch (err: any) {
       console.error('❌ 환전 실패:', err);
-      console.log('❌ 오류 응답:', err.response?.data);
       alert(err.response?.data?.message || '환전 중 오류가 발생했습니다.');
     }
   };
