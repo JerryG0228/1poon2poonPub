@@ -124,10 +124,10 @@ const ETFTradeSetting = () => {
 
       alert(`${symbol} ETF ${quantity}주 구매 완료!`);
 
-      await setDollars(); // 그 후에 최신 달러 정보 갱신
+      await setDollars();
 
       if (response.data.ownedETFs) {
-        setOwnedStocks(response.data.ownedETFs); // ✅ 주식 보유 정보 갱신
+        setOwnedStocks(response.data.ownedETFs);
       }
 
       navigate('/InvestmentHome');

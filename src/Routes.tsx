@@ -8,9 +8,9 @@ import DonateMainLayout from './layout/DonateMainLayout';
 import Main from './pages/main/Main';
 import PointHistory from './pages/main/PointHistory';
 import DonateMainBefore from './pages/donate/DonateMainBefore';
-import InvestCategory from '@/pages/invest/Category';
-import ETFList from '@/pages/invest/ETFList';
-import ETFDetail from '@/pages/invest/ETFDetail';
+import InvestCategory from '@/pages/invest/investCategory'; // 투자 카테고리 선택
+import ETFList from '@/pages/invest/ETFList'; // ETF 목록
+import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
 import ETFCategoryList from '@/pages/invest/ETFCategoryList';
 import DonateCategory from './pages/donate/DonateCategory';
 import DonateGoal from './pages/donate/DonateGoal';
@@ -18,6 +18,7 @@ import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from './pages/donate/DonateHome';
 import USDExchangeRate from '@/pages/invest/USDExchangeRate';
 import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
+// import Exchange from '@/pages/invest/Exchange';
 import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
@@ -40,12 +41,16 @@ const routes = [
       { path: 'donategoal', element: <DonateGoal /> },
       { path: 'donate', element: <Donate /> },
       { path: 'investbefore', element: <InvestMainBefore /> },
-      { path: 'etf-detail/:symbol', element: <ETFDetail /> }, // ETF 상세 페이지
-      { path: 'investCategory', element: <InvestCategory /> },
+      { path: 'etf-detail/:symbol', element: <ETFDetail /> },
+      { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
       { path: 'USDExchangeRate', element: <USDExchangeRate /> },
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
+<<<<<<< HEAD
+      // { path: 'Exchange', element: <Exchange /> },
+=======
       { path: 'investDollarsHistory', element: <InvestDollarsHistory /> }, // 달러 내역 페이지
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
+>>>>>>> dev
     ],
   },
 

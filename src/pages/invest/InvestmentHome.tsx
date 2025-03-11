@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import useStore from '@/store/User';
 import TopGainersChart from '@/components/invest/TopGainersChart';
 import ETFBox from '@/components/invest/ETFBox';
 import ETFQuantityBox from '@/components/invest/ETFQuantityBox';
 import baseAxios from '@/apis/axiosInstance';
 import ExchangeSection from '@/components/invest/ExchangeSection';
+import useStore from '@/store/User';
 
 const Container = styled.div`
   color: white;
@@ -71,30 +71,16 @@ const BuyButton = styled.button`
 
 const InvestmentHome = () => {
   const navigate = useNavigate();
-  const { username, interestsStock, setInterestsStock, ownedStocks, setOwnedStocks } = useStore();
+  const { username, interestsStock, ownedStocks, setOwnedStocks } = useStore();
 
   const [activeTab, setActiveTab] = useState<'내 ETF' | '관심 ETF'>('내 ETF');
+  // const [ownedETFs, setOwnedETFs] = useState<any[]>([]);
   const [stocks, setStocks] = useState<
     { name: string; price: number; transPrice: number; changePercent: string; quantity: number }[]
   >([]);
   const [topETFs, setTopETFs] = useState<any[]>([]);
 
-  // 페이지 진입 시 관심 ETF 가져오기
-  useEffect(() => {
-    async function fetchInterestETFs() {
-      try {
-        const res = await baseAxios.get(`/invest/getInterestEtf/${username}`);
-        setInterestsStock(res.data); // zustand에 관심 ETF 저장
-      } catch (error) {
-        console.error('관심 ETF 불러오기 실패:', error);
-      }
-    }
-
-    if (username) {
-      fetchInterestETFs();
-    }
-  }, [username]);
-
+  // 보유 ETF 불러오기
   useEffect(() => {
     async function fetchOwnedETFs() {
       try {
@@ -130,7 +116,7 @@ const InvestmentHome = () => {
     }
   }, [ownedStocks, interestsStock]);
 
-  // 종목별 API 호출
+  // ETF별 가격 정보 호출
   const fetchStockData = async (stockList: { name: string; quantity: number }[]) => {
     try {
       const validResponses = [];
@@ -153,7 +139,7 @@ const InvestmentHome = () => {
             quantity: stock.quantity,
           });
         } catch (err) {
-          console.warn(`${stock.name} 종목 데이터를 불러올 수 없습니다. 건너뜁니다.`);
+          console.warn(`${stock.name} 종목 데이터를 불러올 수 없습니다.`);
         }
       }
 
@@ -185,10 +171,8 @@ const InvestmentHome = () => {
         </ChartWrapper>
       )}
 
-      {/* 환전 탭 */}
       <ExchangeSection />
 
-      {/* 탭 UI */}
       <TabContainer>
         <Tab $isActive={activeTab === '내 ETF'} onClick={() => setActiveTab('내 ETF')}>
           내 ETF
@@ -198,12 +182,11 @@ const InvestmentHome = () => {
         </Tab>
       </TabContainer>
 
-      {/* 선택한 탭에 따라 다른 리스트 표시 */}
       {activeTab === '내 ETF' ? (
         stocks.length > 0 ? (
           <StockList>
             {stocks
-              .filter((stock) => stock.quantity > 0) // 보유 수량이 1주 이상인 주식만 표시
+              .filter((stock) => stock.quantity > 0)
               .map((stock, index) => (
                 <ETFQuantityBox
                   key={index}
@@ -218,9 +201,7 @@ const InvestmentHome = () => {
                 />
               ))}
           </StockList>
-        ) : (
-          <></>
-        )
+        ) : null
       ) : interestsStock.length > 0 ? (
         <StockList>
           {interestsStock.map((etf, index) => {

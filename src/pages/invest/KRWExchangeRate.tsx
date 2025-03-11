@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import useStore from '@/store/User';
-import baseAxios from '@/apis/axiosInstance'; // ✅ 빠진 import 추가
+import baseAxios from '@/apis/axiosInstance';
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
