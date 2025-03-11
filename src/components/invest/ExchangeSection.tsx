@@ -1,6 +1,7 @@
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 import useStore from '@/store/User'; // 상태 가져오기
+import { Link } from 'react-router-dom';
 
 const ExchangeWrap = styled.div`
   display: flex;
@@ -22,7 +23,13 @@ const ExchangeContent = styled.div`
   gap: 1rem;
 `;
 
-const ExchangeBox = styled.div`
+// const ExchangeBoxContainer = styled(Link)`
+//   flex: 1; /* 두 개의 박스를 균등하게 배치 */
+//   min-width: 150px; /* 너무 작아지는 걸 방지 */
+//   display: flex;
+// `;
+
+const ExchangeBox = styled(Link)`
   display: flex;
   flex-direction: column;
   padding: 1rem 1.2rem;
@@ -50,14 +57,18 @@ export default function ExchangeSection() {
     <ExchangeWrap>
       <ExchangeTitle>내 계좌보기</ExchangeTitle>
       <ExchangeContent>
-        <ExchangeBox>
+        {/* <ExchangeBoxContainer to={'/investDollarsHistory'}> */}
+        <ExchangeBox to={'/investPointsHistory'}>
           <ExchangeSubTitle>포인트</ExchangeSubTitle>
           <ExchangeAmount>{points.toLocaleString()}원</ExchangeAmount> {/* ✅ 포인트 표시 */}
         </ExchangeBox>
-        <ExchangeBox>
+        {/* </ExchangeBoxContainer> */}
+        {/* <ExchangeBoxContainer to={'/investPointsHistory'}> */}
+        <ExchangeBox to={'/investDollarsHistory'}>
           <ExchangeSubTitle>달러</ExchangeSubTitle>
           <ExchangeAmount>${dollars.toFixed(2)}</ExchangeAmount> {/* ✅ 달러 표시 */}
         </ExchangeBox>
+        {/* </ExchangeBoxContainer> */}
       </ExchangeContent>
     </ExchangeWrap>
   );
