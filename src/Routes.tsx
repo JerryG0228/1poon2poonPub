@@ -18,7 +18,6 @@ import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from './pages/donate/DonateHome';
 import USDExchangeRate from '@/pages/invest/USDExchangeRate';
 import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
-// import Exchange from '@/pages/invest/Exchange';
 import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
@@ -45,12 +44,8 @@ const routes = [
       { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
       { path: 'USDExchangeRate', element: <USDExchangeRate /> },
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
-<<<<<<< HEAD
-      // { path: 'Exchange', element: <Exchange /> },
-=======
       { path: 'investDollarsHistory', element: <InvestDollarsHistory /> }, // 달러 내역 페이지
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
->>>>>>> dev
     ],
   },
 

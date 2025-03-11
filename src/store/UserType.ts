@@ -51,7 +51,8 @@ interface UserState {
 
   updateUser: () => void;
   setPoints: (amount: number, origin: string) => void;
-  setDollars: () => void;
+  updatePoints: () => void;
+  updateDollars: () => void;
   resetStamp: () => void;
   addBadge: (badge: string) => void;
   setInterests: (interests: string[]) => void;
