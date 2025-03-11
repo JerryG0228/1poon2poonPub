@@ -12,6 +12,13 @@ import storeImage from '@/assets/StampBox/StoreIcon.png';
 import taxiImage from '@/assets/StampBox/TaxiIcon.png';
 import CategoryBox from '@/components/invest/CategoryBox';
 import baseAxios from '@/apis/axiosInstance';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  #root {
+    background-color: white !important;
+  }
+`;
 
 const Box = styled.div`
   display: flex;
@@ -34,7 +41,7 @@ const InputWrapper = styled.div`
   display: inline-block;
   margin-bottom: 1rem;
   &:focus-within label {
-    color: white;
+    color: ${colors.Black};
   }
 `;
 
@@ -52,7 +59,7 @@ const InputAmout = styled.input<{ value: number }>`
   &:focus {
     outline: none;
     border-bottom: 1px solid ${colors.LightBlue};
-    color: ${(props) => (props.value < 1 ? colors.Grey : colors.White)};
+    color: ${(props) => (props.value < 1 ? colors.Grey : colors.Black)};
   }
 
   /* 파이어폭스 스핀 버튼 숨기기 */
@@ -125,12 +132,14 @@ export default function PayMain() {
 
   return (
     <Box>
+      <GlobalStyle />
       <PayCategoryBox>
         {categoryList.map((item) => (
           <CategoryBox
             key={item.category}
             title={item.title}
             imageSrc={item.image}
+            isPay={true}
             active={selectedCategory === item} // 선택된 경우 true로 active 적용
             onClick={() => handleClick(item)} // 클릭 이벤트 추가
           />

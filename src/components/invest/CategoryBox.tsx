@@ -18,9 +18,9 @@ const Wrapper = styled.div<{ $active: boolean }>`
   transition: opacity 0.3s;
 `;
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.div<{ isPay: boolean }>`
   display: flex;
-  background-color: #313845;
+  background-color: ${(props) => (props.isPay ? colors.Grey : colors.Navy)};
   padding: 2rem;
   border-radius: 1rem;
 `;
@@ -39,10 +39,10 @@ const TitleBox = styled.div`
   align-items: center;
 `;
 
-const ContentTitle = styled.div`
+const ContentTitle = styled.div<{ isPay: boolean }>`
   display: flex;
   font-size: 1rem;
-  color: ${colors.White};
+  color: ${(props) => (props.isPay ? colors.Black : colors.White)};
   margin: 0.5rem 0;
   text-align: center;
 `;
@@ -61,18 +61,19 @@ interface Props {
   title: string;
   imageSrc: string;
   active: boolean;
+  isPay: boolean;
   onClick: () => void; // 클릭 이벤트 추가!
 }
 
-export default function CategoryBox({ title, imageSrc, active, onClick }: Props) {
+export default function CategoryBox({ title, imageSrc, active, isPay, onClick }: Props) {
   return (
     <>
       <Wrapper $active={active} onClick={onClick}>
-        <ImageWrapper>
+        <ImageWrapper isPay={isPay}>
           <ContentImg src={imageSrc} alt={title} />
         </ImageWrapper>
         <TitleBox>
-          <ContentTitle>{title}</ContentTitle>
+          <ContentTitle isPay={isPay}>{title}</ContentTitle>
         </TitleBox>
       </Wrapper>
     </>
