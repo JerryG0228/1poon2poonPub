@@ -1,72 +1,7 @@
 import baseAxios from '@/apis/axiosInstance';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface pointHistory {
-  name: string;
-  day: string;
-  time: string;
-  change: number;
-  finalPoints: number;
-  _id: string;
-}
-interface dollarHistory {
-  name: string;
-  day: string;
-  time: string;
-  change: number;
-  finalDollars: number;
-  _id: string;
-}
-
-interface OwnedStocks {
-  name: string;
-  price: number;
-  changeRate: number;
-  quantity: number;
-  _id: string;
-}
-
-interface InterestsStock {
-  name: string;
-  price: number;
-  changeRate: number;
-  _id: string;
-}
-
-interface UserState {
-  username: string;
-  cashbackStatus: { [key: string]: boolean };
-  cashbackStamps: number[];
-  points: number;
-  dollars: number;
-  pointHistory: pointHistory[];
-  dollarHistory: dollarHistory[];
-  badges: string[];
-  interests: string[];
-  ownedStocks: OwnedStocks[];
-  interestsStock: InterestsStock[];
-  goalCategory: string;
-  totalDonations: number;
-  goalDonations: number;
-  currentDonations: number;
-
-  setOwnedStocks: (stocks: OwnedStocks[]) => void;
-
-  updateUser: () => void;
-  setName: (name: string) => void;
-  setPoints: (amount: number, origin: string) => void;
-  setDollars: () => void;
-  resetStamp: () => void;
-  addBadge: (badge: string) => void;
-  setInterests: (interests: string[]) => void;
-  setGoalCategory: (category: string) => void;
-  getTotalDonations: (amount: number) => void;
-  updateTotalDonations: (amount: number) => void;
-  setGoalDonations: (goal: number) => void;
-  getCurrentDonations: (amount: number) => void;
-  updateCurrentDonations: (amount: number) => void;
-}
+import { InterestsStock, UserState } from './UserType';
 
 // 이름, 포인트, 뱃지, 관심 투자 카테고리, 기부 목표 카테고리, 현재까지 누적 기부금액, 목표 기부금액, 현재 기부금액
 const useStore = create<UserState>()(
@@ -119,8 +54,6 @@ const useStore = create<UserState>()(
 
       setInterestsStock: (stocks: InterestsStock[]) => set(() => ({ interestsStock: stocks })),
 
-      setName: (name) => set(() => ({ username: name })), // 유저 이름 설정
-
       setPoints: async (amount, origin) => {
         const state = useStore.getState();
 
@@ -165,7 +98,7 @@ const useStore = create<UserState>()(
         }
       }, // 달러 추가/감소
 
-      resetStamp: () => set(() => ({ cashbackStamps: [] })),
+      resetStamp: () => set(() => ({ cashbackStamps: [] })), // 스탬프판 초기화
 
       addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
 
