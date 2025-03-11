@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import useStore from '@/store/User';
 
 const Box = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ const KRWExchangeRate = () => {
   const [rate, setRate] = useState<number | null>(null);
   const [usd, setUsd] = useState('');
   const [krw, setKrw] = useState<number | null>(null);
+  const { points } = useStore(); // ✅ 보유 포인트 가져오기
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -126,6 +128,18 @@ const KRWExchangeRate = () => {
           <InputWrapper>
             <Label>현재 환율</Label>
             <ResultText>1 USD ≈ {rate.toLocaleString()} KRW</ResultText>
+            <ResultText
+              onClick={() => {
+                if (rate) {
+                  const maxUsd = Math.floor((points / rate) * 100) / 100; // 소수점 둘째 자리 반올림
+                  setUsd(String(maxUsd));
+                  setKrw(maxUsd * rate);
+                }
+              }}
+              style={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              보유 포인트: {points.toLocaleString()}원
+            </ResultText>
           </InputWrapper>
 
           <InputWrapper>
@@ -139,9 +153,13 @@ const KRWExchangeRate = () => {
             {krw !== null && (
               <ResultText>💴 환전 결과: {Math.floor(krw).toLocaleString()} KRW</ResultText>
             )}
+            {krw !== null && krw > points && (
+              <ResultText style={{ color: 'tomato' }}>⚠️ 보유 포인트를 초과했습니다!</ResultText>
+            )}
           </InputWrapper>
 
-          <ExchangeButton onClick={handleExchange} disabled={!krw}>
+          {/* 버튼 비활성화 조건 수정 */}
+          <ExchangeButton onClick={handleExchange} disabled={!krw || krw > points}>
             환전하기
           </ExchangeButton>
         </>
