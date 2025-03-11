@@ -5,18 +5,17 @@ import HomeLayout from './layout/HomeLayout';
 import DonateMainLayout from './layout/DonateMainLayout';
 
 // Pages
-import Main from './pages/main/Main'; // 메인 페이지
-import PointHistory from './pages/main/PointHistory'; // 포인트 내역
+import Main from './pages/main/Main';
+import PointHistory from './pages/main/PointHistory';
 import DonateMainBefore from './pages/donate/DonateMainBefore';
-import InvestCategory from '@/pages/invest/Category'; // 투자 카테고리 선택
-import ETFList from '@/pages/invest/ETFList'; // ETF 목록
-import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
+import InvestCategory from '@/pages/invest/Category';
+import ETFList from '@/pages/invest/ETFList';
+import ETFDetail from '@/pages/invest/ETFDetail';
 import ETFCategoryList from '@/pages/invest/ETFCategoryList';
 import DonateCategory from './pages/donate/DonateCategory';
 import DonateGoal from './pages/donate/DonateGoal';
 import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from './pages/donate/DonateHome';
-import Invest from '@/pages/invest/InvestMainBefore';
 import USDExchangeRate from '@/pages/invest/USDExchangeRate';
 import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
 import Exchange from '@/pages/invest/Exchange';
@@ -33,14 +32,14 @@ const routes = [
     path: '/',
     element: <DefaultLayout />,
     children: [
-      { path: '/', element: <Main /> },
-      { path: 'pointhistory', element: <PointHistory /> },
-      { path: 'donatebefore', element: <DonateMainBefore /> },
+      { path: '/', element: <Main /> }, // 메인 페이지
+      { path: 'pointhistory', element: <PointHistory /> }, // 포인트 내역
+      { path: 'donatebefore', element: <DonateMainBefore /> }, // 투자 카테고리 선택
       { path: 'donatecategory', element: <DonateCategory /> },
       { path: 'donategoal', element: <DonateGoal /> },
       { path: 'donate', element: <Donate /> },
       { path: 'investbefore', element: <InvestMainBefore /> },
-      { path: 'etf-detail/:symbol', element: <ETFDetail /> },
+      { path: 'etf-detail/:symbol', element: <ETFDetail /> }, // ETF 상세 페이지
       { path: 'investCategory', element: <InvestCategory /> },
       { path: 'USDExchangeRate', element: <USDExchangeRate /> },
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
@@ -67,7 +66,7 @@ const routes = [
     path: '/',
     element: <HomeLayout />,
     children: [
-      { path: 'etf-list', element: <ETFList /> },
+      { path: 'etf-list', element: <ETFList /> }, // ETF 목록
       { path: 'etf-category/:category', element: <ETFCategoryList /> },
       { path: 'etf-buy/:symbol', element: <ETFBuy /> },
       { path: 'etf-sell/:symbol', element: <ETFSell /> },
