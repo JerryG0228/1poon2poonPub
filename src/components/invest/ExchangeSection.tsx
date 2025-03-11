@@ -1,5 +1,6 @@
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
+import useStore from '@/store/User'; // 상태 가져오기
 
 const ExchangeWrap = styled.div`
   display: flex;
@@ -43,21 +44,21 @@ const ExchangeAmount = styled.div`
 `;
 
 export default function ExchangeSection() {
+  const { points, dollars } = useStore(); // 상태에서 포인트, 달러 가져오기
+
   return (
-    <>
-      <ExchangeWrap>
-        <ExchangeTitle>내 계좌보기</ExchangeTitle>
-        <ExchangeContent>
-          <ExchangeBox>
-            <ExchangeSubTitle>원화</ExchangeSubTitle>
-            <ExchangeAmount>0원</ExchangeAmount>
-          </ExchangeBox>
-          <ExchangeBox>
-            <ExchangeSubTitle>달러</ExchangeSubTitle>
-            <ExchangeAmount>$0.00</ExchangeAmount>
-          </ExchangeBox>
-        </ExchangeContent>
-      </ExchangeWrap>
-    </>
+    <ExchangeWrap>
+      <ExchangeTitle>내 계좌보기</ExchangeTitle>
+      <ExchangeContent>
+        <ExchangeBox>
+          <ExchangeSubTitle>포인트</ExchangeSubTitle>
+          <ExchangeAmount>{points.toLocaleString()}원</ExchangeAmount> {/* ✅ 포인트 표시 */}
+        </ExchangeBox>
+        <ExchangeBox>
+          <ExchangeSubTitle>달러</ExchangeSubTitle>
+          <ExchangeAmount>${dollars.toFixed(2)}</ExchangeAmount> {/* ✅ 달러 표시 */}
+        </ExchangeBox>
+      </ExchangeContent>
+    </ExchangeWrap>
   );
 }

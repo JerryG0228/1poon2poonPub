@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance'; // ✅ 빠진 import 추가
 
 const Box = styled.div`
   display: flex;
@@ -68,7 +69,6 @@ const ExchangeButton = styled.button`
   }
 `;
 
-// 뱅커스 라운딩 함수
 const bankersRound = (value: number, decimalPlaces = 2): number => {
   const multiplier = Math.pow(10, decimalPlaces);
   const scaled = value * multiplier;
@@ -84,7 +84,9 @@ const KRWExchangeRate = () => {
   const [rate, setRate] = useState<number | null>(null);
   const [usd, setUsd] = useState('');
   const [krw, setKrw] = useState<number | null>(null);
-  const { points } = useStore(); // ✅ 보유 포인트 가져오기
+
+  // ✅ 필요한 상태/함수 추가
+  const { username, dollars, points, setPoints, setDollars } = useStore();
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -125,17 +127,39 @@ const KRWExchangeRate = () => {
     }
   };
 
-  const handleExchange = () => {
-    if (krw) {
+  const handleExchange = async () => {
+    if (!usd || !rate || !krw) return;
+
+    const roundedUsd = bankersRound(Number(usd), 2);
+
+    try {
+      const res = await baseAxios.post('/user/exchange', {
+        name: username,
+        amount: roundedUsd,
+        direction: 'points',
+      });
+
+      if (res.data?.points !== undefined) {
+        await setPoints(res.data.points, 'exchange'); // 포인트 먼저 반영
+        await setDollars(); // 그 다음에 setDollars 호출 (환전 API 호출 후 반드시 실행)
+      }
+
       alert(
-        `💱 $${Number(usd).toLocaleString()}은 약 ${Math.floor(krw).toLocaleString()}원 입니다.`,
+        `환전 성공! 💵 ${roundedUsd.toFixed(2)} USD → 💴 ${res.data.points.toLocaleString()}원`,
       );
+
+      // 입력값 초기화
+      setUsd('');
+      setKrw(null);
+    } catch (err: any) {
+      console.error('❌ 환전 실패:', err);
+      alert(err.response?.data?.message || '환전 중 오류가 발생했습니다.');
     }
   };
 
   return (
     <Box>
-      <Title>원화 환율 계산기</Title>
+      <Title>달러 → 원화 환전</Title>
       {rate ? (
         <>
           <InputWrapper>
@@ -144,15 +168,16 @@ const KRWExchangeRate = () => {
             <ResultText
               onClick={() => {
                 if (rate) {
-                  const maxUsd = Math.floor((points / rate) * 100) / 100;
+                  const maxUsd = Math.floor(dollars * 100) / 100;
                   setUsd(String(maxUsd));
                   setKrw(bankersRound(maxUsd * rate));
                 }
               }}
               style={{ cursor: 'pointer', textDecoration: 'underline' }}
             >
-              보유 달러: {points.toLocaleString()}원
+              보유 달러: ${dollars.toFixed(2)}
             </ResultText>
+            <ResultText>보유 포인트: {points.toLocaleString()}원</ResultText>
           </InputWrapper>
 
           <InputWrapper>
@@ -166,12 +191,12 @@ const KRWExchangeRate = () => {
             {krw !== null && (
               <ResultText>💴 환전 결과: {bankersRound(krw, 2).toLocaleString()} KRW</ResultText>
             )}
-            {krw !== null && krw > points && (
-              <ResultText style={{ color: 'tomato' }}>⚠️ 보유 포인트를 초과했습니다!</ResultText>
+            {Number(usd) > dollars && (
+              <ResultText style={{ color: 'tomato' }}>⚠️ 보유 달러를 초과했습니다!</ResultText>
             )}
           </InputWrapper>
 
-          <ExchangeButton onClick={handleExchange} disabled={!krw || krw > points}>
+          <ExchangeButton onClick={handleExchange} disabled={!krw || Number(usd) > dollars}>
             환전하기
           </ExchangeButton>
         </>
