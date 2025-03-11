@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import useStore from '@/store/User';
 
 const Box = styled.div`
   display: flex;
@@ -67,10 +68,23 @@ const ExchangeButton = styled.button`
   }
 `;
 
+const bankersRound = (value: number, decimalPlaces = 2): number => {
+  const multiplier = Math.pow(10, decimalPlaces);
+  const scaled = value * multiplier;
+  const floored = Math.floor(scaled);
+  const diff = scaled - floored;
+
+  if (diff > 0.5) return Math.ceil(scaled) / multiplier;
+  if (diff < 0.5) return floored / multiplier;
+
+  return (floored % 2 === 0 ? floored : floored + 1) / multiplier;
+};
+
 const USDExchangeRate = () => {
   const [rate, setRate] = useState<number | null>(null);
   const [won, setWon] = useState('');
   const [usd, setUsd] = useState<number | null>(null);
+  const { points } = useStore(); // zustand에서 보유 포인트 가져오기
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -112,7 +126,9 @@ const USDExchangeRate = () => {
 
   const handleExchange = () => {
     if (usd) {
-      alert(`💵 ${Number(won).toLocaleString()}원은 약 ${usd.toFixed(2)} USD 입니다.`);
+      alert(
+        `💵 ${Number(won).toLocaleString()}원은 약 ${bankersRound(usd, 2).toFixed(2)} USD 입니다.`,
+      );
     }
   };
 
@@ -124,6 +140,15 @@ const USDExchangeRate = () => {
           <InputWrapper>
             <Label>현재 환율</Label>
             <ResultText>1 USD ≈ {rate.toLocaleString()} KRW</ResultText>
+            <ResultText
+              onClick={() => {
+                setWon(String(points));
+                if (rate) setUsd(points / rate);
+              }}
+              style={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              보유 포인트: {points.toLocaleString()}원
+            </ResultText>
           </InputWrapper>
 
           <InputWrapper>
@@ -134,7 +159,9 @@ const USDExchangeRate = () => {
               onChange={handleChange}
               placeholder="₩ 원화 금액 입력"
             />
-            {usd !== null && <ResultText>💵 환전 결과: {usd.toFixed(2)} USD</ResultText>}
+            {usd !== null && (
+              <ResultText>💵 환전 결과: {bankersRound(usd, 2).toFixed(2)} USD</ResultText>
+            )}
           </InputWrapper>
 
           <ExchangeButton onClick={handleExchange} disabled={!usd}>
