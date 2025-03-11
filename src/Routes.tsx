@@ -23,8 +23,8 @@ import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 import DonateSetFinish from './pages/donate/DonateSetFinish';
 import DonateComplete from './pages/donate/DonateComplete';
-import Pay from './pages/main/Pay';
-import PyaMain from './pages/main/PayMain';
+import Pay from './pages/pay/Pay';
+import PayMain from './pages/pay/PayMain';
 
 const routes = [
   // DefaultLayout
@@ -41,7 +41,7 @@ const routes = [
       { path: 'investbefore', element: <InvestMainBefore /> },
       { path: 'etf-detail/:symbol', element: <ETFDetail /> },
       { path: 'investCategory', element: <InvestCategory /> },
-      { path: 'paymain', element: <PyaMain /> },
+      { path: 'paymain', element: <PayMain /> },
     ],
   },
 
