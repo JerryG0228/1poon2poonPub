@@ -1,42 +1,45 @@
 import styled from 'styled-components';
 import ETFIcon from '@/assets/ETFBox/ETFIcon.png';
-import { colors } from '@/styles/colors';
 
 const Box = styled.div<{ $isRecommend: boolean }>`
   display: flex;
+  align-items: center;
   gap: 0.8rem;
-  font-weight: bold;
+  margin-left: ${({ $isRecommend }) => ($isRecommend ? '3rem' : '0.7rem')};
+  margin-right: 0.3rem;
+  font-weight: 500;
+  padding: 1rme;
   border-radius: 8px;
 `;
 
 const ETFImg = styled.img`
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
 `;
 
 const ETFContentBox = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.3rem;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+  margin-bottom: 0.3rem;
 `;
 
 const ETFTitle = styled.div`
   font-size: 1.1rem;
-  font-weight: bold;
-  color: ${colors.Black};
+  color: white;
 `;
 
 const ETFContent = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 0.1rem;
 `;
 
 const ETFPrice = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: ${colors.Black};
+  font-size: 1rem;
+  color: white;
 `;
 
 const ETFTransPrice = styled.div<{ $transPrice?: number }>`
@@ -51,6 +54,7 @@ const ETFChangePercent = styled.div<{ $changePercent?: string }>`
     $changePercent && parseFloat($changePercent) > 0 ? '#FF0000' : '#0064FF'};
   font-weight: lighter;
 `;
+
 const EtfPriceContent = styled.div`
   display: flex;
   flex-direction: row;
@@ -58,41 +62,51 @@ const EtfPriceContent = styled.div`
   gap: 0.2rem;
 `;
 
+const ETFQuantity = styled.div`
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-top: 3px;
+`;
+
 interface Props {
   name: string;
   price: number;
   transPrice?: number;
   changePercent?: string;
+  quantity?: number; // 보유 수량 추가
   isRecommend: boolean;
   isImageVisible?: boolean;
-  onClick?: () => void; // ✅ 클릭 이벤트 추가
+  onClick?: () => void;
 }
 
-function ETFChartBox({
+function ETFQuantityBox({
   name,
   price,
   transPrice = 0,
   changePercent,
+  quantity = 0,
   isRecommend,
   isImageVisible = true,
   onClick,
 }: Props) {
   return (
     <Box $isRecommend={isRecommend} onClick={onClick}>
-      {' '}
       {isImageVisible && <ETFImg src={ETFIcon} alt="ETF Icon" />}
-      {/* ✅ 클릭 이벤트 적용 */}
       <ETFContentBox>
-        <ETFTitle>{name}</ETFTitle>
+        <div>
+          <ETFTitle>{name}</ETFTitle>
+          {quantity > 0 && <ETFQuantity>보유 수량: {quantity}주</ETFQuantity>}{' '}
+          {/* 보유 수량 표시 */}
+        </div>
         <ETFContent>
-          <ETFPrice>{price.toLocaleString()}USD</ETFPrice>
+          <ETFPrice>{price.toLocaleString()} USD</ETFPrice>
           <EtfPriceContent>
             <ETFTransPrice $transPrice={transPrice}>
               {transPrice > 0
                 ? `+${transPrice.toLocaleString()}`
                 : `${transPrice.toLocaleString()}`}
             </ETFTransPrice>
-            <ETFChangePercent style={{ color: transPrice > 0 ? 'red' : 'blue' }}>
+            <ETFChangePercent style={{ color: transPrice > 0 ? '#FF0000' : '#0064FF' }}>
               ({changePercent}%)
             </ETFChangePercent>
           </EtfPriceContent>
@@ -102,4 +116,4 @@ function ETFChartBox({
   );
 }
 
-export default ETFChartBox;
+export default ETFQuantityBox;

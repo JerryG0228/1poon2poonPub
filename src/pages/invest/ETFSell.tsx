@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const Box = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
   font-weight: bold;
+  padding: 1rem;
 `;
 
 const Title = styled.div`
@@ -85,29 +88,28 @@ const SellBtn = styled.div<{ $disabled: boolean }>`
 `;
 
 const ETFSellSetting = () => {
-  const location = useLocation();
+  const { symbol } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { symbol, currentPrice, priceChange, changePercent } = location.state || {};
+  const { username, ownedStocks, setOwnedStocks, setDollars } = useStore();
+
+  const currentPrice = parseFloat(searchParams.get('currentPrice') || '0');
+  const priceChange = parseFloat(searchParams.get('priceChange') || '0');
+  const changePercent = parseFloat(searchParams.get('changePercent') || '0');
 
   const [quantity, setQuantity] = useState<number | null>(null);
   const [ownedQuantity, setOwnedQuantity] = useState<number>(0);
   const totalPrice = quantity ? currentPrice * quantity : 0;
 
-  /** ✅ 보유 수량 불러오기 */
   useEffect(() => {
-    const existingStocks = JSON.parse(localStorage.getItem('myStocks') || '[]');
-    const stockData = existingStocks.find((s) => s.name === symbol);
-    setOwnedQuantity(stockData ? stockData.quantity : 0);
-  }, [symbol]);
-
-  /** ✅ 판매 버튼 클릭 시 */
-  const handleBtn = () => {
-    if (ownedQuantity === 0) {
-      alert('보유 수량이 없습니다. 판매할 수 없습니다.');
-      return;
+    if (symbol && ownedStocks.length > 0) {
+      const stock = ownedStocks.find((etf) => etf.name === symbol);
+      setOwnedQuantity(stock ? stock.quantity : 0);
     }
+  }, [symbol, ownedStocks]);
 
-    if (quantity === null || quantity <= 0) {
+  const handleSell = async () => {
+    if (!quantity || quantity <= 0) {
       alert('수량을 입력해 주세요!');
       return;
     }
@@ -117,30 +119,34 @@ const ETFSellSetting = () => {
       return;
     }
 
-    // ✅ 기존 주식 데이터 가져오기
-    const existingStocks = JSON.parse(localStorage.getItem('myStocks') || '[]');
+    try {
+      const res = await baseAxios.post('/invest/sell', {
+        name: username,
+        etfName: symbol,
+        quantity,
+      });
 
-    // ✅ 보유 주식 수량 감소
-    const updatedStocks = existingStocks.map((s) => {
-      if (s.name === symbol) {
-        return { ...s, quantity: s.quantity - quantity };
-      }
-      return s;
-    });
+      alert(res.data.message || 'ETF 판매가 완료되었습니다.');
 
-    // ✅ 0 이하가 되면 제거
-    const filteredStocks = updatedStocks.filter((s) => s.quantity > 0);
+      // 💰 판매 후 달러 정보 갱신
+      await setDollars(); // ⬅️ 반드시 호출
 
-    // ✅ 로컬스토리지 업데이트
-    localStorage.setItem('myStocks', JSON.stringify(filteredStocks));
+      // 🔄 주식 수량 갱신
+      const updatedStocks = ownedStocks
+        .map((etf) => (etf.name === symbol ? { ...etf, quantity: etf.quantity - quantity } : etf))
+        .filter((etf) => etf.quantity > 0);
 
-    navigate('/InvestmentHome');
+      setOwnedStocks(updatedStocks);
+      navigate('/InvestmentHome');
+    } catch (error: any) {
+      console.error('판매 실패:', error);
+      alert(error?.response?.data?.message || '판매 처리 중 오류가 발생했습니다.');
+    }
   };
 
-  /** ✅ 수량 입력 핸들러 */
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    setQuantity(value > 0 ? value : null);
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value);
+    setQuantity(val > 0 ? val : null);
   };
 
   return (
@@ -151,10 +157,9 @@ const ETFSellSetting = () => {
         style={{ fontSize: '0.8rem', fontWeight: 'bold', color: priceChange > 0 ? 'red' : 'blue' }}
       >
         {priceChange > 0 ? `+${priceChange}` : priceChange} (
-        {changePercent !== null ? `${changePercent.toFixed(2)}%` : '데이터 없음'})
+        {changePercent !== 0 ? `${changePercent.toFixed(2)}%` : '데이터 없음'})
       </p>
 
-      {/* 예상 체결가 */}
       <InputWrapper>
         <Label>예상체결가</Label>
         <AmountBox>
@@ -165,7 +170,6 @@ const ETFSellSetting = () => {
         </AmountBox>
       </InputWrapper>
 
-      {/* 수량 입력 */}
       <InputWrapper>
         <Label>수량</Label>
         <AmountBox>
@@ -180,8 +184,7 @@ const ETFSellSetting = () => {
         <Text>보유 수량 {ownedQuantity > 0 ? `${ownedQuantity}주` : '(판매 불가)'}</Text>
       </InputWrapper>
 
-      {/* 판매하기 버튼 (보유 수량이 0이면 비활성화) */}
-      <SellBox onClick={ownedQuantity > 0 ? handleBtn : undefined}>
+      <SellBox onClick={ownedQuantity > 0 ? handleSell : undefined}>
         <SellBtn $disabled={ownedQuantity === 0}>
           {ownedQuantity > 0 ? '판매하기' : '판매 불가'}
         </SellBtn>

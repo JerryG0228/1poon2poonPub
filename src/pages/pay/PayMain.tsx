@@ -10,7 +10,7 @@ import foodImage from '@/assets/StampBox/FoodIcon.png';
 import movieImage from '@/assets/StampBox/MovieIcon.png';
 import storeImage from '@/assets/StampBox/StoreIcon.png';
 import taxiImage from '@/assets/StampBox/TaxiIcon.png';
-import CategoryBox from '@/components/CategoryBox';
+import CategoryBox from '@/components/invest/CategoryBox';
 import baseAxios from '@/apis/axiosInstance';
 
 const Box = styled.div`

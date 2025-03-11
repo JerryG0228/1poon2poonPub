@@ -8,9 +8,10 @@ import oneCoinBack from '@/assets/Coin/100coinback.png';
 import fiveCoinBack from '@/assets/Coin/500coinback.png';
 import { colors } from '@/styles/colors';
 import FlipCoin from './FlipCoin';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import FlipStampBoard from './FlipStampBoard';
+import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const StampBoard = styled.div<{ isFull: boolean }>`
   display: flex;
@@ -21,7 +22,7 @@ const StampBoard = styled.div<{ isFull: boolean }>`
 const OverLay = styled.div`
   display: flex;
   flex-direction: column;
-  //Board
+  //Board와 같은 크기
   height: 7.4rem;
   padding: 0.8rem 0;
   gap: 1rem;
@@ -33,6 +34,7 @@ const OverlayText = styled.div`
   font-size: 1.2rem;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 const Board = styled.div`
@@ -52,6 +54,7 @@ const Circle = styled.div<{ index: number; hasImage: boolean }>`
   max-height: 56px;
   border-radius: 3rem;
   background-color: ${({ hasImage }) => (hasImage ? 'transparent' : colors.Navy)};
+  box-shadow: ${({ hasImage }) => (hasImage ? 'inset 0 0 0.5rem rgba(16, 21, 32, 0.6)' : 'none')};
 `;
 
 //props를 받는 부분
@@ -59,16 +62,15 @@ interface StampBoardSectionProps {
   stamps: number[];
   isFull: boolean;
   totalStamps: number;
-  handlePointCalculate: () => void;
 }
 
 export default function StampBoardSection({
   stamps,
   isFull: initialIsFull, //부모 컴포넌트에서 전달한 isFull 값을 initialIsFull이라는 이름으로 받음
   totalStamps,
-  handlePointCalculate,
 }: StampBoardSectionProps) {
   const [isFull, setIsFull] = useState(initialIsFull); // 상태로 관리
+  const { setPoints, resetStamp } = useStore();
 
   //스탬프 10개 이상이면 isFull=true로 설정
   useEffect(() => {
@@ -78,14 +80,17 @@ export default function StampBoardSection({
   // 버튼 클릭시 실행되는 함수
   const handlePoints = async () => {
     try {
-      const response = await axios.put('http://localhost:3000/user/resetStamp', {
+      //스탬프판에 있는 동전 합산 계산
+      const totalAddPoints = stamps.reduce((acc, cur) => {
+        return acc + cur;
+      }, 0);
+      setPoints(totalAddPoints, '포인트 적립');
+
+      //스탬프판 초기화 API 호출
+      await baseAxios.put('/user/resetStamp', {
         name: 'tester',
       });
-
-      console.log('초기화된 스탬프:', response.data);
-
-      // 빈 배열로 변경
-      handlePointCalculate();
+      resetStamp();
 
       //isFull 상태 변경
       setIsFull(false);

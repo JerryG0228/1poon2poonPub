@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import useStore from '@/store/User';
 import PointBox from '@/components/PointBox';
-import Filter from '@/components/Main/Filter';
+import KRWFilter from '@/components/invest/KRWFilter';
 
 const GreyBox = styled.div`
   background-color: #313845;
@@ -81,7 +81,7 @@ interface PointHistoryProps {
   _id: string;
 }
 
-export default function PointHistory() {
+export default function InvestPointsHistory() {
   const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
 
   const [selectedValue, setSelectedValue] = useState('전체');
@@ -135,43 +135,29 @@ export default function PointHistory() {
 
   let groupedHistory = groupByDateSorted(filteredHistory);
 
-  //상황별 기부 페이지 이동 경로
-  const donateLink = badges.length == 0 && goalDonations === 0 ? '/donatebefore' : '/donatehome';
-
-  //상황별 투자 페이지 이동 경로
-  const investLink = interestsStock.length === 0 ? '/donatebefore' : '/donate';
-
   return (
     <>
       <GreyBox />
       <Wrap>
         <HistoryTop>
           <TopText>
-            <div>캐시백 포인트</div>
+            <div>보유 포인트</div>
             <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
-            <Link to={donateLink}>
+            <Link to={'/USDExchangeRate'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem' }}>기부하러 가기</div>
-                </PressMotion>
-              </Btn>
-            </Link>
-            <Link to={investLink}>
-              <Btn bgColor={colors.Navy} handleBtn={() => {}}>
-                <PressMotion>
-                  <div style={{ width: '10rem' }}>투자하러 가기</div>
+                  <div style={{ width: '21.5rem' }}>포인트 환전 하기</div>
                 </PressMotion>
               </Btn>
             </Link>
           </Button>
         </HistoryTop>
-
         <NavyLine />
 
         <div style={{ padding: '1rem' }}>
-          <Filter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
+          <KRWFilter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (
               <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>

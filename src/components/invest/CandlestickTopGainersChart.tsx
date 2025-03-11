@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CrosshairMode } from 'lightweight-charts';
-import axios from 'axios';
+import baseAxios from '@/apis/axiosInstance';
 
 type CandlestickChartProps = {
   symbol: string;
@@ -18,14 +18,14 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
       if (!symbol) return;
 
       try {
-        const res = await axios.get(`http://localhost:5001/api/etf/${symbol}?range=${timeRange}`);
-        console.log('📊 차트 데이터:', res.data);
+        const res = await baseAxios.get(`/invest/getData/${symbol}?range=${timeRange}`);
+        console.log('차트 데이터:', res.data);
 
         const quote = res.data?.chart?.result?.[0]?.indicators?.quote?.[0];
         const timestamps = res.data?.chart?.result?.[0]?.timestamp;
 
         if (!quote || !timestamps) {
-          console.error('❌ 데이터 형식 오류');
+          console.error('데이터 형식 오류');
           return;
         }
 
@@ -39,7 +39,7 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
 
         setChartData(formattedData);
       } catch (err) {
-        console.error('❌ 데이터 가져오기 실패:', err);
+        console.error('데이터 가져오기 실패:', err);
       }
     }
 
@@ -58,28 +58,28 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
       height: 100,
       layout: { background: { color: 'transparent' }, textColor: '#FFFFFF' }, // ✅ 배경 투명 처리
       grid: {
-        vertLines: { visible: false }, // ✅ 세로선 제거
-        horzLines: { visible: false }, // ✅ 가로선 제거
+        vertLines: { visible: false }, // 세로선 제거
+        horzLines: { visible: false }, // 가로선 제거
       },
       crosshair: { mode: CrosshairMode.Normal },
       timeScale: {
-        visible: false, // ✅ X축 눈금 제거
-        borderVisible: false, // ✅ X축 경계선 제거
-        fixLeftEdge: true, // ✅ 왼쪽 경계 고정
-        fixRightEdge: true, // ✅ 오른쪽 경계 고정
+        visible: false, // X축 눈금 제거
+        borderVisible: false, // X축 경계선 제거
+        fixLeftEdge: true, // 왼쪽 경계 고정
+        fixRightEdge: true, // 오른쪽 경계 고정
         lockVisibleTimeRangeOnResize: true,
       },
       rightPriceScale: {
-        visible: false, // ✅ 오른쪽 가격 눈금 제거
-        borderVisible: false, // ✅ 가격 축 경계선 제거
+        visible: false, // 오른쪽 가격 눈금 제거
+        borderVisible: false, // 가격 축 경계선 제거
       },
       leftPriceScale: {
-        visible: false, // ✅ 왼쪽 가격 눈금 제거
-        borderVisible: false, // ✅ 가격 축 경계선 제거
+        visible: false, // 왼쪽 가격 눈금 제거
+        borderVisible: false, // 가격 축 경계선 제거
       },
-      handleScroll: false, // ✅ 차트 스크롤 방지
-      handleScale: false, // ✅ 차트 확대/축소 방지
-      watermark: { visible: false }, // ✅ 워터마크 제거
+      handleScroll: false, // 차트 스크롤 방지
+      handleScale: false, // 차트 확대/축소 방지
+      watermark: { visible: false }, // 워터마크 제거
     });
 
     const candleSeries = chart.addCandlestickSeries({
@@ -89,7 +89,7 @@ const CandlestickTopGainersChart = ({ symbol, timeRange }: CandlestickChartProps
       borderDownColor: '#FF0000',
       wickUpColor: '#0064FF',
       wickDownColor: '#FF0000',
-      priceLineVisible: false, // ✅ 가격 라벨 제거
+      priceLineVisible: false, // 가격 라벨 제거
     });
 
     candleSeries.setData(chartData);

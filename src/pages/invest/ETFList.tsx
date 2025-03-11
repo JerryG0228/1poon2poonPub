@@ -1,19 +1,19 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
-import EtfCategoryBox from '@/components/EtfCategoryBox';
-import ETFBox from '@/components/ETFBox';
+import EtfCategoryBox from '@/components/invest/EtfCategoryBox';
+import ETFBox from '@/components/invest/ETFBox';
 import buildingImage from '@/assets/categorybox/building_image.png';
 import computerImage from '@/assets/categorybox/computer_image.png';
 import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
-import etfData from '@/data/etfData';
+import etfData from '@/data/etfData.js';
+import baseAxios from '@/apis/axiosInstance';
 
 const Container = styled.div`
-  padding: 0 0.7rem;
+  padding: 1rem;
   padding-bottom: 2rem;
   color: white;
 `;
@@ -93,8 +93,8 @@ function ETFList() {
   useEffect(() => {
     if (Object.keys(randomETFs).length > 0) return;
 
-    console.log('📢 etfData 확인:', etfData);
-    console.log('📢 선택된 카테고리:', selectedCategories);
+    console.log('etfData 확인:', etfData);
+    console.log('선택된 카테고리:', selectedCategories);
 
     if (selectedCategories.length > 0) {
       localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
@@ -112,11 +112,11 @@ function ETFList() {
         selectedETFData[category] = [...etfs].sort(() => 0.5 - Math.random()).slice(0, 3);
       } else {
         selectedETFData[category] = [];
-        console.error(`🚨 ETF 데이터 없음: ${category} (${englishCategory})`);
+        console.error(`ETF 데이터 없음: ${category} (${englishCategory})`);
       }
     });
 
-    console.log('✅ 랜덤 ETF 선택됨:', selectedETFData);
+    console.log('랜덤 ETF 선택됨:', selectedETFData);
     setRandomETFs(selectedETFData);
   }, [selectedCategories]);
 
@@ -127,14 +127,14 @@ function ETFList() {
       const priceData: { [key: string]: number } = {};
       const previousCloseData: { [key: string]: number } = {};
 
-      console.log('📢 가격 데이터 가져오는 중...');
+      console.log('가격 데이터 가져오는 중...');
 
       const requests = Object.values(randomETFs)
         .flat()
         .map(async (etf) => {
           try {
-            const res = await axios.get(`http://localhost:5001/api/etf/${etf}`);
-            console.log(`✅ API 응답 (${etf}):`, res.data);
+            const res = await baseAxios.get(`/invest/getData/${etf}`);
+            console.log(`API 응답 (${etf}):`, res.data);
 
             const marketPrice = res.data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 0;
             const previousClose = res.data?.chart?.result?.[0]?.meta?.chartPreviousClose ?? 0;
@@ -142,7 +142,7 @@ function ETFList() {
             priceData[etf] = marketPrice;
             previousCloseData[etf] = previousClose;
           } catch (error) {
-            console.error(`❌ 가격 가져오기 실패 (${etf}):`, error);
+            console.error(`가격 가져오기 실패 (${etf}):`, error);
             priceData[etf] = 0;
             previousCloseData[etf] = 0;
           }
@@ -186,11 +186,7 @@ function ETFList() {
               active={true}
               onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
             />
-            <MoreButton
-              onClick={() =>
-                navigate(`/etf-category/${categoryMapping[category]}`, { state: { category } })
-              }
-            >
+            <MoreButton onClick={() => navigate(`/etf-category/${categoryMapping[category]}`)}>
               {'+'}
             </MoreButton>
           </CategoryHeader>

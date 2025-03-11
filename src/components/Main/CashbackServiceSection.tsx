@@ -49,18 +49,15 @@ const VerticalLine = styled.div`
   background: linear-gradient(to bottom, #313845 0%, #4d596e 24%, #4d596e 73%, #313845 100%);
 `;
 
-const InvestProgressRate = styled.div<{ totalReturnPercent: number }>`
+const InvestProgressRate = styled.div<{ $totalReturnPercent: number }>`
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 0.2rem;
-  color: ${(props) => (props.totalReturnPercent > 0 ? colors.Red : colors.LightBlue)};
+  color: ${(props) => (props.$totalReturnPercent > 0 ? colors.Red : colors.LightBlue)};
 `;
 
 export default function CashbackServiceSection() {
   const { currentDonations, goalDonations, badges, interestsStock } = useStore();
-  console.log(currentDonations);
-  console.log(goalDonations);
-  console.log(badges);
 
   //상황별 기부 페이지 이동 경로
   const donateLink = badges.length == 0 && goalDonations === 0 ? '/donatebefore' : '/donatehome';
@@ -77,8 +74,6 @@ export default function CashbackServiceSection() {
     return acc + etf.quantity * etf.price * (etf.changeRate / 100);
   }, 0);
 
-  console.log(`totalLoss;${totalLoss}`);
-
   //총 투자 금액 계산
   const totalInvestment = stock.reduce((acc, etf) => {
     return acc + etf.quantity * etf.price;
@@ -86,7 +81,6 @@ export default function CashbackServiceSection() {
 
   //이율 퍼센트 계산
   const totalReturnPercent = totalInvestment !== 0 ? totalLoss / totalInvestment : 0;
-  console.log(totalReturnPercent);
 
   return (
     <>
@@ -94,7 +88,7 @@ export default function CashbackServiceSection() {
         <Service>
           <Link to={donateLink}>
             <PressMotion>
-              <Button varient="donate">
+              <Button>
                 <img src={donateImage} />
                 <ServiceTitle>기부</ServiceTitle>
                 <DonateProgressRate>
@@ -111,7 +105,7 @@ export default function CashbackServiceSection() {
               <Button varient="invest">
                 <img src={totalReturnPercent > 0 ? investUpImage : investDownImage} />
                 <ServiceTitle>투자</ServiceTitle>
-                <InvestProgressRate varient="invest">
+                <InvestProgressRate $totalReturnPercent={totalReturnPercent}>
                   {/* toFixed(1) : 소수점 1자리까지 */}
                   {!stock
                     ? '0%'

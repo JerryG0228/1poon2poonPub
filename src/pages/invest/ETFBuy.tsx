@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import useStore from '@/store/User';
+import baseAxios from '@/apis/axiosInstance';
 
 const Box = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
   font-weight: bold;
+  padding: 1rem;
 `;
 
 const Title = styled.div`
@@ -37,7 +40,7 @@ const AmountBox = styled.div`
 const AmountText = styled.p<{ $isEmpty: boolean }>`
   font-size: 1.2rem;
   font-weight: bold;
-  color: ${({ $isEmpty }) => ($isEmpty ? '#bbbbbb' : 'white')}; /* ✅ 숫자가 없을 때 회색 */
+  color: ${({ $isEmpty }) => ($isEmpty ? '#bbbbbb' : 'white')};
 `;
 
 const InputAmount = styled.input<{ $hasValue: boolean }>`
@@ -55,7 +58,7 @@ const InputAmount = styled.input<{ $hasValue: boolean }>`
 
 const Unit = styled.span<{ $hasValue: boolean }>`
   font-size: 1.15rem;
-  color: ${({ $hasValue }) => ($hasValue ? 'white' : '#bbbbbb')}; /* ✅ 값 입력 시 하얀색 */
+  color: ${({ $hasValue }) => ($hasValue ? 'white' : '#bbbbbb')};
   margin-left: 0.3rem;
 `;
 
@@ -85,47 +88,61 @@ const BuyBtn = styled.div`
 `;
 
 const ETFTradeSetting = () => {
-  const location = useLocation();
+  const { symbol } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { symbol, currentPrice, priceChange, changePercent } = location.state || {};
 
-  // ✅ 더미 데이터: 사용자 보유 포인트 & 최대 구매 가능 주식 수
-  const userPoints = 25000; // 사용자 보유 포인트 (예: 250,000원)
-  const maxBuyableShares = Math.floor(userPoints / currentPrice); // 구매 가능 주식 수
+  const currentPrice = parseFloat(searchParams.get('currentPrice') || '0');
+  const priceChange = parseFloat(searchParams.get('priceChange') || '0');
+  const changePercent = parseFloat(searchParams.get('changePercent') || '0');
+
+  const { username, dollars, setDollars, setOwnedStocks } = useStore(); // ✅ 변경됨
+  const maxBuyableShares = currentPrice > 0 ? Math.floor(dollars / currentPrice) : 0;
 
   const [quantity, setQuantity] = useState<number | null>(null);
   const totalPrice = quantity ? currentPrice * quantity : 0;
 
-  // "구매하기" 버튼 클릭 핸들러
-  const handleBtn = () => {
-    if (quantity === null || quantity <= 0) {
+  const handleBtn = async () => {
+    if (!quantity || quantity <= 0) {
       alert('수량을 입력해 주세요!');
       return;
     }
+
     if (quantity > maxBuyableShares) {
-      alert(`보유 포인트가 부족합니다. 최대 구매 가능 수량은 ${maxBuyableShares}주입니다.`);
+      alert(`보유 달러가 부족합니다. 최대 구매 가능 수량은 ${maxBuyableShares}주입니다.`);
       return;
     }
 
-    // ✅ 기존 주식 데이터 가져오기
-    const existingStocks = JSON.parse(localStorage.getItem('myStocks') || '[]');
+    try {
+      const response = await baseAxios.post('/invest/purchase', {
+        name: username,
+        etfName: symbol,
+        price: currentPrice,
+        changeRate: changePercent,
+        quantity,
+      });
 
-    // ✅ 기존에 동일한 주식을 보유하고 있다면 업데이트
-    const updatedStocks = [...existingStocks];
-    const stockIndex = updatedStocks.findIndex((s) => s.name === symbol);
-    if (stockIndex > -1) {
-      updatedStocks[stockIndex].quantity += quantity;
-    } else {
-      updatedStocks.push({ name: symbol, price: currentPrice, quantity });
+      alert(`${symbol} ETF ${quantity}주 구매 완료!`);
+
+      await setDollars();
+
+      if (response.data.ownedETFs) {
+        setOwnedStocks(response.data.ownedETFs);
+      }
+
+      navigate('/InvestmentHome');
+    } catch (error: any) {
+      console.error('❌ 구매 실패 전체 에러:', error);
+
+      if (error.response) {
+        console.error('❌ 에러 응답 데이터:', error.response.data);
+        alert(error.response.data.message || '구매 처리 중 오류가 발생했습니다.');
+      } else {
+        alert('서버와의 연결에 실패했습니다.');
+      }
     }
-
-    // ✅ 새로운 주식 데이터 저장
-    localStorage.setItem('myStocks', JSON.stringify(updatedStocks));
-
-    navigate('/InvestmentHome');
   };
 
-  // 수량 입력 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     setQuantity(value > 0 ? value : null);
@@ -139,10 +156,9 @@ const ETFTradeSetting = () => {
         style={{ fontSize: '0.8rem', fontWeight: 'bold', color: priceChange > 0 ? 'red' : 'blue' }}
       >
         {priceChange > 0 ? `+${priceChange}` : priceChange} (
-        {changePercent !== null ? `${changePercent.toFixed(2)}%` : '데이터 없음'})
+        {changePercent !== 0 ? `${changePercent.toFixed(2)}%` : '데이터 없음'})
       </p>
 
-      {/* 예상 체결가 */}
       <InputWrapper>
         <Label>예상체결가</Label>
         <AmountBox>
@@ -153,7 +169,6 @@ const ETFTradeSetting = () => {
         </AmountBox>
       </InputWrapper>
 
-      {/* 수량 입력 */}
       <InputWrapper>
         <Label>수량</Label>
         <AmountBox>
@@ -166,11 +181,10 @@ const ETFTradeSetting = () => {
           />
         </AmountBox>
         <Text>
-          보유 포인트 {userPoints.toLocaleString()}USD · 구매 가능 수량 {maxBuyableShares}주
+          보유 달러 ${dollars.toLocaleString()} · 구매 가능 수량 {maxBuyableShares}주
         </Text>
       </InputWrapper>
 
-      {/* 구매하기 버튼 */}
       <BuyBox onClick={handleBtn}>
         <BuyBtn>구매하기</BuyBtn>
       </BuyBox>
