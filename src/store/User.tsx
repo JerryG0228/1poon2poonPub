@@ -1,14 +1,21 @@
 import baseAxios from '@/apis/axiosInstance';
-import { L } from 'framer-motion/dist/types.d-6pKw1mTI';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface PointHistory {
+interface pointHistory {
   name: string;
   day: string;
   time: string;
   change: number;
   finalPoints: number;
+  _id: string;
+}
+interface dollarHistory {
+  name: string;
+  day: string;
+  time: string;
+  change: number;
+  finalDollars: number;
   _id: string;
 }
 
@@ -32,7 +39,9 @@ interface UserState {
   cashbackStatus: { [key: string]: boolean };
   cashbackStamps: number[];
   points: number;
-  pointHistory: PointHistory[];
+  dollars: number;
+  pointHistory: pointHistory[];
+  dollarHistory: dollarHistory[];
   badges: string[];
   interests: string[];
   ownedStocks: OwnedStocks[];
@@ -44,23 +53,10 @@ interface UserState {
 
   setOwnedStocks: (stocks: OwnedStocks[]) => void;
 
-  setDefault: (
-    name: string,
-    cashbackStatus: { [key: string]: boolean },
-    stamps: number[],
-    point: number,
-    pointHistory: PointHistory[],
-    badge: string[],
-    interest: string[],
-    ownedETFs: OwnedStocks[],
-    interestsStock: InterestsStock[],
-    goalCategory: string,
-    totalDonation: number,
-    goalDonation: number,
-    currentDonation: number,
-  ) => void;
+  updateUser: () => void;
   setName: (name: string) => void;
   setPoints: (amount: number, origin: string) => void;
+  setDollars: () => void;
   resetStamp: () => void;
   addBadge: (badge: string) => void;
   setInterests: (interests: string[]) => void;
@@ -80,7 +76,9 @@ const useStore = create<UserState>()(
       cashbackStatus: {},
       cashbackStamps: [],
       points: 0,
+      dollars: 0,
       pointHistory: [],
+      dollarHistory: [],
       badges: [],
       interests: [],
       ownedStocks: [],
@@ -92,36 +90,32 @@ const useStore = create<UserState>()(
 
       setOwnedStocks: (stocks) => set(() => ({ ownedStocks: stocks })),
 
-      setDefault: (
-        name,
-        cashbackStatus,
-        stamps,
-        point,
-        pointHistory,
-        badge,
-        interest,
-        ownedStocks,
-        interestsStock,
-        goalCategory,
-        totalDonation,
-        goalDonation,
-        currentDonation,
-      ) =>
-        set(() => ({
-          username: name,
-          cashbackStatus: cashbackStatus,
-          cashbackStamps: stamps,
-          points: point,
-          pointHistory: pointHistory,
-          badges: badge,
-          interests: interest,
-          ownedStocks: ownedStocks,
-          interestsStock: interestsStock,
-          goalCategory: goalCategory,
-          totalDonations: totalDonation,
-          goalDonations: goalDonation,
-          currentDonations: currentDonation,
-        })), // 기본값 설정
+      updateUser: async () => {
+        try {
+          const response = await baseAxios.get('/user/tester');
+          const data = response.data;
+
+          set({
+            username: data.name,
+            cashbackStatus: data.cashbackStatus,
+            cashbackStamps: data.cashbackStamps,
+            points: data.cashback.points,
+            dollars: data.cashback.dollars,
+            pointHistory: data.cashback.history.pointHistory,
+            dollarHistory: data.cashback.history.dollarHistory,
+            badges: data.donate.history,
+            interests: data.invest.interests,
+            ownedStocks: data.invest.ownedETFs,
+            interestsStock: data.invest.interestedETFs,
+            goalCategory: data.donate.category,
+            totalDonations: data.donate.totalAmount,
+            goalDonations: data.donate.targetAmount,
+            currentDonations: data.donate.currentAmount,
+          });
+        } catch (error) {
+          console.error('데이터 불러오기 실패:', error);
+        }
+      },
 
       setInterestsStock: (stocks: InterestsStock[]) => set(() => ({ interestsStock: stocks })),
 
@@ -136,9 +130,7 @@ const useStore = create<UserState>()(
             point: amount,
             origin: origin,
           });
-
           const data = response.data;
-          console.log('data: ', data);
 
           if (!data) {
             throw new Error('잘못된 응답 형식');
@@ -152,6 +144,26 @@ const useStore = create<UserState>()(
           console.error('포인트 업데이트 실패:', error);
         }
       }, // 포인트 추가/감소
+
+      setDollars: async () => {
+        const state = useStore.getState();
+
+        try {
+          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
+          const data = response.data;
+
+          if (!data) {
+            throw new Error('잘못된 응답 형식');
+          }
+
+          useStore.setState({
+            dollars: data.dollars,
+            dollarHistory: data.dollarHistory,
+          });
+        } catch (error) {
+          console.error('포인트 업데이트 실패:', error);
+        }
+      }, // 달러 추가/감소
 
       resetStamp: () => set(() => ({ cashbackStamps: [] })),
 

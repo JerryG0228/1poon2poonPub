@@ -9,7 +9,7 @@ import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
-import etfData from '@/data/etfData';
+import etfData from '@/data/etfData.js';
 import baseAxios from '@/apis/axiosInstance';
 
 const Container = styled.div`
