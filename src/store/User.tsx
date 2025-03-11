@@ -98,7 +98,7 @@ const useStore = create<UserState>()(
         }
       }, // 달러 추가/감소
 
-      resetStamp: () => set(() => ({ cashbackStamps: [] })),
+      resetStamp: () => set(() => ({ cashbackStamps: [] })), // 스탬프판 초기화
 
       addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
 
