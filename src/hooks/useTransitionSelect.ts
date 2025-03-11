@@ -17,7 +17,7 @@ const useTransitionSelect = () => {
   const [transition, setTransition] = useState('');
 
   useEffect(() => {
-    const previousPath = sessionStorage.getItem('path')!;
+    const previousPath = sessionStorage.getItem('path') || '';
     const previousPage = getPageByPath(previousPath);
     const currentPage = getPageByPath(location.pathname);
 
