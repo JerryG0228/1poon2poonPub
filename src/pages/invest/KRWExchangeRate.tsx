@@ -68,6 +68,18 @@ const ExchangeButton = styled.button`
   }
 `;
 
+// 뱅커스 라운딩 함수
+const bankersRound = (value: number, decimalPlaces = 2): number => {
+  const multiplier = Math.pow(10, decimalPlaces);
+  const scaled = value * multiplier;
+  const floored = Math.floor(scaled);
+  const diff = scaled - floored;
+
+  if (diff > 0.5) return Math.ceil(scaled) / multiplier;
+  if (diff < 0.5) return floored / multiplier;
+  return (floored % 2 === 0 ? floored : floored + 1) / multiplier;
+};
+
 const KRWExchangeRate = () => {
   const [rate, setRate] = useState<number | null>(null);
   const [usd, setUsd] = useState('');
@@ -106,7 +118,8 @@ const KRWExchangeRate = () => {
     const usdValue = e.target.value;
     setUsd(usdValue);
     if (rate && !isNaN(Number(usdValue))) {
-      setKrw(Number(usdValue) * rate);
+      const krwValue = bankersRound(Number(usdValue) * rate, 2);
+      setKrw(krwValue);
     } else {
       setKrw(null);
     }
@@ -131,14 +144,14 @@ const KRWExchangeRate = () => {
             <ResultText
               onClick={() => {
                 if (rate) {
-                  const maxUsd = Math.floor((points / rate) * 100) / 100; // 소수점 둘째 자리 반올림
+                  const maxUsd = Math.floor((points / rate) * 100) / 100;
                   setUsd(String(maxUsd));
-                  setKrw(maxUsd * rate);
+                  setKrw(bankersRound(maxUsd * rate));
                 }
               }}
               style={{ cursor: 'pointer', textDecoration: 'underline' }}
             >
-              보유 포인트: {points.toLocaleString()}원
+              보유 달러: {points.toLocaleString()}원
             </ResultText>
           </InputWrapper>
 
@@ -151,14 +164,13 @@ const KRWExchangeRate = () => {
               placeholder="$ 달러 금액 입력"
             />
             {krw !== null && (
-              <ResultText>💴 환전 결과: {Math.floor(krw).toLocaleString()} KRW</ResultText>
+              <ResultText>💴 환전 결과: {bankersRound(krw, 2).toLocaleString()} KRW</ResultText>
             )}
             {krw !== null && krw > points && (
               <ResultText style={{ color: 'tomato' }}>⚠️ 보유 포인트를 초과했습니다!</ResultText>
             )}
           </InputWrapper>
 
-          {/* 버튼 비활성화 조건 수정 */}
           <ExchangeButton onClick={handleExchange} disabled={!krw || krw > points}>
             환전하기
           </ExchangeButton>
