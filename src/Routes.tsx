@@ -8,7 +8,7 @@ import DonateMainLayout from './layout/DonateMainLayout';
 import Main from './pages/main/Main'; // 메인 페이지
 import PointHistory from './pages/main/PointHistory'; // 포인트 내역
 import DonateMainBefore from './pages/donate/DonateMainBefore';
-import InvestCategory from '@/pages/invest/Category'; // 투자 카테고리 선택
+import InvestCategory from '@/pages/invest/investCategory'; // 투자 카테고리 선택
 import ETFList from '@/pages/invest/ETFList'; // ETF 목록
 import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
 import ETFCategoryList from '@/pages/invest/ETFCategoryList';
@@ -41,7 +41,7 @@ const routes = [
       { path: 'donate', element: <Donate /> },
       { path: 'investbefore', element: <InvestMainBefore /> },
       { path: 'etf-detail/:symbol', element: <ETFDetail /> },
-      { path: 'investCategory', element: <InvestCategory /> },
+      { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
       { path: 'USDExchangeRate', element: <USDExchangeRate /> },
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
       { path: 'Exchange', element: <Exchange /> },
