@@ -19,6 +19,7 @@ import DonateHome from './pages/donate/DonateHome';
 import Invest from '@/pages/invest/InvestMainBefore';
 import USDExchangeRate from '@/pages/invest/USDExchangeRate';
 import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
+import Exchange from '@/pages/invest/Exchange';
 import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
@@ -43,6 +44,7 @@ const routes = [
       { path: 'investCategory', element: <InvestCategory /> },
       { path: 'USDExchangeRate', element: <USDExchangeRate /> },
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
+      { path: 'Exchange', element: <Exchange /> },
     ],
   },
 
