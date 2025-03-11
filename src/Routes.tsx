@@ -18,13 +18,14 @@ import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from './pages/donate/DonateHome';
 import USDExchangeRate from '@/pages/invest/USDExchangeRate';
 import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
-import Exchange from '@/pages/invest/Exchange';
 import ETFBuy from '@/pages/invest/ETFBuy';
 import ETFSell from '@/pages/invest/ETFSell';
 import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 import DonateSetFinish from './pages/donate/DonateSetFinish';
 import DonateComplete from './pages/donate/DonateComplete';
+import InvestDollarsHistory from './pages/invest/InvestDollarsHistory';
+import InvestPointsHistory from './pages/invest/InvestPointsHistory';
 
 const routes = [
   // DefaultLayout
@@ -43,7 +44,8 @@ const routes = [
       { path: 'investCategory', element: <InvestCategory /> },
       { path: 'USDExchangeRate', element: <USDExchangeRate /> },
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
-      { path: 'Exchange', element: <Exchange /> },
+      { path: 'investDollarsHistory', element: <InvestDollarsHistory /> }, // 달러 내역 페이지
+      { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
     ],
   },
 
