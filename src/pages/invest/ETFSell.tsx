@@ -91,7 +91,7 @@ const ETFSellSetting = () => {
   const { symbol } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { username, ownedStocks, setOwnedStocks } = useStore(); // ✅ zustand에서 username 불러옴
+  const { username, ownedStocks, setOwnedStocks, setDollars } = useStore(); // ✅ zustand에서 username 불러옴
 
   const currentPrice = parseFloat(searchParams.get('currentPrice') || '0');
   const priceChange = parseFloat(searchParams.get('priceChange') || '0');
@@ -130,13 +130,16 @@ const ETFSellSetting = () => {
 
       alert(res.data.message || 'ETF 판매가 완료되었습니다.');
 
-      // 상태 업데이트: 판매 수량 반영
+      // 💰 판매 수익 달러 상태에 반영
+      if (res.data.Dollars !== undefined) {
+        setDollars(res.data.Dollars);
+      }
+
       const updatedStocks = ownedStocks
         .map((etf) => (etf.name === symbol ? { ...etf, quantity: etf.quantity - quantity } : etf))
-        .filter((etf) => etf.quantity > 0); // 수량 0이면 제거
+        .filter((etf) => etf.quantity > 0);
 
       setOwnedStocks(updatedStocks);
-
       navigate('/InvestmentHome');
     } catch (error: any) {
       console.error('판매 실패:', error);

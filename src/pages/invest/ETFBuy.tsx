@@ -96,8 +96,8 @@ const ETFTradeSetting = () => {
   const priceChange = parseFloat(searchParams.get('priceChange') || '0');
   const changePercent = parseFloat(searchParams.get('changePercent') || '0');
 
-  const { username, points, setOwnedStocks } = useStore(); // ✅ zustand에서 가져옴
-  const maxBuyableShares = currentPrice > 0 ? Math.floor(points / currentPrice) : 0;
+  const { username, dollars, setOwnedStocks } = useStore(); // ✅ 변경됨
+  const maxBuyableShares = currentPrice > 0 ? Math.floor(dollars / currentPrice) : 0;
 
   const [quantity, setQuantity] = useState<number | null>(null);
   const totalPrice = quantity ? currentPrice * quantity : 0;
@@ -130,9 +130,15 @@ const ETFTradeSetting = () => {
 
       // ✅ 페이지 이동
       navigate('/InvestmentHome');
-    } catch (error) {
-      console.error('구매 실패:', error);
-      alert(error?.response?.data?.message || '구매 처리 중 오류가 발생했습니다.');
+    } catch (error: any) {
+      console.error('❌ 구매 실패 전체 에러:', error);
+
+      if (error.response) {
+        console.error('❌ 에러 응답 데이터:', error.response.data);
+        alert(error.response.data.message || '구매 처리 중 오류가 발생했습니다.');
+      } else {
+        alert('서버와의 연결에 실패했습니다.');
+      }
     }
   };
 
@@ -174,7 +180,7 @@ const ETFTradeSetting = () => {
           />
         </AmountBox>
         <Text>
-          보유 포인트 {points.toLocaleString()} USD · 구매 가능 수량 {maxBuyableShares}주
+          보유 달러 ${dollars.toLocaleString()} · 구매 가능 수량 {maxBuyableShares}주
         </Text>
       </InputWrapper>
 
