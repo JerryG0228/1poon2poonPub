@@ -32,8 +32,7 @@ const StyledLottie = styled(Lottie)`
 export default function PayComplete() {
   return (
     <Container>
-      <ReactConfetti numberOfPieces={150} recycle={false} gravity={0.2} />
-      <Text>감사합니다!</Text>
+      <Text>결제가 완료되었습니다!</Text>
       <StyledLottie animationData={payComplete} loop={true} />
       <Link to="/">
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
