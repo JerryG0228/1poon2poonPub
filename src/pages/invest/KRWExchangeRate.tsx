@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import useStore from '@/store/User';
-import baseAxios from '@/apis/axiosInstance'; // ✅ 빠진 import 추가
+import baseAxios from '@/apis/axiosInstance';
 
 const Box = styled.div`
   display: flex;

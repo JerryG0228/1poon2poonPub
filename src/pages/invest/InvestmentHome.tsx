@@ -71,10 +71,10 @@ const BuyButton = styled.button`
 
 const InvestmentHome = () => {
   const navigate = useNavigate();
-  const { username, interestsStock } = useStore();
+  const { username, interestsStock, ownedStocks, setOwnedStocks } = useStore();
 
   const [activeTab, setActiveTab] = useState<'내 ETF' | '관심 ETF'>('내 ETF');
-  const [ownedETFs, setOwnedETFs] = useState<any[]>([]);
+  // const [ownedETFs, setOwnedETFs] = useState<any[]>([]);
   const [stocks, setStocks] = useState<
     { name: string; price: number; transPrice: number; changePercent: string; quantity: number }[]
   >([]);
@@ -83,29 +83,29 @@ const InvestmentHome = () => {
   // 보유 ETF 불러오기
   useEffect(() => {
     async function fetchOwnedETFs() {
-      if (!username) return;
-
       try {
         const res = await baseAxios.get(`/invest/getUser/${username}`);
         if (res.data.ownedETFs) {
-          setOwnedETFs(res.data.ownedETFs);
+          setOwnedStocks(res.data.ownedETFs); // zustand에 보유 ETF 저장
         }
       } catch (error) {
-        console.error('보유 ETF 불러오기 실패:', error);
+        console.error('❌ 보유 ETF 불러오기 실패:', error);
       }
     }
 
-    fetchOwnedETFs();
+    if (username) {
+      fetchOwnedETFs();
+    }
   }, [username]);
 
-  // 종목 병합 후 fetch
+  // 보유 ETF + 관심 ETF 병합 후 데이터 요청
   useEffect(() => {
     const interestOnly = interestsStock.filter(
-      (interest) => !ownedETFs.some((own) => own.name === interest.name),
+      (interest) => !ownedStocks.some((own) => own.name === interest.name),
     );
 
     const allList = [
-      ...ownedETFs.map((own) => ({ name: own.name, quantity: own.quantity })),
+      ...ownedStocks.map((own) => ({ name: own.name, quantity: own.quantity })),
       ...interestOnly.map((it) => ({ name: it.name, quantity: 0 })),
     ];
 
@@ -114,7 +114,7 @@ const InvestmentHome = () => {
     } else {
       setStocks([]);
     }
-  }, [ownedETFs, interestsStock]);
+  }, [ownedStocks, interestsStock]);
 
   // ETF별 가격 정보 호출
   const fetchStockData = async (stockList: { name: string; quantity: number }[]) => {
