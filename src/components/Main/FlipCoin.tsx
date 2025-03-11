@@ -79,11 +79,11 @@ const FlipImage: React.FC<FlipImageProps> = ({ srcA, srcB, alt }) => {
     <FlipWrapper isFlipping={isFlipping} onClick={handleClick}>
       {showBack ? (
         <div className="side back">
-          <CoinImage src={srcB} alt={alt} />
+          <CoinImage src={srcB} alt={'backImage'} />
         </div>
       ) : (
         <div className="side front">
-          <CoinImage src={srcA} alt={alt} />
+          <CoinImage src={srcA} alt={'frontImage'} />
         </div>
       )}
     </FlipWrapper>

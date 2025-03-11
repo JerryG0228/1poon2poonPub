@@ -6,6 +6,7 @@ import TopGainersChart from '@/components/invest/TopGainersChart';
 import ETFBox from '@/components/invest/ETFBox';
 import ETFQuantityBox from '@/components/invest/ETFQuantityBox';
 import baseAxios from '@/apis/axiosInstance';
+import ExchangeSection from '@/components/invest/ExchangeSection';
 
 const Container = styled.div`
   color: white;
@@ -183,6 +184,9 @@ const InvestmentHome = () => {
           </EmptyStateBox>
         </ChartWrapper>
       )}
+
+      {/* 환전 탭 */}
+      <ExchangeSection />
 
       {/* 탭 UI */}
       <TabContainer>
