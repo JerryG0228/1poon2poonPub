@@ -25,6 +25,7 @@ import DonateSetFinish from './pages/donate/DonateSetFinish';
 import DonateComplete from './pages/donate/DonateComplete';
 import Pay from './pages/pay/Pay';
 import PayMain from './pages/pay/PayMain';
+import PayComplete from './pages/pay/PayComplete';
 
 const routes = [
   // DefaultLayout
@@ -34,14 +35,14 @@ const routes = [
     children: [
       { path: '/', element: <Main /> },
       { path: 'pointhistory', element: <PointHistory /> },
-      { path: 'donatebefore', element: <DonateMainBefore /> },
-      { path: 'donatecategory', element: <DonateCategory /> },
-      { path: 'donategoal', element: <DonateGoal /> },
-      { path: 'donate', element: <Donate /> },
+      { path: 'donatebefore', element: <DonateMainBefore /> }, //기부 처음 시작 페이지
+      { path: 'donatecategory', element: <DonateCategory /> }, //기부 카테고리 선택 페이지
+      { path: 'donategoal', element: <DonateGoal /> }, //기부 목표 금액 설정 페이지
+      { path: 'donate', element: <Donate /> }, //기부 포인트 적립 페이지
       { path: 'investbefore', element: <InvestMainBefore /> },
       { path: 'etf-detail/:symbol', element: <ETFDetail /> },
       { path: 'investCategory', element: <InvestCategory /> },
-      { path: 'paymain', element: <PayMain /> },
+      { path: 'paymain', element: <PayMain /> }, //결제 메인 페이지지
     ],
   },
 
@@ -49,7 +50,7 @@ const routes = [
   {
     path: '/donatehome',
     element: <DonateMainLayout />,
-    children: [{ path: '', element: <DonateHome /> }],
+    children: [{ path: '', element: <DonateHome /> }], //기부 메인 페이지지
   },
 
   // PlusLayout
@@ -71,9 +72,10 @@ const routes = [
     ],
   },
 
-  { path: '/donatesetfinish', element: <DonateSetFinish /> },
-  { path: '/donatecomplete', element: <DonateComplete /> },
-  { path: '/pay', element: <Pay /> },
+  { path: '/donatesetfinish', element: <DonateSetFinish /> }, //기부 설정 완료 페이지
+  { path: '/donatecomplete', element: <DonateComplete /> }, //기부 완료 페이지
+  { path: '/pay', element: <Pay /> }, //결제 시작 페이지
+  { path: '/paycomplete', element: <PayComplete /> }, //결제 완료 페이지
 ];
 
 export default routes;

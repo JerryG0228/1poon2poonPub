@@ -108,7 +108,9 @@ export default function PayMain() {
   const fetchData = async () => {
     await baseAxios
       .post('/user/addStamp', data)
-      .then(() => {})
+      .then((reaponse) => {
+        console.log(reaponse);
+      })
       .catch((error) => {
         console.error('Error:', error);
       });
@@ -144,7 +146,7 @@ export default function PayMain() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <Link to="/">
+      <Link to="/paycomplete">
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '21.3rem' }}>결제하기</div>

@@ -292,7 +292,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       setIsClicked(false);
     }, 1000); // 1.3초 후 애니메이션 후 상태 초기화
   };
-
+  console.log(goalDonations);
   useEffect(() => {
     spring.set(currDonate);
   }, [currDonate, spring]);
@@ -355,9 +355,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       </div>
       <CharacterName>한푼이</CharacterName>
       <TextBox>
-        <Donate>{targetDonate > 0 ? animatedValue : '?'}</Donate>
+        <Donate>{goalDonations > 0 ? animatedValue : '?'}</Donate>
         <Target>/</Target>
-        <Target>{targetDonate > 0 ? targetDonate.toLocaleString() : '?'}</Target>
+        <Target>{goalDonations > 0 ? goalDonations.toLocaleString() : '?'}</Target>
       </TextBox>
     </Wrapper>
   );

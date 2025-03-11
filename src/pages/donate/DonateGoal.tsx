@@ -99,6 +99,7 @@ export default function DonateGoal() {
       .post('/donate/setDonate', data)
       .then((response) => {
         const data = response.data;
+        console.log(data);
         setGoalDonations(data.targetAmount);
       })
       .catch((error) => {
