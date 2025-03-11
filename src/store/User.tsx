@@ -32,7 +32,6 @@ interface UserState {
   cashbackStatus: { [key: string]: boolean };
   cashbackStamps: number[];
   points: number;
-  dollars: number;
   pointHistory: PointHistory[];
   badges: string[];
   interests: string[];
@@ -62,7 +61,6 @@ interface UserState {
   ) => void;
   setName: (name: string) => void;
   setPoints: (amount: number, origin: string) => void;
-  setDollars: (amount: number) => void;
   resetStamp: () => void;
   addBadge: (badge: string) => void;
   setInterests: (interests: string[]) => void;
@@ -82,7 +80,6 @@ const useStore = create<UserState>()(
       cashbackStatus: {},
       cashbackStamps: [],
       points: 0,
-      dollars: 0,
       pointHistory: [],
       badges: [],
       interests: [],
@@ -155,8 +152,6 @@ const useStore = create<UserState>()(
           console.error('포인트 업데이트 실패:', error);
         }
       }, // 포인트 추가/감소
-
-      setDollars: (amount) => set(() => ({ dollars: amount })),
 
       resetStamp: () => set(() => ({ cashbackStamps: [] })),
 
