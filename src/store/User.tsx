@@ -71,14 +71,34 @@ const useStore = create<UserState>()(
 
           useStore.setState({
             points: data.points,
-            pointHistory: data.history,
+            pointHistory: data.pointHistory,
           });
         } catch (error) {
           console.error('포인트 업데이트 실패:', error);
         }
       }, // 포인트 추가/감소
 
-      setDollars: async () => {
+      updatePoints: async () => {
+        const state = useStore.getState();
+
+        try {
+          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
+          const data = response.data;
+
+          if (!data) {
+            throw new Error('잘못된 응답 형식');
+          }
+
+          useStore.setState({
+            points: data.points,
+            pointHistory: data.pointHistory,
+          });
+        } catch (error) {
+          console.error('포인트 업데이트 실패:', error);
+        }
+      }, // 보유 포인트 업데이트
+
+      updateDollars: async () => {
         const state = useStore.getState();
 
         try {
@@ -96,7 +116,7 @@ const useStore = create<UserState>()(
         } catch (error) {
           console.error('포인트 업데이트 실패:', error);
         }
-      }, // 달러 추가/감소
+      }, // 보유 달러 업데이트
 
       resetStamp: () => set(() => ({ cashbackStamps: [] })), // 스탬프판 초기화
 

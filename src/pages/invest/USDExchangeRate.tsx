@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import useStore from '@/store/User';
-import baseAxios from '@/apis/axiosInstance'; // ✅ 빠진 import 추가
+import baseAxios from '@/apis/axiosInstance';
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
@@ -145,22 +145,6 @@ const ErrorText = styled.div`
   text-align: center;
 `;
 
-// const ExchangeButton = styled.button`
-//   margin-top: 2rem;
-//   padding: 0.8rem;
-//   background-color: #ef4452;
-//   color: white;
-//   font-size: 1rem;
-//   font-weight: bold;
-//   border: none;
-//   border-radius: 0.6rem;
-//   cursor: pointer;
-//   &:disabled {
-//     background-color: #6b7683;
-//     cursor: not-allowed;
-//   }
-// `;
-
 const bankersRound = (value: number, decimalPlaces = 2): number => {
   const multiplier = Math.pow(10, decimalPlaces);
   const scaled = value * multiplier;
@@ -177,7 +161,7 @@ const USDExchangeRate = () => {
   const [rate, setRate] = useState<number | null>(null);
   const [won, setWon] = useState('');
   const [usd, setUsd] = useState<number | null>(null);
-  const { username, setPoints, points, setDollars, dollars } = useStore();
+  const { username, points, updatePoints, updateDollars } = useStore();
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -220,23 +204,21 @@ const USDExchangeRate = () => {
   const handleExchange = async () => {
     if (!usd || !rate || !won) return;
 
-    const roundedUsd = bankersRound(usd, 2);
-
     try {
-      const res = await baseAxios.post('/user/exchange', {
-        name: username,
-        amount: Number(won),
-        direction: 'dollars',
-      });
-
-      if (res.data?.points !== undefined) {
-        await setPoints(res.data.points, 'exchange'); // 포인트 업데이트
-        await setDollars(); // 💡 반드시 API 호출 후 setDollars
-        alert(`환전 성공! 💴 ${Number(won).toLocaleString()}원 → 💵 ${roundedUsd.toFixed(2)} USD`);
-
-        setWon('');
-        setUsd(null);
-      }
+      await baseAxios
+        .post('/user/exchange', {
+          name: username,
+          amount: Number(won),
+          direction: 'dollars',
+        })
+        .then(() => {
+          updatePoints(); // 보유 포인트 업데이트
+          updateDollars(); // 보유 달러 업데이트
+        })
+        .then(() => {
+          setWon('');
+          setUsd(null);
+        });
     } catch (err: any) {
       console.error('❌ 환전 실패:', err);
       alert(err.response?.data?.message || '환전 중 오류가 발생했습니다.');
@@ -291,11 +273,6 @@ const USDExchangeRate = () => {
                 </WonWrap>
               </InputContent>
               <ButtonContent>
-                {/* <ResultText>보유 포인트: {points.toLocaleString()}원</ResultText> */}
-                {/* 
-            {krw !== null && (
-              <ResultText>💴 환전 결과: {bankersRound(krw, 2).toLocaleString()} KRW</ResultText>
-            )} */}
                 {Number(won) > points && <ErrorText>⚠️ 보유 포인트를 초과했습니다!</ErrorText>}
 
                 <Btn
@@ -308,10 +285,6 @@ const USDExchangeRate = () => {
                     <div style={{ width: '21.5rem' }}>환전하기</div>
                   </PressMotion>
                 </Btn>
-
-                {/* <ExchangeButton onClick={handleExchange} disabled={!krw || Number(usd) > dollars}>
-            환전하기
-          </ExchangeButton> */}
               </ButtonContent>
             </ContentWrapper>
           </Wrapper>
