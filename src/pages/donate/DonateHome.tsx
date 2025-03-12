@@ -3,7 +3,7 @@ import CharacterBox from '@/components/Donate/CharacterBox';
 import Guage from '@/components/Donate/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import EarthPage from '@/assets/donatePage/EarthPage.png';
 import BooksPage from '@/assets/donatePage/BooksPage.png';
@@ -251,15 +251,14 @@ const Animation: Record<string, string> = {
 };
 
 export default function DonateHome() {
-  const { totalDonations, goalDonations, currentDonations, goalCategory, badges, pointHistory } =
-    useStore();
+  const { totalDonations, goalDonations, currentDonations, goalCategory, badges } = useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
   const [bgColor, setBgColor] = useState(colors.Navy);
 
   // 기부중인 카테고리 이미지 매핑
   const categoryImg = categoryList[goalCategory];
-  console.log(pointHistory);
+
   const handleClick = (item: any) => {
     setSelectBadge(item);
     setIsOpen(true);
