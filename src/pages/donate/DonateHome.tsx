@@ -253,13 +253,14 @@ const Animation: Record<string, string> = {
 };
 
 export default function DonateHome() {
-  const { totalDonations, goalDonations, currentDonations, goalCategory, badges } = useStore();
+  const { totalDonations, goalDonations, currentDonations, goalCategory, badges, pointHistory } =
+    useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
 
   // 기부중인 카테고리 이미지 매핑
   const categoryImg = categoryList[goalCategory];
-
+  console.log(pointHistory);
   const handleClick = (item: any) => {
     setSelectBadge(item);
     setIsOpen(true);

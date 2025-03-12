@@ -22,7 +22,7 @@ const useStore = create<UserState>()(
       totalDonations: 0,
       goalDonations: 0,
       currentDonations: 0,
-
+      getPointCount: 5,
       setOwnedStocks: (stocks) => set(() => ({ ownedStocks: stocks })),
 
       updateUser: async () => {
@@ -56,26 +56,40 @@ const useStore = create<UserState>()(
 
       setPoints: async (amount, origin) => {
         const state = useStore.getState();
+        if (origin === '기부') {
+          await baseAxios
+            .get(`/user/getPointInfo/${state.username}`)
+            .then((response) => {
+              console.log('point:', response.data);
+              useStore.setState({
+                points: response.data.points,
+                pointHistory: response.data.history,
+              });
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        } else {
+          try {
+            const response = await baseAxios.post('/user/setPoint', {
+              name: state.username,
+              point: amount,
+              origin: origin,
+            });
+            const data = response.data;
+            console.log('data: ', data);
 
-        try {
-          const response = await baseAxios.post('/user/setPoint', {
-            name: state.username,
-            point: amount,
-            origin: origin,
-          });
-          const data = response.data;
+            if (!data) {
+              throw new Error('잘못된 응답 형식');
+            }
 
-          if (!data) {
-            throw new Error('잘못된 응답 형식');
+            useStore.setState({
+              points: data.points,
+              pointHistory: data.history,
+            });
+          } catch (error) {
+            console.error('포인트 업데이트 실패:', error);
           }
-
-          useStore.setState({
-            points: data.points,
-            pointHistory: data.history,
-          });
-        } catch (error) {
-          console.error('포인트 업데이트 실패:', error);
-        }
       }, // 포인트 추가/감소
 
       updatePoints: async () => {
@@ -118,6 +132,9 @@ const useStore = create<UserState>()(
         }
       }, // 보유 달러 업데이트
 
+      addStamp: (stamp) => {
+        set((state) => ({ cashbackStamps: [...state.cashbackStamps, stamp] }));
+      }, // 스탬프 추가
       resetStamp: () => set(() => ({ cashbackStamps: [] })), // 스탬프판 초기화
 
       addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
@@ -132,6 +149,7 @@ const useStore = create<UserState>()(
       getCurrentDonations: (amount) => set(() => ({ currentDonations: amount })), // 현재 기부 금액 조회
       updateCurrentDonations: (amount) =>
         set((state) => ({ currentDonations: state.currentDonations + amount })), // 현재 기부 금액 추가
+      setGetPointCount: (count) => set((state) => ({ getPointCount: 5 })),
     }),
     { name: 'user-store' },
   ),

@@ -1,7 +1,6 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { useEffect, useState } from 'react';
@@ -99,13 +98,13 @@ export default function DonateGoal() {
       .post('/donate/setDonate', data)
       .then((response) => {
         const data = response.data;
-        setGoalDonations(data.targetAmount);
+        setGoalDonations(data.data.targetAmount);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   };
-
+  console.log(data);
   useEffect(() => {
     setBgColor((targetAmount ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
   }, [targetAmount]);

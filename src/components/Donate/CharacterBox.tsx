@@ -12,9 +12,7 @@ import getCoin from '@/assets/characterbox/coin.json';
 import donateComplete from '@/assets/characterbox/donateComplete.json';
 import Lottie from 'lottie-react';
 import useStore from '@/store/User';
-import baseAxios from '@/apis/axiosInstance';
-import heartD from '@/assets/donatePage/heartD.json';
-
+import paper from '@/assets/characterbox/paper.json';
 const Jello = keyframes` // 모찌 리액션
   0% { transform: scale3d(1,1,1); }
   30% { transform: scale3d(0.65,1.15,1); }
@@ -226,14 +224,13 @@ interface Props {
 }
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
-  const { goalDonations, setPoints, username, goalCategory } = useStore();
+  const { goalDonations, setPoints, getPointCount, goalCategory, setGetPointCount } = useStore();
   const [character, setCharacter] = useState<string>('');
-  const [growth, setGrowth] = useState<number>(10);
+  const [growth, setGrowth] = useState<number>(10); // 캐릭터 상태에 따른 크기 변화
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
   const [isClickable, setIsClickable] = useState<boolean>(true); // 캐릭터 클릭 가능 상태
   const [animate, setAnimate] = useState<string>('');
-  const [isLottieVisible, setIsLottieVisible] = useState(false);
-  const [getCoinCount, setGetCoinCount] = useState<number>(5);
+  const [isLottieVisible, setIsLottieVisible] = useState(false); //동전 로티 효과
   const [isClicked, setIsClicked] = useState(false);
   const [getPoint, setGetPoint] = useState(0);
   const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
@@ -258,11 +255,20 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
         return anim.name;
       }
     }
-    return 'Jello'; // 기본값
+    return 'Jello'; // 애니메이션 기본값
   };
 
+  //랜덤 포인트 획득
   const getRandomPoint = () => {
-    return Math.floor(Math.random() * 10) + 1;
+    const rand = Math.random() * 100; // 0 ~ 99.99~
+
+    if (rand < 50) {
+      return Math.floor(Math.random() * 10) + 1; // 1~10, 85프로 확률
+    } else if (rand < 80) {
+      return 100; // 10프로 확률
+    } else {
+      return 500; // 5프로 확률
+    }
   };
 
   // 애니메이션 트리거 함수
@@ -272,15 +278,15 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
     setIsClickable(false); // 애니메이션 종료 후 클릭 가능
 
     //코인 얻을 때 까진 말랑말랑, 횟수 끝나면 랜덤 모션 재생
-    if (getCoinCount > 0) {
+    if (getPointCount > 0) {
       setIsLottieVisible(true);
-      setGetCoinCount(getCoinCount - 1);
+      setGetPointCount(1);
       setIsClicked(true);
 
       const randomPoint = getRandomPoint();
       setGetPoint(randomPoint);
       setAnimate(randomPoint > 5 ? 'Jello' : 'Shake');
-      setPoints(randomPoint, '캐릭터 이벤트');
+      setPoints(randomPoint, '한푼이 털기');
     } else {
       setAnimate(weightedRandomAnimation());
     }
@@ -296,6 +302,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   useEffect(() => {
     spring.set(currDonate);
   }, [currDonate, spring]);
+
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
     if (per < 25 && goalDonations > 0) {
@@ -320,13 +327,13 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       {goalCategory == '' || goalCategory == 'none' ? (
         <div style={{ visibility: 'hidden' }}>1</div>
       ) : (
-        <div style={{ marginLeft: '20rem' }}>{getCoinCount}/5</div>
+        <div style={{ marginLeft: '20rem' }}>{getPointCount}/5</div>
       )}
-      <div style={{ position: 'relative', marginTop: (13 % growth) + 2 + 'rem' }}>
+      <div style={{ position: 'relative', marginTop: (13 % growth) + 'rem' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : goalDonations == 0 ? (
-          <Lottie animationData={heartD} loop={true} style={{ width: '14rem', height: '14rem' }} />
+          <Lottie animationData={paper} loop={true} style={{ width: '13rem', height: '13rem' }} />
         ) : (
           <>
             {getPoint > 5 ? (
@@ -355,9 +362,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       </div>
       <CharacterName>한푼이</CharacterName>
       <TextBox>
-        <Donate>{targetDonate > 0 ? animatedValue : '?'}</Donate>
+        <Donate>{goalDonations > 0 ? animatedValue : '?'}</Donate>
         <Target>/</Target>
-        <Target>{targetDonate > 0 ? targetDonate.toLocaleString() : '?'}</Target>
+        <Target>{goalDonations > 0 ? goalDonations.toLocaleString() : '?'}</Target>
       </TextBox>
     </Wrapper>
   );

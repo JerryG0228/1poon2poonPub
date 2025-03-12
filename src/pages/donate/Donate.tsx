@@ -45,6 +45,7 @@ export default function Donate() {
   const { points, goalDonations, currentDonations, username, updateCurrentDonations, setPoints } =
     useStore();
   const [value, setValue] = useState<number>(0); // 기부 할 금액 입력
+  const [formattedValue, setFormattedValue] = useState<string>(''); //input에
   const [data, setData] = useState<{ name: string; amount: number }>({ name: username, amount: 0 });
   const [bgColor, setBgColor] = useState(colors.Grey);
 
@@ -52,12 +53,14 @@ export default function Donate() {
 
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let amount: number = Number(event.target.value); // 입력값을 숫자로 변환
+    let rawValue = event.target.value.replace(/,/g, ''); // 쉼표 제거 후 숫자로 변환
+    let amount: number = Number(rawValue); // 입력값을 숫자로 변환
 
     const maxAmount = Math.min(remainAmount, points);
     if (points === 0) {
       alert('포인트가 없습니다.');
       setValue(0); // 입력값을 초기화
+      setFormattedValue('');
       setData({ name: username, amount: 0 }); // 데이터 초기화
       event.preventDefault(); // 기본 입력 동작을 방지하여 더 이상 입력이 안 되도록
       return; // 더 이상 실행되지 않도록 early return
@@ -65,12 +68,14 @@ export default function Donate() {
     if (amount > maxAmount) {
       amount = maxAmount; // 초과시 최대값으로 설정
     }
-    setValue(amount > 0 ? amount : 0); // 0보다 크면 저장, 아니면 null
-
+    setValue(amount);
+    setFormattedValue(amount > 0 ? amount.toLocaleString() : '');
     setData({ name: username, amount: amount });
   };
 
   const fetchData = async () => {
+    console.log('data: ', data);
+
     await baseAxios
       .post('/donate/donation', data)
       .then(() => {
@@ -96,9 +101,9 @@ export default function Donate() {
           <DonateInput
             disabled={points == 0}
             show={value}
-            type="number"
+            type="text"
             placeholder="기부 금액을 입력해 주세요"
-            value={value === 0 ? '' : value}
+            value={formattedValue}
             onChange={handleInput}
           ></DonateInput>
           <PointBalance>보유 포인트 {points}원</PointBalance>
