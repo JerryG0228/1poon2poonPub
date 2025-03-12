@@ -226,14 +226,13 @@ interface Props {
 }
 
 export default function CharacterBox({ currDonate, targetDonate }: Props) {
-  const { goalDonations, setPoints, username, goalCategory } = useStore();
+  const { goalDonations, setPoints, getPointCount, goalCategory, setGetPointCount } = useStore();
   const [character, setCharacter] = useState<string>('');
   const [growth, setGrowth] = useState<number>(10);
   const [isActive, setIsActive] = useState<boolean>(false); // 애니메이션 진행 상태
   const [isClickable, setIsClickable] = useState<boolean>(true); // 캐릭터 클릭 가능 상태
   const [animate, setAnimate] = useState<string>('');
   const [isLottieVisible, setIsLottieVisible] = useState(false);
-  const [getCoinCount, setGetCoinCount] = useState<number>(5);
   const [isClicked, setIsClicked] = useState(false);
   const [getPoint, setGetPoint] = useState(0);
   const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
@@ -273,9 +272,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
     setIsClickable(false); // 애니메이션 종료 후 클릭 가능
 
     //코인 얻을 때 까진 말랑말랑, 횟수 끝나면 랜덤 모션 재생
-    if (getCoinCount > 0) {
+    if (getPointCount > 0) {
       setIsLottieVisible(true);
-      setGetCoinCount(getCoinCount - 1);
+      setGetPointCount(1);
       setIsClicked(true);
 
       const randomPoint = getRandomPoint();
@@ -297,6 +296,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   useEffect(() => {
     spring.set(currDonate);
   }, [currDonate, spring]);
+
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
     if (per < 25 && goalDonations > 0) {
@@ -321,9 +321,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       {goalCategory == '' || goalCategory == 'none' ? (
         <div style={{ visibility: 'hidden' }}>1</div>
       ) : (
-        <div style={{ marginLeft: '20rem' }}>{getCoinCount}/5</div>
+        <div style={{ marginLeft: '20rem' }}>{getPointCount}/5</div>
       )}
-      <div style={{ position: 'relative', marginTop: (13 % growth) + 2 + 'rem' }}>
+      <div style={{ position: 'relative', marginTop: (13 % growth) + 'rem' }}>
         {per === 100 ? (
           <Lottie animationData={present} loop={true} style={{ width: '12rem', height: '12rem' }} />
         ) : goalDonations == 0 ? (

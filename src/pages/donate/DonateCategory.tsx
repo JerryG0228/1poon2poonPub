@@ -88,6 +88,7 @@ export default function DonateCategory() {
             title={item.category}
             imageSrc={item.image}
             active={selectedCategory === item} // 선택된 경우 true로 active 적용
+            isPay={false}
             onClick={() => handleClick(item)} // 클릭 이벤트 추가
           />
         ))}

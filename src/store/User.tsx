@@ -22,7 +22,7 @@ const useStore = create<UserState>()(
       totalDonations: 0,
       goalDonations: 0,
       currentDonations: 0,
-
+      getPointCount: 5,
       setOwnedStocks: (stocks) => set(() => ({ ownedStocks: stocks })),
 
       updateUser: async () => {
@@ -147,6 +147,7 @@ const useStore = create<UserState>()(
       getCurrentDonations: (amount) => set(() => ({ currentDonations: amount })), // 현재 기부 금액 조회
       updateCurrentDonations: (amount) =>
         set((state) => ({ currentDonations: state.currentDonations + amount })), // 현재 기부 금액 추가
+      setGetPointCount: (count) => set((state) => ({ getPointCount: state.getPointCount - count })),
     }),
     { name: 'user-store' },
   ),
