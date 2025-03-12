@@ -71,7 +71,7 @@ const useStore = create<UserState>()(
 
           useStore.setState({
             points: data.points,
-            pointHistory: data.pointHistory,
+            pointHistory: data.history,
           });
         } catch (error) {
           console.error('포인트 업데이트 실패:', error);

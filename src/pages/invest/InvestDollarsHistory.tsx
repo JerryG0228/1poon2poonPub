@@ -72,36 +72,38 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
-interface PointHistoryProps {
+interface DollarHistoryProps {
   name: string;
   day: string;
   time: string;
   change: number;
-  finalPoints: number;
+  finalDollars: number;
   _id: string;
 }
 
 export default function InvestDollarsHistory() {
-  const { dollars, points, pointHistory, badges, goalDonations, interestsStock } = useStore();
+  const { dollars, points, dollarHistory, badges, goalDonations, interestsStock } = useStore();
 
   const [selectedValue, setSelectedValue] = useState('전체');
 
   // 적립/사용에 따라 구분된 데이터
-  const filterHistory = (filterResult: PointHistoryProps[], filter: string) => {
-    if (filter === '적립 내역') {
-      return filterResult.filter((item) => item.change > 0);
-    } else if (filter === '사용 내역') {
-      return filterResult.filter((item) => item.change < 0);
+  const filterHistory = (filterResult: DollarHistoryProps[], filter: string) => {
+    if (filter === '구매') {
+      return filterResult.filter((item) => item.name.split(' ')[1] === '구매');
+    } else if (filter === '판매') {
+      return filterResult.filter((item) => item.name.split(' ')[1] === '판매');
+    } else if (filter === '환전') {
+      return filterResult.filter((item) => item.name.split(' ')[1] === '환전');
     }
     return filterResult;
   };
 
   // selectedValue(선택된 필터로) 구분된 데이터
-  const filteredHistory = filterHistory(pointHistory, selectedValue);
+  const filteredHistory = filterHistory(dollarHistory, selectedValue);
 
   // selectedValue(선택된 필터로) 구분된 데이터를 날짜별로 정렬
-  const groupByDateSorted = (filterResult: PointHistoryProps[]) => {
-    const grouped: { [key: string]: PointHistoryProps[] } = {};
+  const groupByDateSorted = (filterResult: DollarHistoryProps[]) => {
+    const grouped: { [key: string]: DollarHistoryProps[] } = {};
 
     filterResult
       .sort((a, b) => {
@@ -167,7 +169,7 @@ export default function InvestDollarsHistory() {
                     key={history._id}
                     time={history.time}
                     name={history.name}
-                    point={history.finalPoints}
+                    point={history.finalDollars}
                     transPoint={history.change}
                   />
                 ))}
