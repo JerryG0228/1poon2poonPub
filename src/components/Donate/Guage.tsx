@@ -35,7 +35,7 @@ const GuageBar = styled.div<{ per: number }>`
 
   background: linear-gradient(to right, #0064ff, #cbdfad);
 
-  transition: width 1s ease-in-out;
+  transition: width 1.2s ease-in-out;
 `;
 
 interface Props {
@@ -48,8 +48,8 @@ export default function Guage({ currDonate, targetDonate }: Props) {
 
   useEffect(() => {
     const newPer = Math.floor((currDonate / targetDonate) * 100);
-    const calculatedWidth = (newPer * 85) / 100; // 전체 너비의 비율 계산 (85% 기준)
-    setTimeout(() => setPer(calculatedWidth), 100); // 약간의 딜레이 추가
+    const calculatedWidth = (newPer * 85) / 100;
+    setPer(calculatedWidth);
   }, [currDonate, targetDonate]);
 
   return (
