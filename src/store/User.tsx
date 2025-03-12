@@ -39,7 +39,7 @@ const useStore = create<UserState>()(
             pointHistory: data.cashback.history.pointHistory,
             dollarHistory: data.cashback.history.dollarHistory,
             badges: data.donate.history,
-            interests: data.invest.interests,
+            interests: data.invest.category,
             ownedStocks: data.invest.ownedETFs,
             interestsStock: data.invest.interestedETFs,
             goalCategory: data.donate.category,
@@ -97,7 +97,7 @@ const useStore = create<UserState>()(
         const state = useStore.getState();
 
         try {
-          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
+          const response = await baseAxios.get('/user/getPointInfo/${state.username}');
           const data = response.data;
 
           if (!data) {
@@ -117,7 +117,7 @@ const useStore = create<UserState>()(
         const state = useStore.getState();
 
         try {
-          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
+          const response = await baseAxios.get('/user/getPointInfo/${state.username}');
           const data = response.data;
 
           if (!data) {

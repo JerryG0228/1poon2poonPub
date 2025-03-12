@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CategoryBox from '@/components/invest/CategoryBox';
 import buildingImage from '@/assets/categorybox/building_image.png';
@@ -31,7 +31,6 @@ const categoryImages: { [key: string]: string } = {
   '리츠 & 인프라': buildingImage,
   '소비 & 리테일': shoppingImage,
 };
-
 const Container = styled.div`
   padding: 1rem;
   color: white;
@@ -69,8 +68,21 @@ const NextButtonBox = styled.div`
 
 function Category() {
   const navigate = useNavigate();
-  const { username, interests, setInterests } = useStore();
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(interests || []);
+  const { username, interests, setInterests, updateUser } = useStore();
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    updateUser(); // 상태 업데이트 요청만 함
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(interests) && interests.length === 3) {
+      console.log('서버에서 가져온 관심 카테고리:', interests);
+      setSelectedCategories(interests);
+    } else {
+      console.log('❗ interests가 비어 있어서 선택값을 유지합니다.');
+    }
+  }, [interests]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
@@ -113,6 +125,7 @@ function Category() {
                   categories: selectedCategories,
                 });
 
+                await updateUser();
                 setInterests(selectedCategories);
                 console.log('카테고리 등록 성공:', response.data);
                 navigate('/etf-list', { state: { selectedCategories } });

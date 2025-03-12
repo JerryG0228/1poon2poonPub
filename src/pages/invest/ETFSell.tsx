@@ -91,7 +91,7 @@ const ETFSellSetting = () => {
   const { symbol } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { username, ownedStocks, setOwnedStocks, setDollars } = useStore();
+  const { username, ownedStocks, setOwnedStocks, updateDollars } = useStore();
 
   const currentPrice = parseFloat(searchParams.get('currentPrice') || '0');
   const priceChange = parseFloat(searchParams.get('priceChange') || '0');
@@ -129,7 +129,7 @@ const ETFSellSetting = () => {
       alert(res.data.message || 'ETF 판매가 완료되었습니다.');
 
       // 💰 판매 후 달러 정보 갱신
-      await setDollars(); // ⬅️ 반드시 호출
+      await updateDollars(); // ⬅️ 반드시 호출
 
       // 🔄 주식 수량 갱신
       const updatedStocks = ownedStocks
