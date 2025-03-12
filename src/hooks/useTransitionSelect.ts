@@ -1,50 +1,39 @@
-import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const getPageByPath = (path: string) => {
-  const page = path.split('/')[1];
-
-  if (page === '') {
+  if (path === '/') {
     return 'home';
   }
-  if (page === 'pointhistory') {
+  if (path === '/pointhistory') {
     return 'pointhistory';
   }
 };
 
 const useTransitionSelect = () => {
   const location = useLocation();
-  const [transition, setTransition] = useState('');
+  const previousPath = sessionStorage.getItem('path') || '/';
 
-  useEffect(() => {
-    const previousPath = sessionStorage.getItem('path') || '';
-    const previousPage = getPageByPath(previousPath);
-    const currentPage = getPageByPath(location.pathname);
+  const previousPage = getPageByPath(previousPath);
+  const currentPage = getPageByPath(location.pathname);
 
-    let newTransition = '';
+  console.log('currentPage', currentPage);
+  console.log('prevPage', previousPage);
 
-    console.log('currentPage', currentPage);
-    console.log('prevPage', previousPage);
+  sessionStorage.setItem('path', location.pathname);
 
-    if (currentPage === 'home') {
-      if (previousPage === 'pointhistory') {
-        newTransition = 'slide-left';
-      } else {
-        newTransition = '';
-      }
+  if (currentPage === 'home') {
+    if (previousPage === 'pointhistory') {
+      return 'slide-left';
     }
+  }
 
-    if (currentPage === 'pointhistory') {
-      if (previousPage === 'home') {
-        newTransition = 'slide-right';
-      }
+  if (currentPage === 'pointhistory') {
+    if (previousPage === 'home') {
+      return 'slide-right';
     }
+  }
 
-    setTransition(newTransition);
-    sessionStorage.setItem('path', location.pathname);
-  }, [location.pathname]);
-
-  return transition;
+  return '';
 };
 
 export default useTransitionSelect;
