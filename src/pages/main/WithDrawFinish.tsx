@@ -6,6 +6,7 @@ import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
 import ReactConfetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
+import useStore from '@/store/User';
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const BtnWrap = styled.div`
   margin-top: 5rem;
 `;
 
-export default function DonateSetFinish() {
+export default function WithDrawFinish() {
   const navigate = useNavigate();
 
   const handleBtn = () => {

@@ -81,7 +81,8 @@ const Unit = styled.label`
 // `;
 
 export default function WithDraw() {
-  const { setPoints, points } = useStore();
+  const navigate = useNavigate();
+  const { updatePoints, setPoints, points } = useStore();
   const [withdrawAmount, setWithdrawAmount] = useState<number>(); //출금 입력 금액
 
   const amount = Number(withdrawAmount);
@@ -94,20 +95,15 @@ export default function WithDraw() {
     setWithdrawAmount(value);
   };
 
-  const navigate = useNavigate();
+  const handleWithdraw = async () => {
+    if (isDisabled) return;
 
-  const handleWithdraw = () => {
-    if (isDisabled) {
-      alert('출금할 금액이 올바르지 않습니다');
-    } else if (amount > points) {
-      alert(`보유 포인트 ${points}보다 많은 금액을 출금할 수 없습니다`);
-    } else {
-      setPoints(-amount, '출금');
+    try {
+      await setPoints(-amount, '출금');
 
-      // ✅ 상태 업데이트 후 이동 (navigate 사용)
-      setTimeout(() => {
-        navigate('/withdrawfinish');
-      }, 100); // 상태가 반영될 시간을 고려하여 딜레이 추가
+      navigate('/withdrawfinish');
+    } catch (err) {
+      console.log('실패: ', err);
     }
   };
 
@@ -131,13 +127,11 @@ export default function WithDraw() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      {/* <CustomLink to="/withdrawfinish" disabled={isDisabled}> */}
       <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
         <PressMotion>
           <div style={{ width: '21.5rem' }}>출금하기</div>
         </PressMotion>
       </Btn>
-      {/* </CustomLink> */}
     </Box>
   );
 }
