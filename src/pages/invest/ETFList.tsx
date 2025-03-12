@@ -11,6 +11,7 @@ import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import etfData from '@/data/etfData.js';
 import baseAxios from '@/apis/axiosInstance';
+import useStore from '@/store/User';
 
 const Container = styled.div`
   padding: 1rem;
@@ -81,10 +82,8 @@ const categoryImages: { [key: string]: string } = {
 
 function ETFList() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const storedCategories = JSON.parse(localStorage.getItem('selectedCategories') || '[]');
-
-  const selectedCategories: string[] = location.state?.selectedCategories ?? storedCategories;
+  const { interests } = useStore(); // ✅ 전역 상태에서 관심 카테고리 가져오기
+  const selectedCategories: string[] = interests;
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
   const [previousCloseData, setPreviousCloseData] = useState<{ [key: string]: number }>({});

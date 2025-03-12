@@ -8,7 +8,7 @@ import DonateMainLayout from './layout/DonateMainLayout';
 import Main from './pages/main/Main';
 import PointHistory from './pages/main/PointHistory';
 import DonateMainBefore from './pages/donate/DonateMainBefore';
-import InvestCategory from '@/pages/invest/investCategory'; // 투자 카테고리 선택
+import InvestCategory from './pages/invest/investCategory'; // 투자 카테고리 선택
 import ETFList from '@/pages/invest/ETFList'; // ETF 목록
 import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
 import ETFCategoryList from '@/pages/invest/ETFCategoryList';
