@@ -18,14 +18,14 @@ const GlobalStyle = createGlobalStyle`
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5rem;
+  gap: 4rem;
   font-weight: bold;
   padding: 0 2rem;
-  margin-top: 2rem;
+  margin-top: 5rem;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: black;
   font-weight: bold;
 `;
@@ -57,8 +57,8 @@ const Button = styled.div`
   }
 `;
 const StyledLottie = styled(Lottie)`
-  width: 20rem;
-  height: 20rem;
+  width: 22rem;
+  height: 22rem;
 `;
 const ServiceTitle = styled.div`
   font-size: 1.5em;

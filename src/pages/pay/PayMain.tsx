@@ -14,6 +14,12 @@ import CategoryBox from '@/components/invest/CategoryBox';
 import baseAxios from '@/apis/axiosInstance';
 import { createGlobalStyle } from 'styled-components';
 import useStore from '@/store/User';
+import fastfood from '@/assets/Pay/fastfood.json';
+import taxi from '@/assets/Pay/taxi.json';
+import bus from '@/assets/Pay/bus.json';
+import cafe from '@/assets/Pay/cafe.json';
+import store from '@/assets/Pay/store.json';
+import movie from '@/assets/Pay/movie.json';
 
 const GlobalStyle = createGlobalStyle`
   #root {
@@ -90,12 +96,12 @@ const Unit = styled.label`
 `;
 
 const categoryList = [
-  { title: '대중교통', category: 'bus', image: busImage },
-  { title: '택시', category: 'taxi', image: taxiImage },
-  { title: '편의점', category: 'convenienceStore', image: storeImage },
-  { title: '영화관', category: 'movie', image: movieImage },
-  { title: '패스트푸드', category: 'fastFood', image: foodImage },
-  { title: '카페', category: 'cafe', image: cafeImage },
+  { title: '대중교통', category: 'bus', image: bus },
+  { title: '택시', category: 'taxi', image: taxi },
+  { title: '편의점', category: 'convenienceStore', image: movie },
+  { title: '영화관', category: 'movie', image: store },
+  { title: '패스트푸드', category: 'fastFood', image: fastfood },
+  { title: '카페', category: 'cafe', image: cafe },
 ];
 
 export default function PayMain() {
@@ -111,7 +117,6 @@ export default function PayMain() {
     // 한 개만 선택 가능 → 이미 선택된 경우 해제
     setSelectedCategory((prev) => (prev === item ? null : item));
   };
-  console.log('결제메인', cashbackStamps, points);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환

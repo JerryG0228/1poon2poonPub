@@ -255,6 +255,7 @@ export default function DonateHome() {
     useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
+  const [bgColor, setBgColor] = useState(colors.Navy);
 
   // 기부중인 카테고리 이미지 매핑
   const categoryImg = categoryList[goalCategory];
@@ -279,6 +280,10 @@ export default function DonateHome() {
       : currentDonations == goalDonations
         ? '기부 하러 가기'
         : '기부 포인트 채우기';
+
+  useEffect(() => {
+    setBgColor(goalDonations > 0 ? colors.Navy : colors.LightBlue);
+  }, [goalDonations]);
 
   return (
     <Box>
@@ -309,7 +314,7 @@ export default function DonateHome() {
         <Guage currDonate={currentDonations} targetDonate={goalDonations}></Guage>
 
         <Link to={link}>
-          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+          <Btn bgColor={bgColor} handleBtn={() => {}}>
             <PressMotion>
               <div style={{ width: '19rem' }}>{info}</div>
             </PressMotion>
