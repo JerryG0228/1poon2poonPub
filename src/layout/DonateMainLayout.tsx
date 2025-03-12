@@ -26,7 +26,7 @@ const Icon = styled.div`
 `;
 
 const backNavigationMap: Record<string, string> = {
-  '/dondonatehome': '/',
+  '/donatehome': '/',
 };
 
 export default function DonateMainLayout() {
