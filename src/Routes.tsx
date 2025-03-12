@@ -53,7 +53,6 @@ const routes = [
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
       { path: 'paymain', element: <PayMain /> }, //결제 페이지
       { path: 'withdraw', element: <WithDraw /> }, // 포인트 출금 페이지
-      { path: 'withdrawfinish', element: <WithDrawFinish /> }, // 출금 완료 페이지
     ],
   },
 
@@ -83,6 +82,7 @@ const routes = [
     ],
   },
 
+  { path: 'withdrawfinish', element: <WithDrawFinish /> }, // 출금 완료 페이지
   { path: '/donatesetfinish', element: <DonateSetFinish /> }, //기부 설정 완료 페이지
   { path: '/donatecomplete', element: <DonateComplete /> }, //기부 완료 페이지
   { path: '/pay', element: <Pay /> }, //결제 시작 페이지
