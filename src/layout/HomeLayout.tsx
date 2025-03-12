@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
@@ -22,15 +22,24 @@ const Icon = styled.div`
   }
 `;
 
+const backNavigationMap: Record<string, string> = {};
+
 export default function HomeLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const HandleBackClick = () => {
-    navigate(-1);
+    const currentPath = location.pathname;
+
+    if (backNavigationMap[currentPath]) {
+      navigate(backNavigationMap[currentPath]);
+    } else {
+      navigate(-1);
+    }
   };
 
   const HandleHomeClick = () => {
-    navigate('/InvestmentHome'); // ✅ 홈 아이콘 클릭 시 이동
+    navigate('/InvestmentHome');
   };
 
   return (

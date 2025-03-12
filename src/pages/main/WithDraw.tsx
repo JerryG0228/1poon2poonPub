@@ -1,10 +1,9 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
-import { useEffect, useState } from 'react';
-import baseAxios from '@/apis/axiosInstance';
+import { useState } from 'react';
 import useStore from '@/store/User';
 
 const Box = styled.div`
@@ -54,7 +53,7 @@ const InputAmout = styled.input<{ value: number }>`
   &:focus {
     outline: none;
     border-bottom: 1px solid ${colors.LightBlue};
-    color: ${(props) => (props.value < 10000 ? colors.Grey : colors.White)};
+    color: ${(props) => (props.value < 0 || null ? colors.Grey : colors.White)};
   }
 
   /* 파이어폭스 스핀 버튼 숨기기 */
@@ -77,69 +76,66 @@ const Unit = styled.label`
   color: ${colors.Grey};
 `;
 
-const CustomLink = styled(Link)<{ disabled?: boolean }>`
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  position: fixed;
-  bottom: 1rem;
-`;
+// const CustomLink = styled(Link)<{ disabled?: boolean }>`
+//   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+// `;
 
-export default function DonateGoal() {
-  const { setGoalDonations, goalCategory, username } = useStore();
-  const [targetAmount, setTargetAmount] = useState<number | null>(null); // 목표 금액
-  const [data, setData] = useState<Object>({}); // 전달 데이터
-  const [bgColor, setBgColor] = useState(colors.Grey);
+export default function WithDraw() {
+  const navigate = useNavigate();
+  const { updatePoints, setPoints, points } = useStore();
+  const [withdrawAmount, setWithdrawAmount] = useState<number>(); //출금 입력 금액
+
+  const amount = Number(withdrawAmount);
+  const isDisabled = !withdrawAmount || amount <= 0 || amount > points;
+
+  const maxPoint = Math.min(points);
+
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value); // 입력값을 숫자로 변환
-    setTargetAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
-    setData({ category: goalCategory, targetAmount: value, name: username });
+    let value = Number(event.target.value);
+    if (value > maxPoint) {
+      value = maxPoint; // 초과시 최대값으로 설정
+    }
+    setWithdrawAmount(value);
   };
 
-  const fetchData = async () => {
-    await baseAxios
-      .post('/donate/setDonate', data)
-      .then((response) => {
-        const data = response.data;
-        setGoalDonations(data.data.targetAmount);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+  const handleWithdraw = async () => {
+    if (isDisabled) return;
+
+    try {
+      await setPoints(-amount, '출금');
+
+      navigate('/withdrawfinish');
+    } catch (err) {
+      console.log('실패: ', err);
+    }
   };
-  console.log(data);
-  useEffect(() => {
-    setBgColor((targetAmount ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
-  }, [targetAmount]);
 
   return (
     <Box>
       <TitleBox>
         <Title>
-          기부 목표 금액을
+          출금할 금액을
           <br />
-          설정해주세요
+          입력해 주세요
         </Title>
-        <Info>최소 10,000원 이상 설정 가능</Info>
+        <Info>현재 보유 포인트 : {points.toLocaleString()}원</Info>
       </TitleBox>
       <InputWrapper>
         <InputAmout
           id="inputAmount"
           type="number"
-          value={targetAmount}
+          value={withdrawAmount || ''}
           placeholder="금액"
           onChange={handleInput}
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatesetfinish" disabled={(targetAmount ?? 0) < 10000}>
-        <Btn bgColor={bgColor} handleBtn={fetchData}>
-          <PressMotion>
-            <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
-              설정하기
-            </div>
-          </PressMotion>
-        </Btn>
-      </CustomLink>
+      <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
+        <PressMotion>
+          <div style={{ width: '21.5rem' }}>출금하기</div>
+        </PressMotion>
+      </Btn>
     </Box>
   );
 }

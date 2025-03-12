@@ -233,7 +233,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const [isLottieVisible, setIsLottieVisible] = useState(false); //동전 로티 효과
   const [isClicked, setIsClicked] = useState(false);
   const [getPoint, setGetPoint] = useState(0);
-  const spring = useSpring(0, { mass: 0.8, stiffness: 50, damping: 15 });
+  const spring = useSpring(0, { mass: 0.8, stiffness: 75, damping: 15 });
   const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
 
   //랜덤 애니메이션 설정

@@ -11,15 +11,16 @@ import styled from 'styled-components';
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 22rem;
+  /* gap: 22rem; */
   font-weight: bold;
   padding: 0 1rem;
+  margin-top: 3rem;
 `;
 
 const DonateBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 1rem;
   font-size: 1.5rem;
 `;
 
@@ -39,6 +40,11 @@ const DonateInput = styled.input<{ show: number }>`
 const PointBalance = styled.div`
   font-size: 0.8rem;
   color: ${colors.Grey};
+`;
+
+const BtnWrap = styled(Link)`
+  position: fixed;
+  bottom: 1rem;
 `;
 
 export default function Donate() {
@@ -106,16 +112,18 @@ export default function Donate() {
             value={formattedValue}
             onChange={handleInput}
           ></DonateInput>
-          <PointBalance>보유 포인트 {points}원</PointBalance>
+          <PointBalance>보유 포인트 {points.toLocaleString()}원</PointBalance>
         </TitleBox>
       </DonateBox>
-      <Link to="/donateHome">
+      <BtnWrap to="/donateHome">
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '21.3rem' }}>기부 하기</div>
+            <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
+              기부 하기
+            </div>
           </PressMotion>
         </Btn>
-      </Link>
+      </BtnWrap>
     </Box>
   );
 }

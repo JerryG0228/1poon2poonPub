@@ -7,6 +7,7 @@ import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { FaEquals } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Box = styled.div`
   display: flex;
@@ -47,8 +48,6 @@ const Label = styled.p`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 65vh;
-  justify-content: space-between;
 `;
 
 const InputContent = styled.div`
@@ -140,6 +139,11 @@ const ResultText = styled.p`
 
 const ErrorText = styled.div`
   display: flex;
+`;
+
+const BtnWrap = styled(Link)`
+  position: fixed;
+  bottom: 1rem;
 `;
 
 const bankersRound = (value: number, decimalPlaces = 2): number => {
@@ -279,17 +283,20 @@ const KRWExchangeRate = () => {
                 {Number(usd) > dollars && (
                   <ErrorText style={{ color: colors.Red }}>⚠️ 보유 달러를 초과했습니다!</ErrorText>
                 )}
-
-                <Btn
-                  bgColor={isDisabled ? colors.Grey : colors.Red}
-                  handleBtn={() => {
-                    handleExchange();
-                  }}
-                >
-                  <PressMotion>
-                    <div style={{ width: '21.5rem' }}>환전하기</div>
-                  </PressMotion>
-                </Btn>
+                <BtnWrap to={'/InvestmentHome'}>
+                  <Btn
+                    bgColor={isDisabled ? colors.Grey : colors.Red}
+                    handleBtn={() => {
+                      handleExchange();
+                    }}
+                  >
+                    <PressMotion>
+                      <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
+                        환전하기
+                      </div>
+                    </PressMotion>
+                  </Btn>
+                </BtnWrap>
               </ButtonContent>
             </ContentWrapper>
           </Wrapper>

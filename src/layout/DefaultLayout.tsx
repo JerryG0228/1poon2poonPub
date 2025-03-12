@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
@@ -25,11 +25,33 @@ const Icon = styled.div`
   }
 `;
 
+const backNavigationMap: Record<string, string> = {
+  '/': '/',
+  '/pointhistory': '/',
+  '/donatebefore': '/',
+  '/donategoal': '/donatecategory',
+  '/donate': '/donatehome',
+  '/investbefore': '/',
+  '/USDExchangeRate': '/investPointsHistory',
+  '/KRWExchangeRate': '/investDollarsHistory',
+  '/investDollarsHistory': '/investmentHome',
+  '/investPointsHistory': '/investmentHome',
+  '/paymain': '/pay',
+  '/withdraw': '/pointhistory',
+};
+
 export default function DefaultLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const HandleIcon = () => {
-    navigate(-1);
+    const currentPath = location.pathname;
+
+    if (backNavigationMap[currentPath]) {
+      navigate(backNavigationMap[currentPath]);
+    } else {
+      navigate(-1);
+    }
   };
 
   return (

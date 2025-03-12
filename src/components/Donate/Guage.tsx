@@ -1,4 +1,5 @@
 import { colors } from '@/styles/colors';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Percentage = styled.div<{ per: number }>`
@@ -20,17 +21,21 @@ const GuageBg = styled.div`
   height: 1.2rem;
   border-radius: 5rem;
   background-color: ${colors.Navy};
+  position: relative;
+  overflow: hidden;
 `;
 
 const GuageBar = styled.div<{ per: number }>`
   position: absolute;
   top: 0rem;
 
-  width: ${(props) => (props.per * 85) / 100}%;
+  width: ${(props) => props.per}%;
   height: 1.2rem;
   border-radius: 5rem;
 
   background: linear-gradient(to right, #0064ff, #cbdfad);
+
+  transition: width 1.2s ease-in-out;
 `;
 
 interface Props {
@@ -39,7 +44,13 @@ interface Props {
 }
 
 export default function Guage({ currDonate, targetDonate }: Props) {
-  const per = Math.floor((currDonate / targetDonate) * 100);
+  const [per, setPer] = useState(0);
+
+  useEffect(() => {
+    const newPer = Math.floor((currDonate / targetDonate) * 100);
+    const calculatedWidth = (newPer * 85) / 100;
+    setPer(calculatedWidth);
+  }, [currDonate, targetDonate]);
 
   return (
     <div>
@@ -47,7 +58,7 @@ export default function Guage({ currDonate, targetDonate }: Props) {
         <GuageWrapper>
           <GuageBg />
           <GuageBar per={per} />
-          <Percentage per={per}>{per > 0 ? per : 0} %</Percentage>
+          <Percentage>{Math.floor((currDonate / targetDonate) * 100)}%</Percentage>
         </GuageWrapper>
       </div>
     </div>
