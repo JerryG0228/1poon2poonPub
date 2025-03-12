@@ -3,7 +3,7 @@ import CharacterBox from '@/components/Donate/CharacterBox';
 import Guage from '@/components/Donate/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import EarthPage from '@/assets/donatePage/EarthPage.png';
 import BooksPage from '@/assets/donatePage/BooksPage.png';
@@ -30,8 +30,6 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import { colors } from '@/styles/colors';
 import Lottie from 'lottie-react';
 import useStore from '@/store/User';
-import { aw } from 'framer-motion/dist/types.d-6pKw1mTI';
-import baseAxios from '@/apis/axiosInstance';
 
 const FadeIn = keyframes`
   0% {
