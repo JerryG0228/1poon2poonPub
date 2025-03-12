@@ -10,33 +10,25 @@ const TransitionContainer = styled.div`
 `;
 
 interface TransitionProps {
-  transition?: string;
+  transition: string;
   pageKey: string;
   children: React.ReactNode;
 }
 
-const childFactoryCreator = (props: { classNames: string }) => (child: React.ReactElement) =>
-  React.cloneElement(child, props);
+// const childFactoryCreator = (props: { classNames: string }) => (child: React.ReactElement) =>
+//   React.cloneElement(child, props);
 
-const Transitions: React.FC<TransitionProps> = ({ transition = '', pageKey, children }) => {
+const Transitions: React.FC<TransitionProps> = ({ transition, pageKey, children }) => {
   const nodeRef = React.useRef<HTMLDivElement>(null);
 
+  console.log('transition2:', transition);
+
   return (
-    <TransitionContainer>
-      <TransitionGroup
-        className="transition-group"
-        childFactory={childFactoryCreator({ classNames: transition })}
-      >
-        <CSSTransition key={pageKey} timeout={500} nodeRef={nodeRef} classNames={transition}>
-          <div
-            ref={nodeRef}
-            style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}
-          >
-            {children}
-          </div>
-        </CSSTransition>
-      </TransitionGroup>
-    </TransitionContainer>
+    <TransitionGroup className="transitions-group">
+      <CSSTransition key={pageKey} timeout={500} nodeRef={nodeRef} classNames={transition}>
+        <div ref={nodeRef}>{children}</div>
+      </CSSTransition>
+    </TransitionGroup>
   );
 };
 
