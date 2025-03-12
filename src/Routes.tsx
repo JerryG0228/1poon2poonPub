@@ -6,7 +6,7 @@ import DonateMainLayout from './layout/DonateMainLayout';
 
 // Pages
 import Main from './pages/main/Main';
-import PointHistory from './pages/main/PointHistory';
+import PointHistory from './pages/main/PointHistory'; //포인트 상세 내역 페이지
 import DonateMainBefore from './pages/donate/DonateMainBefore';
 import InvestCategory from '@/pages/invest/investCategory'; // 투자 카테고리 선택
 import ETFList from '@/pages/invest/ETFList'; // ETF 목록
@@ -24,8 +24,10 @@ import Donate from '@/pages/donate/Donate';
 import InvestmentHome from '@/pages/invest/InvestmentHome';
 import DonateSetFinish from './pages/donate/DonateSetFinish';
 import DonateComplete from './pages/donate/DonateComplete';
-import InvestDollarsHistory from './pages/invest/InvestDollarsHistory';
-import InvestPointsHistory from './pages/invest/InvestPointsHistory';
+import InvestDollarsHistory from './pages/invest/InvestDollarsHistory'; // 달러 상세 내역 페이지
+import InvestPointsHistory from './pages/invest/InvestPointsHistory'; // 포인트 상세 내역 페이지
+import WithDraw from './pages/main/WithDraw';
+import WithDrawFinish from './pages/main/WithDrawFinish';
 
 const routes = [
   // DefaultLayout
@@ -46,6 +48,8 @@ const routes = [
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
       { path: 'investDollarsHistory', element: <InvestDollarsHistory /> }, // 달러 내역 페이지
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
+      { path: 'withdraw', element: <WithDraw /> }, // 포인트 출금 페이지
+      { path: 'withdrawfinish', element: <WithDrawFinish /> }, // 출금 완료 페이지
     ],
   },
 

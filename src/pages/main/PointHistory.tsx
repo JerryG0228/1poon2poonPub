@@ -72,6 +72,21 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
+const WithdrawBtn = styled(Link)`
+  display: flex;
+  padding: 0 1rem;
+  position: fixed;
+  bottom: 1rem;
+`;
+
+const WithdrawBox = styled.div`
+  width: 100%;
+  height: 5rem;
+  position: fixed;
+  bottom: 0;
+  background-color: #313845;
+`;
+
 interface PointHistoryProps {
   name: string;
   day: string;
@@ -189,6 +204,19 @@ export default function PointHistory() {
             ))}
           </PointUsage>
         </div>
+
+        {/* 버튼 자리만큼 공간 생성 */}
+        <div style={{ height: '4rem' }}></div>
+
+        <WithdrawBox>
+          <WithdrawBtn to={'/withdraw'}>
+            <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+              <PressMotion>
+                <div style={{ width: '21.5rem' }}>출금하기</div>
+              </PressMotion>
+            </Btn>
+          </WithdrawBtn>
+        </WithdrawBox>
       </Wrap>
     </>
   );
