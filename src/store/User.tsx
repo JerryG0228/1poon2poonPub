@@ -97,7 +97,7 @@ const useStore = create<UserState>()(
         const state = useStore.getState();
 
         try {
-          const response = await baseAxios.get('/user/getPointInfo/${state.username}');
+          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
           const data = response.data;
 
           if (!data) {
@@ -117,7 +117,7 @@ const useStore = create<UserState>()(
         const state = useStore.getState();
 
         try {
-          const response = await baseAxios.get('/user/getPointInfo/${state.username}');
+          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
           const data = response.data;
 
           if (!data) {
