@@ -90,7 +90,6 @@ const useStore = create<UserState>()(
           } catch (error) {
             console.error('포인트 업데이트 실패:', error);
           }
-        }
       }, // 포인트 추가/감소
 
       updatePoints: async () => {

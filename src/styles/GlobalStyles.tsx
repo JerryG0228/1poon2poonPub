@@ -45,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   // Slide Transitions
-.transitions-group {
+  .transitions-group {
     width: 100vw;
     overflow-x: hidden;
     position: relative;

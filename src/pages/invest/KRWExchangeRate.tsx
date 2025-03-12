@@ -7,6 +7,7 @@ import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { FaEquals } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Box = styled.div`
   display: flex;
@@ -279,17 +280,18 @@ const KRWExchangeRate = () => {
                 {Number(usd) > dollars && (
                   <ErrorText style={{ color: colors.Red }}>⚠️ 보유 달러를 초과했습니다!</ErrorText>
                 )}
-
-                <Btn
-                  bgColor={isDisabled ? colors.Grey : colors.Red}
-                  handleBtn={() => {
-                    handleExchange();
-                  }}
-                >
-                  <PressMotion>
-                    <div style={{ width: '21.5rem' }}>환전하기</div>
-                  </PressMotion>
-                </Btn>
+                <Link to={'/InvestmentHome'}>
+                  <Btn
+                    bgColor={isDisabled ? colors.Grey : colors.Red}
+                    handleBtn={() => {
+                      handleExchange();
+                    }}
+                  >
+                    <PressMotion>
+                      <div style={{ width: '21.5rem' }}>환전하기</div>
+                    </PressMotion>
+                  </Btn>
+                </Link>
               </ButtonContent>
             </ContentWrapper>
           </Wrapper>
