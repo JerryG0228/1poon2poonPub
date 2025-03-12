@@ -258,9 +258,10 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
         return anim.name;
       }
     }
-    return 'Jello'; // 기본값
+    return 'Jello'; // 애니메이션 기본값
   };
 
+  //랜덤 포인트 획득
   const getRandomPoint = () => {
     return Math.floor(Math.random() * 10) + 1;
   };
@@ -292,7 +293,7 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       setIsClicked(false);
     }, 1000); // 1.3초 후 애니메이션 후 상태 초기화
   };
-
+  console.log(goalDonations);
   useEffect(() => {
     spring.set(currDonate);
   }, [currDonate, spring]);
@@ -355,9 +356,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       </div>
       <CharacterName>한푼이</CharacterName>
       <TextBox>
-        <Donate>{targetDonate > 0 ? animatedValue : '?'}</Donate>
+        <Donate>{goalDonations > 0 ? animatedValue : '?'}</Donate>
         <Target>/</Target>
-        <Target>{targetDonate > 0 ? targetDonate.toLocaleString() : '?'}</Target>
+        <Target>{goalDonations > 0 ? goalDonations.toLocaleString() : '?'}</Target>
       </TextBox>
     </Wrapper>
   );

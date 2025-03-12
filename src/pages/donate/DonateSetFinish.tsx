@@ -38,7 +38,7 @@ export default function DonateSetFinish() {
 
   return (
     <Container>
-      <ReactConfetti numberOfPieces={150} recycle={false} gravity={0.2} />
+      {/* <ReactConfetti numberOfPieces={150} recycle={false} gravity={0.2} />/// */}
       <Text>기부 목표 설정 완료!</Text>
       <StyledLottie animationData={Heart} loop={true} />
       <Btn bgColor={colors.LightBlue} handleBtn={handleBtn}>

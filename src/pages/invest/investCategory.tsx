@@ -42,7 +42,7 @@ const Title = styled.h1`
   width: 19rem;
   font-size: 2.2rem;
   font-weight: bold;
-  line-height: 2.5rem; /* 줄간격 조정 */
+  line-height: 2.5rem;
 `;
 
 const TextBox = styled.div`
@@ -95,7 +95,7 @@ function Category() {
           <CategoryBox
             key={category}
             title={category}
-            imageSrc={categoryImages[category]} //  이미지 자동 불러오기
+            imageSrc={categoryImages[category]}
             active={selectedCategories.includes(category)}
             onClick={() => toggleCategory(category)}
           />
@@ -109,11 +109,11 @@ function Category() {
             if (selectedCategories.length === 3) {
               try {
                 const response = await baseAxios.post('/invest/setCategory', {
-                  name: username, // zustand에서 불러온 유저명
+                  name: username,
                   categories: selectedCategories,
                 });
 
-                setInterests(selectedCategories); // zustand 상태에도 반영
+                setInterests(selectedCategories);
                 console.log('카테고리 등록 성공:', response.data);
                 navigate('/etf-list', { state: { selectedCategories } });
               } catch (error) {

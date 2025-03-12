@@ -82,7 +82,7 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 `;
 
 export default function DonateGoal() {
-  const { setGoalDonations, goalCategory, username } = useStore();
+  const { setGoalDonations, goalCategory, username, goalDonations } = useStore();
   const [targetAmount, setTargetAmount] = useState<number | null>(null); // 목표 금액
   const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
@@ -98,13 +98,14 @@ export default function DonateGoal() {
       .post('/donate/setDonate', data)
       .then((response) => {
         const data = response.data;
+        console.log(data);
         setGoalDonations(data.targetAmount);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   };
-
+  console.log(goalDonations);
   useEffect(() => {
     setBgColor((targetAmount ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
   }, [targetAmount]);
