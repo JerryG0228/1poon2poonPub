@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
@@ -25,11 +25,22 @@ const Icon = styled.div`
   }
 `;
 
+const backNavigationMap: Record<string, string> = {
+  '/donatehome': '/',
+};
+
 export default function DonateMainLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const HandleIcon = () => {
-    navigate('/');
+    const currentPath = location.pathname;
+
+    if (backNavigationMap[currentPath]) {
+      navigate(backNavigationMap[currentPath]);
+    } else {
+      navigate(-1);
+    }
   };
 
   return (

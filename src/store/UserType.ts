@@ -46,6 +46,7 @@ interface UserState {
   totalDonations: number;
   goalDonations: number;
   currentDonations: number;
+  getPointCount: number;
 
   setOwnedStocks: (stocks: OwnedStocks[]) => void;
 
@@ -53,6 +54,7 @@ interface UserState {
   setPoints: (amount: number, origin: string) => void;
   updatePoints: () => void;
   updateDollars: () => void;
+  addStamp: (stamp: number) => void;
   resetStamp: () => void;
   addBadge: (badge: string) => void;
   setInterests: (interests: string[]) => void;
@@ -62,6 +64,7 @@ interface UserState {
   setGoalDonations: (goal: number) => void;
   getCurrentDonations: (amount: number) => void;
   updateCurrentDonations: (amount: number) => void;
+  setGetPointCount: (count: number) => void;
 }
 
 export type { pointHistory, dollarHistory, OwnedStocks, InterestsStock, UserState };

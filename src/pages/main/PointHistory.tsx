@@ -3,10 +3,11 @@ import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useStore from '@/store/User';
 import PointBox from '@/components/PointBox';
 import Filter from '@/components/Main/Filter';
+import { color } from 'framer-motion';
 
 const GreyBox = styled.div`
   background-color: #313845;
@@ -72,6 +73,21 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
+const WithdrawBox = styled.div<{ clicked: boolean }>`
+  width: 100%;
+  height: 5rem;
+  position: fixed;
+  bottom: 0;
+  background-color: ${({ clicked }) => (clicked ? 'transparent' : '#313845')};
+`;
+
+const WithdrawBtn = styled(Link)`
+  display: flex;
+  padding: 0 1rem;
+  position: fixed;
+  bottom: 1rem;
+`;
+
 interface PointHistoryProps {
   name: string;
   day: string;
@@ -85,6 +101,7 @@ export default function PointHistory() {
   const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
 
   const [selectedValue, setSelectedValue] = useState('전체');
+  const [clicked, setClicked] = useState(false);
 
   // 적립/사용에 따라 구분된 데이터
   const filterHistory = (filterResult: PointHistoryProps[], filter: string) => {
@@ -96,7 +113,9 @@ export default function PointHistory() {
     return filterResult;
   };
 
-  // selectedValue(선택된 필터로) 구분된 데이터
+  console.log('pointHistory: ', pointHistory);
+
+  // pointhistory 데이터에서 선택된 electedValue 필터로 나뉜 데이터
   const filteredHistory = filterHistory(pointHistory, selectedValue);
 
   // selectedValue(선택된 필터로) 구분된 데이터를 날짜별로 정렬
@@ -133,6 +152,7 @@ export default function PointHistory() {
     return grouped;
   };
 
+  // 날짜&시간 최신 순으로 정렬
   let groupedHistory = groupByDateSorted(filteredHistory);
 
   //상황별 기부 페이지 이동 경로
@@ -154,14 +174,14 @@ export default function PointHistory() {
             <Link to={donateLink}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem' }}>기부하러 가기</div>
+                  <div style={{ width: '10rem', fontWeight: '500' }}>기부하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
             <Link to={investLink}>
-              <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+              <Btn bgColor={colors.Red} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem' }}>투자하러 가기</div>
+                  <div style={{ width: '10rem', fontWeight: '500' }}>투자하러 가기</div>
                 </PressMotion>
               </Btn>
             </Link>
@@ -171,7 +191,12 @@ export default function PointHistory() {
         <NavyLine />
 
         <div style={{ padding: '1rem' }}>
-          <Filter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
+          <Filter
+            selectedValue={selectedValue}
+            setSelectedValue={setSelectedValue}
+            clicked={clicked}
+            setClicked={setClicked}
+          />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (
               <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
@@ -189,6 +214,28 @@ export default function PointHistory() {
             ))}
           </PointUsage>
         </div>
+
+        {/* 버튼 자리만큼 공간 생성 */}
+        <div style={{ height: '4rem' }}></div>
+
+        <WithdrawBox clicked={clicked}>
+          <WithdrawBtn to={'/withdraw'}>
+            <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+              <PressMotion>
+                <div
+                  style={{
+                    width: '21.5rem',
+                    color: `${colors.White}`,
+                    fontWeight: '500',
+                    letterSpacing: '0.2em',
+                  }}
+                >
+                  출금하기
+                </div>
+              </PressMotion>
+            </Btn>
+          </WithdrawBtn>
+        </WithdrawBox>
       </Wrap>
     </>
   );

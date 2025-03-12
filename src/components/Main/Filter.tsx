@@ -34,8 +34,8 @@ const CurrentNav = styled.div`
 `;
 
 //오버레이
-const Overlay = styled.div<FilterListProps>`
-  display: ${({ clicked }) => (clicked ? 'block' : 'none')};
+const Overlay = styled.div<{ $clicked: boolean }>`
+  display: ${({ $clicked }) => ($clicked ? 'block' : 'none')};
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100vh;
@@ -45,8 +45,8 @@ const Overlay = styled.div<FilterListProps>`
 `;
 
 //필터 리스트
-const FilterList = styled.div<FilterListProps>`
-  display: ${({ clicked }) => (clicked ? 'flex' : 'none')};
+const FilterList = styled.div<{ $clicked: boolean }>`
+  display: ${({ $clicked }) => ($clicked ? 'flex' : 'none')};
   flex-direction: column;
   position: fixed;
   background-color: ${colors.Navy};
@@ -70,11 +70,11 @@ const SelectMenu = styled.ul`
   flex-direction: column;
 `;
 
-const SelectItem = styled.li<{ isSelected: boolean }>`
+const SelectItem = styled.li<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  color: ${({ isSelected }) => (isSelected ? colors.White : colors.Grey)};
+  color: ${({ $isSelected }) => ($isSelected ? colors.White : colors.Grey)};
   padding: 1rem 0;
   > img {
     width: 1rem;
@@ -86,16 +86,17 @@ const SelectItem = styled.li<{ isSelected: boolean }>`
 interface FilterProps {
   selectedValue: string;
   setSelectedValue: (value: string) => void;
-}
-
-//filter.tsx 내부에서 필터 리스트를 열고 닫는 상태
-interface FilterListProps {
   clicked: boolean;
+  setClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Filter({ selectedValue, setSelectedValue }: FilterProps) {
+export default function Filter({
+  selectedValue,
+  setSelectedValue,
+  clicked,
+  setClicked,
+}: FilterProps) {
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
-  const [clicked, setClicked] = useState(false);
 
   //필터링
   const handleClick = () => {
@@ -125,8 +126,8 @@ export default function Filter({ selectedValue, setSelectedValue }: FilterProps)
           </PressMotion>
         </PointNav>
       </PointFilter>
-      <Overlay clicked={clicked} onClick={closeFilter} />
-      <FilterList clicked={clicked}>
+      <Overlay $clicked={clicked} onClick={closeFilter} />
+      <FilterList $clicked={clicked}>
         <SelectTitle>내역 선택</SelectTitle>
         <SelectMenu>
           {filterOptions.map((item) => {
@@ -134,7 +135,7 @@ export default function Filter({ selectedValue, setSelectedValue }: FilterProps)
               <SelectItem
                 key={item}
                 onClick={() => handleSelect(item)}
-                isSelected={selectedValue === item}
+                $isSelected={selectedValue === item}
               >
                 <div>{item}</div>
                 <img src={selectedValue === item ? blueCheckImage : greyCheckImage} />

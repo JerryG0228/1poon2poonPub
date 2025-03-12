@@ -4,8 +4,7 @@ import Heart from '@/assets/donatePage/Heart';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
-import ReactConfetti from 'react-confetti';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +37,6 @@ export default function DonateSetFinish() {
 
   return (
     <Container>
-      <ReactConfetti numberOfPieces={150} recycle={false} gravity={0.2} />
       <Text>기부 목표 설정 완료!</Text>
       <StyledLottie animationData={Heart} loop={true} />
       <Btn bgColor={colors.LightBlue} handleBtn={handleBtn}>

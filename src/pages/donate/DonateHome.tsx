@@ -3,7 +3,7 @@ import CharacterBox from '@/components/Donate/CharacterBox';
 import Guage from '@/components/Donate/Guage';
 import PressMotion from '@/components/PressMotion';
 import TitleBox from '@/components/TitleBox';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import EarthPage from '@/assets/donatePage/EarthPage.png';
 import BooksPage from '@/assets/donatePage/BooksPage.png';
@@ -30,8 +30,6 @@ import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import { colors } from '@/styles/colors';
 import Lottie from 'lottie-react';
 import useStore from '@/store/User';
-import { aw } from 'framer-motion/dist/types.d-6pKw1mTI';
-import baseAxios from '@/apis/axiosInstance';
 
 const FadeIn = keyframes`
   0% {
@@ -253,13 +251,15 @@ const Animation: Record<string, string> = {
 };
 
 export default function DonateHome() {
-  const { totalDonations, goalDonations, currentDonations, goalCategory, badges } = useStore();
+  const { totalDonations, goalDonations, currentDonations, goalCategory, badges, pointHistory } =
+    useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [selectBadge, setSelectBadge] = useState<any>(null);
+  const [bgColor, setBgColor] = useState(colors.Navy);
 
   // 기부중인 카테고리 이미지 매핑
   const categoryImg = categoryList[goalCategory];
-
+  console.log(pointHistory);
   const handleClick = (item: any) => {
     setSelectBadge(item);
     setIsOpen(true);
@@ -280,6 +280,10 @@ export default function DonateHome() {
       : currentDonations == goalDonations
         ? '기부 하러 가기'
         : '기부 포인트 채우기';
+
+  useEffect(() => {
+    setBgColor(goalDonations > 0 ? colors.Navy : colors.LightBlue);
+  }, [goalDonations]);
 
   return (
     <Box>
@@ -310,7 +314,7 @@ export default function DonateHome() {
         <Guage currDonate={currentDonations} targetDonate={goalDonations}></Guage>
 
         <Link to={link}>
-          <Btn bgColor={colors.Navy} handleBtn={() => {}}>
+          <Btn bgColor={bgColor} handleBtn={() => {}}>
             <PressMotion>
               <div style={{ width: '19rem' }}>{info}</div>
             </PressMotion>

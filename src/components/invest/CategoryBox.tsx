@@ -6,7 +6,8 @@ import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
-
+import Lottie from 'lottie-react';
+import { useEffect, useRef, useState } from 'react';
 const Wrapper = styled.div<{ $active: boolean }>`
   // "$active"로 변경하여 DOM 전달 방지!
   display: flex;
@@ -18,10 +19,10 @@ const Wrapper = styled.div<{ $active: boolean }>`
   transition: opacity 0.3s;
 `;
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.div<{ isPay: boolean }>`
   display: flex;
-  background-color: #313845;
-  padding: 2rem;
+  background-color: ${(props) => (props.isPay ? colors.Grey : '#313845')};
+  padding: ${(props) => (props.isPay ? '0.8rem' : '2rem')};
   border-radius: 1rem;
 `;
 
@@ -39,12 +40,17 @@ const TitleBox = styled.div`
   align-items: center;
 `;
 
-const ContentTitle = styled.div`
+const ContentTitle = styled.div<{ isPay: boolean }>`
   display: flex;
   font-size: 1rem;
-  color: ${colors.White};
+  color: ${(props) => (props.isPay ? colors.Black : colors.White)};
   margin: 0.5rem 0;
   text-align: center;
+`;
+
+const StyledLottie = styled(Lottie)`
+  width: 5rem;
+  height: 5rem;
 `;
 
 const categoryImages = {
@@ -61,18 +67,48 @@ interface Props {
   title: string;
   imageSrc: string;
   active: boolean;
+  isPay: boolean;
   onClick: () => void; // 클릭 이벤트 추가!
 }
 
-export default function CategoryBox({ title, imageSrc, active, onClick }: Props) {
+export default function CategoryBox({ title, imageSrc, active, isPay, onClick }: Props) {
+  const lottieRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (lottieRef.current && typeof imageSrc === 'object') {
+      if (active) {
+        lottieRef.current.play(); // 활성화되면 재생
+      } else {
+        lottieRef.current.goToAndStop(60, true);
+      }
+    }
+  }, [active]); // active 상태가 변경될 때 실행
+
+  const handleClick = () => {
+    if (lottieRef.current && typeof imageSrc === 'object') {
+      lottieRef.current.playSegments([0, 90], true);
+    }
+    onClick();
+  };
+
   return (
     <>
-      <Wrapper $active={active} onClick={onClick}>
-        <ImageWrapper>
-          <ContentImg src={imageSrc} alt={title} />
+      <Wrapper $active={active} onClick={handleClick}>
+        <ImageWrapper isPay={isPay}>
+          {isPay ? (
+            <StyledLottie
+              lottieRef={lottieRef}
+              animationData={imageSrc}
+              loop={false}
+              autoplay={false}
+              play={true}
+            ></StyledLottie>
+          ) : (
+            <ContentImg src={imageSrc} alt={title} />
+          )}
         </ImageWrapper>
         <TitleBox>
-          <ContentTitle>{title}</ContentTitle>
+          <ContentTitle isPay={isPay}>{title}</ContentTitle>
         </TitleBox>
       </Wrapper>
     </>
