@@ -80,6 +80,8 @@ const Unit = styled.label`
 
 const CustomLink = styled(Link)<{ disabled?: boolean }>`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  position: fixed;
+  bottom: 1rem;
 `;
 
 export default function DonateGoal() {
@@ -133,7 +135,9 @@ export default function DonateGoal() {
       <CustomLink to="/donatesetfinish" disabled={(targetAmount ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '21.3rem' }}>설정하기</div>
+            <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
+              설정하기
+            </div>
           </PressMotion>
         </Btn>
       </CustomLink>
