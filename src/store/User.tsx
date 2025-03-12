@@ -133,6 +133,9 @@ const useStore = create<UserState>()(
         }
       }, // 보유 달러 업데이트
 
+      addStamp: (stamp) => {
+        set((state) => ({ cashbackStamps: [...state.cashbackStamps, stamp] }));
+      }, // 스탬프 추가
       resetStamp: () => set(() => ({ cashbackStamps: [] })), // 스탬프판 초기화
 
       addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
@@ -147,7 +150,7 @@ const useStore = create<UserState>()(
       getCurrentDonations: (amount) => set(() => ({ currentDonations: amount })), // 현재 기부 금액 조회
       updateCurrentDonations: (amount) =>
         set((state) => ({ currentDonations: state.currentDonations + amount })), // 현재 기부 금액 추가
-      setGetPointCount: (count) => set((state) => ({ getPointCount: state.getPointCount - count })),
+      setGetPointCount: (count) => set((state) => ({ getPointCount: 5 })),
     }),
     { name: 'user-store' },
   ),

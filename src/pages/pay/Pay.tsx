@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import LogoImg from '@/assets/Pay/Logo.png';
 import PressMotion from '@/components/PressMotion';
 import Lottie from 'lottie-react';
 import welcome1 from '@/assets/Pay/welcome1.json';
-import welcome2 from '@/assets/Pay/welcome2.json';
 import { createGlobalStyle } from 'styled-components';
 import { colors } from '@/styles/colors';
 import PayButtonBox from '@/components/Pay/PayButtonBox';
@@ -29,14 +27,14 @@ const Box = styled.div`
 const Title = styled.div`
   font-size: 2rem;
   color: black;
+  font-weight: bold;
 `;
-const Logo = styled.img`
-  width: 15rem;
-`;
+
 const ContentBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2rem;
 `;
 const Service = styled.div`
   display: flex;

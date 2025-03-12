@@ -13,6 +13,7 @@ import taxiImage from '@/assets/StampBox/TaxiIcon.png';
 import CategoryBox from '@/components/invest/CategoryBox';
 import baseAxios from '@/apis/axiosInstance';
 import { createGlobalStyle } from 'styled-components';
+import useStore from '@/store/User';
 
 const GlobalStyle = createGlobalStyle`
   #root {
@@ -23,9 +24,15 @@ const GlobalStyle = createGlobalStyle`
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 1rem;
   font-weight: bold;
   padding: 0 1rem;
+`;
+
+const Title = styled.div`
+  font-size: 2rem;
+  color: black;
+  font-weight: bold;
 `;
 
 const PayCategoryBox = styled.div`
@@ -92,6 +99,7 @@ const categoryList = [
 ];
 
 export default function PayMain() {
+  const { addStamp, cashbackStamps, points } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
   const [bgColor, setBgColor] = useState<string>(colors.Grey);
   const [payAmount, setPayAmount] = useState<number | null>(null); // 결제 금액
@@ -103,6 +111,7 @@ export default function PayMain() {
     // 한 개만 선택 가능 → 이미 선택된 경우 해제
     setSelectedCategory((prev) => (prev === item ? null : item));
   };
+  console.log('결제메인', cashbackStamps, points);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value); // 입력값을 숫자로 변환
@@ -111,12 +120,11 @@ export default function PayMain() {
     setPayAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
   };
 
-  console.log(data);
   const fetchData = async () => {
     await baseAxios
       .post('/user/addStamp', data)
-      .then((reaponse) => {
-        console.log(reaponse);
+      .then(() => {
+        addStamp(point);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -133,6 +141,11 @@ export default function PayMain() {
   return (
     <Box>
       <GlobalStyle />
+      <Title>
+        결제하실 카테고리를
+        <br />
+        선택해주세요
+      </Title>
       <PayCategoryBox>
         {categoryList.map((item) => (
           <CategoryBox
