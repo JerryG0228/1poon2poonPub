@@ -362,9 +362,15 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       </div>
       <CharacterName>한푼이</CharacterName>
       <TextBox>
-        <Donate>{goalDonations > 0 ? animatedValue : '?'}</Donate>
-        <Target>/</Target>
-        <Target>{goalDonations > 0 ? goalDonations.toLocaleString() : '?'}</Target>
+        {goalDonations > 0 ? (
+          <>
+            <Donate>{animatedValue}</Donate>
+            <Target>/</Target>
+            <Target>{goalDonations.toLocaleString()}</Target>
+          </>
+        ) : (
+          <div>?</div>
+        )}
       </TextBox>
     </Wrapper>
   );

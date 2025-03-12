@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Lottie from 'lottie-react';
-import Heart from '@/assets/donatePage/Heart';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
