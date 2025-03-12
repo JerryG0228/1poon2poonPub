@@ -88,10 +88,14 @@ export default function WithDraw() {
   const amount = Number(withdrawAmount);
   const isDisabled = !withdrawAmount || amount <= 0 || amount > points;
 
+  const maxPoint = Math.min(points);
+
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-
+    let value = Number(event.target.value);
+    if (value > maxPoint) {
+      value = maxPoint; // 초과시 최대값으로 설정
+    }
     setWithdrawAmount(value);
   };
 

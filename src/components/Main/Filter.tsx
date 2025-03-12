@@ -86,11 +86,17 @@ const SelectItem = styled.li<{ $isSelected: boolean }>`
 interface FilterProps {
   selectedValue: string;
   setSelectedValue: (value: string) => void;
+  clicked: boolean;
+  setClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Filter({ selectedValue, setSelectedValue }: FilterProps) {
+export default function Filter({
+  selectedValue,
+  setSelectedValue,
+  clicked,
+  setClicked,
+}: FilterProps) {
   const filterOptions = ['전체', '적립 내역', '사용 내역'] as const;
-  const [clicked, setClicked] = useState(false);
 
   //필터링
   const handleClick = () => {

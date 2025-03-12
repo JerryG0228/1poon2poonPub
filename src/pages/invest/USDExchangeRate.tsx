@@ -48,8 +48,6 @@ const Label = styled.p`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 65vh;
-  justify-content: space-between;
 `;
 
 const InputContent = styled.div`
@@ -144,6 +142,11 @@ const ErrorText = styled.div`
   color: ${colors.LightBlue};
   justify-content: center;
   text-align: center;
+`;
+
+const BtnWrap = styled(Link)`
+  position: fixed;
+  bottom: 1rem;
 `;
 
 const bankersRound = (value: number, decimalPlaces = 2): number => {
@@ -276,7 +279,7 @@ const USDExchangeRate = () => {
               <ButtonContent>
                 {Number(won) > points && <ErrorText>⚠️ 보유 포인트를 초과했습니다!</ErrorText>}
 
-                <Link to={'/InvestmentHome'}>
+                <BtnWrap to={'/InvestmentHome'}>
                   <Btn
                     bgColor={isDisabled ? colors.Grey : colors.LightBlue}
                     handleBtn={() => {
@@ -284,10 +287,12 @@ const USDExchangeRate = () => {
                     }}
                   >
                     <PressMotion>
-                      <div style={{ width: '21.5rem' }}>환전하기</div>
+                      <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
+                        환전하기
+                      </div>
                     </PressMotion>
                   </Btn>
-                </Link>
+                </BtnWrap>
               </ButtonContent>
             </ContentWrapper>
           </Wrapper>
