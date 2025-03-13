@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import EtfCategoryBox from '@/components/invest/EtfCategoryBox';
@@ -9,7 +9,7 @@ import moneyImage from '@/assets/categorybox/money_image.png';
 import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
-import etfData from '@/data/etfData.js';
+import etfData from '@/data/etfData';
 import baseAxios from '@/apis/axiosInstance';
 import useStore from '@/store/User';
 

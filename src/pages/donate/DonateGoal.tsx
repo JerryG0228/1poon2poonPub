@@ -40,7 +40,7 @@ const InputWrapper = styled.div`
   }
 `;
 
-const InputAmout = styled.input<{ value: number }>`
+const InputAmout = styled.input<{ format: number }>`
   font-size: 1.55rem;
   border: none;
   border-bottom: 1px solid ${colors.Grey};
@@ -54,7 +54,7 @@ const InputAmout = styled.input<{ value: number }>`
   &:focus {
     outline: none;
     border-bottom: 1px solid ${colors.LightBlue};
-    color: ${(props) => (props.value < 10000 ? colors.Grey : colors.White)};
+    color: ${(props) => (props.format < 10000 ? colors.Grey : colors.White)};
   }
 
   /* 파이어폭스 스핀 버튼 숨기기 */
@@ -87,12 +87,14 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 export default function DonateGoal() {
   const { setGoalDonations, goalCategory, username } = useStore();
   const [formattedValue, setFormattedValue] = useState<number>(0);
+  const [formattedNum, setFormattedNum] = useState<number>(0);
   const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     let rawValue = event.target.value.replace(/,/g, ''); // 쉼표 제거 후 숫자로 변환
     const value = Number(rawValue); // 입력값을 숫자로 변환
+    setFormattedNum(value);
     setFormattedValue(value); // 숫자로 저장
     setData({ category: goalCategory, targetAmount: value, name: username });
   };
@@ -128,6 +130,7 @@ export default function DonateGoal() {
           id="inputAmount"
           type="text"
           value={formattedValue}
+          format={formattedNum}
           placeholder="금액"
           onChange={handleInput}
         ></InputAmout>
