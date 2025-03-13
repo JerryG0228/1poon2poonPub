@@ -1,9 +1,10 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
+import useStore from '@/store/User';
 
+import { IoMenu } from 'react-icons/io5';
 import { IoChevronBackSharp } from 'react-icons/io5';
-import { CgArrowsExchangeAlt } from 'react-icons/cg';
 
 const Top = styled.div`
   display: flex;
@@ -25,15 +26,16 @@ const Icon = styled.div`
   }
 `;
 
-export default function PlusLayout() {
+export default function ETFListLayout() {
   const navigate = useNavigate();
+  const { interests } = useStore(); // ✅ selectedCategories 대신 interests 사용
 
   const HandleIcon = () => {
     navigate('/');
   };
 
   const HandleHomeClick = () => {
-    navigate('/investCategory');
+    navigate('/etf-list', { state: { selectedCategories: interests } }); // ✅ 전달
   };
 
   return (
@@ -43,7 +45,7 @@ export default function PlusLayout() {
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
         </Icon>
         <Icon onClick={HandleHomeClick}>
-          <CgArrowsExchangeAlt color={colors.White} size="1.6rem" />
+          <IoMenu color={colors.White} size="1.6rem" />
         </Icon>
       </Top>
       <Outlet />

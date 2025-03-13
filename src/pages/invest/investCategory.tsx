@@ -34,6 +34,7 @@ const categoryImages: { [key: string]: string } = {
 const Container = styled.div`
   padding: 1rem;
   color: white;
+  margin-top: 3.3rem;
 `;
 
 const Title = styled.h1`

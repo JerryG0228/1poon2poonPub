@@ -70,22 +70,28 @@ const InputWrapper = styled.div`
   }
 `;
 
-const InputAmount = styled.input`
+const formatWithCommas = (value: string) => {
+  const num = value.replace(/[^\d.]/g, '');
+  if (!num) return '';
+  const parts = num.split('.');
+  parts[0] = parseInt(parts[0]).toLocaleString();
+  return parts.join('.');
+};
+
+const InputAmount = styled.input<{ $isExceeded: boolean }>`
   width: 100%;
   font-size: 1.55rem;
-  font-weight: 600;
   color: white;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid ${({ $isExceeded }) => ($isExceeded ? 'red' : '#aaa')};
   padding: 0.5rem 4rem 0.5rem 0;
   &:focus {
     outline: none;
-    border-color: ${colors.Red};
+    border-color: ${({ $isExceeded }) => ($isExceeded ? 'red' : colors.LightBlue)};
   }
 `;
 
-//input 끝에 달러' 글자 고정
 const Unit = styled.label`
   position: absolute;
   right: 0.5rem;
@@ -139,6 +145,10 @@ const ResultText = styled.p`
 
 const ErrorText = styled.div`
   display: flex;
+  width: 100%;
+  color: ${colors.Red};
+  justify-content: center;
+  text-align: center;
 `;
 
 const BtnWrap = styled(Link)`
@@ -151,7 +161,6 @@ const bankersRound = (value: number, decimalPlaces = 2): number => {
   const scaled = value * multiplier;
   const floored = Math.floor(scaled);
   const diff = scaled - floored;
-
   if (diff > 0.5) return Math.ceil(scaled) / multiplier;
   if (diff < 0.5) return floored / multiplier;
   return (floored % 2 === 0 ? floored : floored + 1) / multiplier;
@@ -161,7 +170,6 @@ const KRWExchangeRate = () => {
   const [rate, setRate] = useState<number | null>(null);
   const [usd, setUsd] = useState('');
   const [krw, setKrw] = useState<number | null>(null);
-
   const { username, dollars, updatePoints, updateDollars } = useStore();
 
   useEffect(() => {
@@ -188,15 +196,17 @@ const KRWExchangeRate = () => {
         console.error('❌ 환율 정보 가져오기 실패:', err);
       }
     };
-
     fetchRate();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const usdValue = e.target.value;
-    setUsd(usdValue);
-    if (rate && !isNaN(Number(usdValue))) {
-      const krwValue = bankersRound(Number(usdValue) * rate, 2);
+    const rawValue = e.target.value.replace(/,/g, '');
+    if (!/^\d*(\.\d{0,2})?$/.test(rawValue)) return;
+    const formatted = formatWithCommas(rawValue);
+    setUsd(formatted);
+
+    if (rate && !isNaN(Number(rawValue))) {
+      const krwValue = bankersRound(Number(rawValue) * rate, 0); // <- 여기! 정수로 반올림
       setKrw(krwValue);
     } else {
       setKrw(null);
@@ -205,91 +215,79 @@ const KRWExchangeRate = () => {
 
   const handleExchange = async () => {
     if (!usd || !rate || !krw) return;
-
-    const roundedUsd = bankersRound(Number(usd), 2);
-
+    const numericUsd = Number(usd.replace(/,/g, ''));
     try {
-      await baseAxios
-        .post('/user/exchange', {
-          name: username,
-          amount: roundedUsd,
-          direction: 'points',
-        })
-        .then(() => {
-          updatePoints(); // 보유 포인트 업데이트
-          updateDollars(); // 보유 달러 업데이트
-        })
-        .then(() => {
-          setUsd('');
-          setKrw(null);
-        });
+      await baseAxios.post('/user/exchange', {
+        name: username,
+        amount: numericUsd,
+        direction: 'points',
+      });
+      await updatePoints();
+      await updateDollars();
+      setUsd('');
+      setKrw(null);
     } catch (err: any) {
       console.error('❌ 환전 실패:', err);
       alert(err.response?.data?.message || '환전 중 오류가 발생했습니다.');
     }
   };
 
-  // 버튼 비활성화 여부
-  const isDisabled = !krw || Number(usd) > dollars;
+  const numericUsd = Number(usd.replace(/,/g, ''));
+  const isExceeded = numericUsd > dollars;
+  const isDisabled = !krw || isExceeded;
 
   return (
     <Box>
       <Title>달러 → 원화 환전</Title>
       {rate ? (
-        <>
-          <Wrapper>
-            <TitleWrapper>
-              <Label>현재 환율</Label>
-              <CurrentRate>1 USD ≈ {rate.toLocaleString()} KRW</CurrentRate>
-            </TitleWrapper>
-
-            <ContentWrapper>
-              <InputContent>
-                <Wrap>
-                  <InputWrapper>
-                    <InputAmount
-                      type="number"
-                      value={usd}
-                      onChange={handleChange}
-                      placeholder="달러 금액 입력"
-                    />
-                    <Unit htmlFor="inputAmount">달러</Unit>
-                  </InputWrapper>
-                  <OwnMoney
-                    onClick={() => {
-                      if (rate) {
-                        const maxUsd = Math.floor(dollars * 100) / 100;
-                        setUsd(String(maxUsd));
-                        setKrw(bankersRound(maxUsd * rate));
-                      }
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    보유 달러: ${dollars.toFixed(2)}
-                  </OwnMoney>
-                </Wrap>
-
-                <WonWrap>
-                  <FaEquals fontSize={20} />
-                  <ResultAmount
+        <Wrapper>
+          <TitleWrapper>
+            <Label>현재 환율</Label>
+            <CurrentRate>1 USD ≈ {rate.toLocaleString()} KRW</CurrentRate>
+          </TitleWrapper>
+          <ContentWrapper>
+            <InputContent>
+              <Wrap>
+                <InputWrapper>
+                  <InputAmount
                     type="text"
-                    value={krw !== null ? bankersRound(krw, 2).toLocaleString() : 0}
-                    readOnly
+                    value={usd}
+                    onChange={handleChange}
+                    placeholder="달러 금액 입력"
+                    $isExceeded={isExceeded}
                   />
-                  <Unit htmlFor="inputAmount">원</Unit>
-                </WonWrap>
-              </InputContent>
-              <ButtonContent>
-                {Number(usd) > dollars && (
-                  <ErrorText style={{ color: colors.Red }}>⚠️ 보유 달러를 초과했습니다!</ErrorText>
-                )}
-                <BtnWrap to={'/InvestmentHome'}>
-                  <Btn
-                    bgColor={isDisabled ? colors.Grey : colors.Red}
-                    handleBtn={() => {
-                      handleExchange();
-                    }}
-                  >
+                  <Unit htmlFor="inputAmount">달러</Unit>
+                </InputWrapper>
+                <OwnMoney
+                  onClick={() => {
+                    const maxUsd = Math.floor(dollars * 100) / 100;
+                    const formatted = formatWithCommas(maxUsd.toFixed(2));
+                    setUsd(formatted);
+                    if (rate) {
+                      const krwValue = bankersRound(maxUsd * rate, 0); // <- 여기도!
+                      setKrw(krwValue);
+                    }
+                  }}
+                  style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  보유 달러: ${dollars.toFixed(2)}
+                </OwnMoney>
+              </Wrap>
+              <WonWrap>
+                <FaEquals fontSize={20} />
+                <ResultAmount
+                  type="text"
+                  value={krw !== null ? bankersRound(krw, 0).toLocaleString() : ''} // ← 여기도 한 번 더 안전하게
+                  readOnly
+                />
+                <Unit htmlFor="inputAmount">원</Unit>
+              </WonWrap>
+            </InputContent>
+            <ButtonContent>
+              {isExceeded && <ErrorText>보유 달러를 초과했습니다</ErrorText>}
+              {!isDisabled ? (
+                <BtnWrap to="/InvestmentHome">
+                  <Btn bgColor={colors.Blue} handleBtn={handleExchange}>
                     <PressMotion>
                       <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
                         환전하기
@@ -297,10 +295,20 @@ const KRWExchangeRate = () => {
                     </PressMotion>
                   </Btn>
                 </BtnWrap>
-              </ButtonContent>
-            </ContentWrapper>
-          </Wrapper>
-        </>
+              ) : (
+                <BtnWrap>
+                  <Btn bgColor={colors.Grey} handleBtn={() => {}}>
+                    <PressMotion>
+                      <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
+                        환전하기
+                      </div>
+                    </PressMotion>
+                  </Btn>
+                </BtnWrap>
+              )}
+            </ButtonContent>
+          </ContentWrapper>
+        </Wrapper>
       ) : (
         <ResultText>환율 정보를 불러오는 중입니다...</ResultText>
       )}
