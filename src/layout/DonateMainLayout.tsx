@@ -39,7 +39,7 @@ export default function DonateMainLayout() {
     if (backNavigationMap[currentPath]) {
       navigate(backNavigationMap[currentPath]);
     } else {
-      navigate(-1);
+      navigate('/');
     }
   };
 

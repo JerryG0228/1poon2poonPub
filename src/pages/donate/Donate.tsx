@@ -11,7 +11,6 @@ import styled from 'styled-components';
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  /* gap: 22rem; */
   font-weight: bold;
   padding: 0 1rem;
   margin-top: 3rem;
