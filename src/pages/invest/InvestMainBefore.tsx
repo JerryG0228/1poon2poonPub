@@ -33,7 +33,7 @@ const Text = styled.div`
 `;
 
 export default function InvestMainBefore() {
-  const lottieRef = useRef(null);
+  const lottieRef = useRef<any>(null);
 
   useEffect(() => {
     if (lottieRef.current) {

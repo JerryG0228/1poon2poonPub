@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ETFBox from '@/components/invest/ETFBox';
 import TopGainersChart from '@/components/invest/TopGainersChart';
-import etfData from '@/data/etfData';
 import baseAxios from '@/apis/axiosInstance';
+
+type CategoryKey = 'tech' | 'finance' | 'healthcare' | 'esg' | 'reit' | 'consumer';
 
 const Container = styled.div`
   padding-bottom: 2rem;
@@ -60,8 +61,17 @@ const Divider = styled.div`
   }
 `;
 
+const etfData: Record<CategoryKey, string[]> = {
+  tech: [...],
+  finance: [...],
+  healthcare: [...],
+  esg: [...],
+  reit: [...],
+  consumer: [...]
+};
+
 function ETFCategoryList() {
-  const { category } = useParams(); // URL 파라미터에서 category 가져오기
+  const { category } = useParams<{ category: CategoryKey }>();
   const navigate = useNavigate();
 
   const [etfs, setEtfs] = useState<string[]>([]);
