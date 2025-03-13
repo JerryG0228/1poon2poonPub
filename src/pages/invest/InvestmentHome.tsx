@@ -65,7 +65,6 @@ const InvestmentHome = () => {
   const { interestsStock, ownedStocks } = useStore();
 
   const [activeTab, setActiveTab] = useState<'내 ETF' | '관심 ETF'>('내 ETF');
-  // const [ownedETFs, setOwnedETFs] = useState<any[]>([]);
   const [stocks, setStocks] = useState<
     { name: string; price: number; transPrice: number; changePercent: string; quantity: number }[]
   >([]);

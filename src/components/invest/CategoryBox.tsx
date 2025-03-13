@@ -1,11 +1,5 @@
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
-import buildingImage from '@/assets/categorybox/building_image.png';
-import computerImage from '@/assets/categorybox/computer_image.png';
-import moneyImage from '@/assets/categorybox/money_image.png';
-import shoppingImage from '@/assets/categorybox/shopping_image.png';
-import earthImage from '@/assets/categorybox/earth_image.png';
-import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import Lottie from 'lottie-react';
 import { useEffect, useRef } from 'react';
 const Wrapper = styled.div<{ $active: boolean }>`

@@ -83,7 +83,7 @@ const SellBtn = styled.div<{ $disabled: boolean }>`
   border-radius: 0.6rem;
   font-size: 1.1rem;
   font-weight: bold;
-  margin-top: 19.5rem;
+  margin-top: 18.5rem;
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
@@ -120,13 +120,11 @@ const ETFSellSetting = () => {
     }
 
     try {
-      const res = await baseAxios.post('/invest/sell', {
+      await baseAxios.post('/invest/sell', {
         name: username,
         etfName: symbol,
         quantity,
       });
-
-      // alert(res.data.message || 'ETF 판매가 완료되었습니다.');
 
       // 💰 판매 후 달러 정보 갱신
       await updateDollars(); // ⬅️ 반드시 호출
