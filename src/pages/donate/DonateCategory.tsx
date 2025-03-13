@@ -54,18 +54,23 @@ const categoryList = [
   { category: '환경 동물', image: dogImage },
 ];
 
+interface CategoryItem {
+  category: string;
+  image: string;
+}
+
 export default function DonateCategory() {
   const { setGoalCategory } = useStore();
   //active적용. 처음엔 선택안함. 다음 페이지에 데이터 전송
-  const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
   const [bgColor, setBgColor] = useState(colors.Grey);
 
   // 카테고리 클릭 핸들러
-  const handleClick = (item: Object) => {
+  const handleClick = (item: CategoryItem) => {
     // 한 개만 선택 가능 → 이미 선택된 경우 해제
     setSelectedCategory((prev) => (prev === item ? null : item));
   };
-
+  console.log(selectedCategory);
   useEffect(() => {
     if (selectedCategory != null) {
       setGoalCategory(selectedCategory.category); // selectedCategory가 null이 아닐 때만 호출

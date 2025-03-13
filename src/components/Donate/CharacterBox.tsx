@@ -141,7 +141,7 @@ const CountBox = styled.div`
   border-radius: 1rem;
 `;
 
-const aniList: Record<string, Keyframes> = {
+const aniList: Record<string, any> = {
   Jello: Jello,
   RunAway: RunAway,
   Jump: Jump,

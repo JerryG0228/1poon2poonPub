@@ -7,7 +7,7 @@ import shoppingImage from '@/assets/categorybox/shopping_image.png';
 import earthImage from '@/assets/categorybox/earth_image.png';
 import hospitalImage from '@/assets/categorybox/hospital_image.png';
 import Lottie from 'lottie-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 const Wrapper = styled.div<{ $active: boolean }>`
   // "$active"로 변경하여 DOM 전달 방지!
   display: flex;
@@ -52,16 +52,6 @@ const StyledLottie = styled(Lottie)`
   width: 5rem;
   height: 5rem;
 `;
-
-const categoryImages = {
-  //투자 카테고리
-  '기술 & AI 관련': computerImage,
-  '금융 & 경제 성장 관련': moneyImage,
-  '사회적 가치 & ESG 투자': earthImage,
-  '헬스케어 & 바이오': hospitalImage,
-  '리츠 & 인프라': buildingImage,
-  '소비 & 리테일': shoppingImage,
-};
 
 interface Props {
   title: string;

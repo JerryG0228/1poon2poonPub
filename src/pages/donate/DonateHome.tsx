@@ -258,7 +258,6 @@ export default function DonateHome() {
 
   // 기부중인 카테고리 이미지 매핑
   const categoryImg = categoryList[goalCategory];
-
   const handleClick = (item: any) => {
     setSelectBadge(item);
     setIsOpen(true);
