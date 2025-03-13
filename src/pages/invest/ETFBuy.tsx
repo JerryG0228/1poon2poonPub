@@ -122,7 +122,7 @@ const ETFTradeSetting = () => {
         quantity,
       });
 
-      alert(`${symbol} ETF ${quantity}주 구매 완료!`);
+      // alert(`${symbol} ETF ${quantity}주 구매 완료!`);
 
       await updateDollars();
 

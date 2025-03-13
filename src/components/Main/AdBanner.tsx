@@ -1,17 +1,23 @@
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 import adImage1 from '@/assets/banner1.png';
 import adImage2 from '@/assets/banner2.png';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
+ /* 슬라이드 트랙 높이 강제 조정 */
   .slick-track {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 5rem !important;  /* 슬라이드 트랙 높이 강제 조정 */
+    height: 5rem !important;  /* 강제로 슬라이드 높이 지정 */
+  }
+
+  /* slick-slide에서 이미지 크기, 정렬 조정 */
+  .slick-slide {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
   }
 `;
 
@@ -26,7 +32,7 @@ const SlideItem = styled.div`
   margin-right: 1rem;
 
   > img {
-    width: 22.2rem;
+    width: 22.5rem;
     height: 5rem;
     border-radius: 1rem;
   }
