@@ -82,7 +82,7 @@ interface DollarHistoryProps {
 }
 
 export default function InvestDollarsHistory() {
-  const { dollars, points, dollarHistory, badges, goalDonations, interestsStock } = useStore();
+  const { dollars, dollarHistory } = useStore();
 
   const [selectedValue, setSelectedValue] = useState('전체');
 

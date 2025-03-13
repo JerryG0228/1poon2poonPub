@@ -54,9 +54,9 @@ interface FlipImageProps {
   alt: string;
 }
 
-const FlipImage: React.FC<FlipImageProps> = ({ srcA, srcB, alt }) => {
+const FlipImage: React.FC<FlipImageProps> = ({ srcA, srcB }) => {
   const [isFlipping, setIsFlipping] = useState(false);
-  const [isFront, setIsFront] = useState(true); // 앞면 여부
+  const [_isFront, setIsFront] = useState(true); // 앞면 여부
   const [showBack, setShowBack] = useState(false); // 뒷면 표시 여부
 
   const handleClick = () => {

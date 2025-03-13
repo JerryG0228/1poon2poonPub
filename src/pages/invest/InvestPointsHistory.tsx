@@ -82,7 +82,7 @@ interface PointHistoryProps {
 }
 
 export default function InvestPointsHistory() {
-  const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
+  const { points, pointHistory } = useStore();
 
   const [selectedValue, setSelectedValue] = useState('전체');
 

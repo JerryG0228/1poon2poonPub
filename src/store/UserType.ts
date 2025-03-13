@@ -69,6 +69,7 @@ interface UserState {
   addStamp: (stamp: number) => void;
   resetStamp: () => void;
   addBadge: (badge: BadgeItem) => void;
+  setInterestsStock: (stocks: InterestsStock[]) => void;
   setInterests: (interests: string[]) => void;
   setGoalCategory: (category: string) => void;
   getTotalDonations: (amount: number) => void;
