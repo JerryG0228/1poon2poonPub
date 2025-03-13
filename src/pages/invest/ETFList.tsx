@@ -13,6 +13,10 @@ import etfData from '@/data/etfData';
 import baseAxios from '@/apis/axiosInstance';
 import useStore from '@/store/User';
 
+type ETFDataType = {
+  [key: string]: string[];
+};
+
 const Container = styled.div`
   padding: 1rem;
   padding-bottom: 2rem;
@@ -103,9 +107,8 @@ function ETFList() {
 
     selectedCategories.forEach((category) => {
       const englishCategory = categoryMapping[category] || category;
-      console.log('📢 변환된 category:', englishCategory, etfData[englishCategory]);
 
-      const etfs = etfData[englishCategory] ?? [];
+      const etfs = (etfData as ETFDataType)[englishCategory] ?? [];
 
       if (etfs.length > 0) {
         selectedETFData[category] = [...etfs].sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -191,9 +194,9 @@ function ETFList() {
           </CategoryHeader>
 
           {(expandedCategory === category
-            ? etfData[categoryMapping[category]]
+            ? (etfData as ETFDataType)[categoryMapping[category]]
             : randomETFs[category]
-          )?.map((etf) => {
+          )?.map((etf: string) => {
             const currentPrice = prices[etf] ?? 0;
             const previousClose = previousCloseData[etf] ?? 0;
             const priceChange = currentPrice - previousClose;

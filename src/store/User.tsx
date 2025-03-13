@@ -27,7 +27,7 @@ const useStore = create<UserState>()(
 
       updateUser: async () => {
         try {
-          const response = await baseAxios.get('/user/두푼이');
+          const response = await baseAxios.get('/user/tester');
           const data = response.data;
 
           set({

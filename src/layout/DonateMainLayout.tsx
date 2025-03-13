@@ -32,7 +32,7 @@ const backNavigationMap: Record<string, string> = {
 export default function DonateMainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  console.log(location.pathname);
   const HandleIcon = () => {
     const currentPath = location.pathname;
 
