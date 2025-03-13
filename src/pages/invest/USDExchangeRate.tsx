@@ -271,7 +271,8 @@ const USDExchangeRate = () => {
                   </InputWrapper>
                   <OwnMoney
                     onClick={() => {
-                      setWon(String(points));
+                      const formatted = Number(points.toFixed(0)).toLocaleString();
+                      setWon(formatted);
                       if (rate) setUsd(points / rate);
                     }}
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
