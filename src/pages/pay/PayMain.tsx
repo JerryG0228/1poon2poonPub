@@ -4,12 +4,6 @@ import { colors } from '@/styles/colors';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import busImage from '@/assets/StampBox/BusIcon.png';
-import cafeImage from '@/assets/StampBox/CafeIcon.png';
-import foodImage from '@/assets/StampBox/FoodIcon.png';
-import movieImage from '@/assets/StampBox/MovieIcon.png';
-import storeImage from '@/assets/StampBox/StoreIcon.png';
-import taxiImage from '@/assets/StampBox/TaxiIcon.png';
 import CategoryBox from '@/components/invest/CategoryBox';
 import baseAxios from '@/apis/axiosInstance';
 import { createGlobalStyle } from 'styled-components';
@@ -105,7 +99,7 @@ const categoryList = [
 ];
 
 export default function PayMain() {
-  const { addStamp, cashbackStamps, points, username } = useStore();
+  const { addStamp, username } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
   const [bgColor, setBgColor] = useState<string>(colors.Grey);
   const [payAmount, setPayAmount] = useState<number | null>(null); // 결제 금액
