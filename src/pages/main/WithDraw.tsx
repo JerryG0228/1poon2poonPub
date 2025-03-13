@@ -140,7 +140,9 @@ export default function WithDraw() {
       <BtnWrap>
         <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
           <PressMotion>
-            <div style={{ width: '21.5rem' }}>출금하기</div>
+            <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
+              출금하기
+            </div>
           </PressMotion>
         </Btn>
       </BtnWrap>

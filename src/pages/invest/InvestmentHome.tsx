@@ -19,7 +19,7 @@ const Container = styled.div`
 const Title = styled.h2`
   font-size: 1.1rem;
   font-weight: bold;
-  letter-spacing: 0.25rem;
+  letter-spacing: 0.1rem;
 `;
 
 const ChartWrapper = styled.div`
@@ -39,7 +39,7 @@ const Tab = styled.div<{ $isActive: boolean }>`
   padding: 0.8rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
-  letter-spacing: 0.25rem;
+  letter-spacing: 0.1rem;
   cursor: pointer;
   border-bottom: ${({ $isActive }) => ($isActive ? '3px solid white' : 'none')};
   color: ${({ $isActive }) => ($isActive ? 'white' : '#888')};

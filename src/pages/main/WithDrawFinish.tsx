@@ -46,7 +46,9 @@ export default function WithDrawFinish() {
       <BtnWrap>
         <Btn bgColor={colors.LightBlue} handleBtn={handleBtn}>
           <PressMotion>
-            <div style={{ width: '12rem', fontWeight: '700' }}>돌아가기</div>
+            <div style={{ width: '12rem', letterSpacing: '0.1em', fontWeight: '700' }}>
+              돌아가기
+            </div>
           </PressMotion>
         </Btn>
       </BtnWrap>
