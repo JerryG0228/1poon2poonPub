@@ -7,6 +7,9 @@ import ETFQuantityBox from '@/components/invest/ETFQuantityBox';
 import baseAxios from '@/apis/axiosInstance';
 import ExchangeSection from '@/components/invest/ExchangeSection';
 import useStore from '@/store/User';
+import { colors } from '@/styles/colors';
+import PressMotion from '@/components/PressMotion';
+import Btn from '@/components/Btn';
 
 const Container = styled.div`
   color: white;
@@ -155,6 +158,10 @@ const InvestmentHome = () => {
     }
   };
 
+  const navigateBtn = () => {
+    navigate('/etf-list');
+  };
+
   return (
     <Container>
       {stocks.length > 0 ? (
@@ -166,7 +173,11 @@ const InvestmentHome = () => {
         <ChartWrapper>
           <Title>내 ETF 차트</Title>
           <EmptyStateBox>
-            <BuyButton onClick={() => navigate('/etf-list')}>내 첫 주식을 가져볼까요?</BuyButton>
+            <Btn bgColor={colors.Blue} handleBtn={navigateBtn}>
+              <PressMotion>
+                <div style={{ width: '12rem', fontWeight: '700' }}>내 첫 주식을 가져볼까요?</div>
+              </PressMotion>
+            </Btn>
           </EmptyStateBox>
         </ChartWrapper>
       )}

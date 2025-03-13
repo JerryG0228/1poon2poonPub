@@ -84,11 +84,10 @@ const InputAmount = styled.input<{ $isExceeded: boolean }>`
   color: white;
   background: transparent;
   border: none;
-  border-bottom: 1px solid ${({ $isExceeded }) => ($isExceeded ? 'red' : '#aaa')};
-  padding: 0.5rem 4rem 0.5rem 0;
+  border-bottom: 1px solid ${({ $isExceeded }) => ($isExceeded ? colors.White : '#aaa')};
   &:focus {
     outline: none;
-    border-color: ${({ $isExceeded }) => ($isExceeded ? 'red' : colors.LightBlue)};
+    border-color: ${({ $isExceeded }) => ($isExceeded ? colors.Red : colors.Blue)};
   }
 `;
 
@@ -145,10 +144,11 @@ const ResultText = styled.p`
 
 const ErrorText = styled.div`
   display: flex;
-  width: 100%;
   color: ${colors.Red};
-  justify-content: center;
   text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22rem;
 `;
 
 const BtnWrap = styled(Link)`

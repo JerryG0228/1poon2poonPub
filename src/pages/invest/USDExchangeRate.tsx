@@ -82,11 +82,11 @@ const InputAmount = styled.input<{ $isExceeded: boolean }>`
   color: white;
   background: transparent;
   border: none;
-  border-bottom: 1px solid ${({ $isExceeded }) => ($isExceeded ? 'red' : '#aaa')};
+  border-bottom: 1px solid ${({ $isExceeded }) => ($isExceeded ? colors.Blue : '#aaa')};
   padding: 0.5rem 4rem 0.5rem 0;
   &:focus {
     outline: none;
-    border-color: ${({ $isExceeded }) => ($isExceeded ? 'red' : colors.LightBlue)};
+    border-color: ${({ $isExceeded }) => ($isExceeded ? 'red' : colors.Blue)};
   }
 `;
 
@@ -144,10 +144,11 @@ const ResultText = styled.p`
 
 const ErrorText = styled.div`
   display: flex;
-  width: 100%;
   color: ${colors.Red};
-  justify-content: center;
   text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22rem;
 `;
 
 const BtnWrap = styled(Link)`
@@ -296,7 +297,7 @@ const USDExchangeRate = () => {
 
                 {!isDisabled ? (
                   <BtnWrap to="/InvestmentHome">
-                    <Btn bgColor={colors.LightBlue} handleBtn={handleExchange}>
+                    <Btn bgColor={colors.Blue} handleBtn={handleExchange}>
                       <PressMotion>
                         <div
                           style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}
