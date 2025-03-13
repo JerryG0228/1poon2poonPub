@@ -85,20 +85,24 @@ const BtnWrap = styled.div`
 export default function WithDraw() {
   const navigate = useNavigate();
   const { setPoints, points } = useStore();
-  const [withdrawAmount, setWithdrawAmount] = useState<number>(); //출금 입력 금액
+  const [formattedValue, setFormattedValue] = useState<string>(''); //input에
 
-  const amount = Number(withdrawAmount);
-  const isDisabled = !withdrawAmount || amount <= 0 || amount > points;
+  const [amount, setAmount] = useState(0);
+  const isDisabled = !formattedValue || amount <= 0 || amount > points;
 
   const maxPoint = Math.min(points);
 
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = Number(event.target.value);
+    let rawValue = event.target.value.replace(/,/g, ''); // 쉼표 제거 후 숫자로 변환
+
+    let value = Number(rawValue);
+
     if (value > maxPoint) {
       value = maxPoint; // 초과시 최대값으로 설정
     }
-    setWithdrawAmount(value);
+    setAmount(value);
+    setFormattedValue(value > 0 ? value.toLocaleString() : '');
   };
 
   const handleWithdraw = async () => {
@@ -126,8 +130,8 @@ export default function WithDraw() {
       <InputWrapper>
         <InputAmout
           id="inputAmount"
-          type="number"
-          value={withdrawAmount || ''}
+          type="text"
+          value={formattedValue}
           placeholder="금액"
           onChange={handleInput}
         ></InputAmout>
