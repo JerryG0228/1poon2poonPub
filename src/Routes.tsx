@@ -3,6 +3,7 @@ import DefaultLayout from './layout/DefaultLayout';
 import PlusLayout from './layout/PlusLayout';
 import HomeLayout from './layout/HomeLayout';
 import DonateMainLayout from './layout/DonateMainLayout';
+import ETFListLayout from './layout/ETFListLayout';
 
 // Pages
 import Main from './pages/main/Main';
@@ -46,15 +47,13 @@ const routes = [
       { path: 'donate', element: <Donate /> }, //기부 포인트 적립 페이지
       { path: 'investbefore', element: <InvestMainBefore /> },
       { path: 'etf-detail/:symbol', element: <ETFDetail /> }, // ETF 상세 페이지
-      { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
       { path: 'USDExchangeRate', element: <USDExchangeRate /> }, // 달러 환전 페이지
       { path: 'KRWExchangeRate', element: <KRWExchangeRate /> }, // 원화 환전 페이지
       { path: 'investDollarsHistory', element: <InvestDollarsHistory /> }, // 달러 내역 페이지
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
       { path: 'paymain', element: <PayMain /> }, //결제 페이지
       { path: 'withdraw', element: <WithDraw /> }, // 포인트 출금 페이지
-      { path: 'etf-buy/:symbol', element: <ETFBuy /> }, // ETF 구매 페이지
-      { path: 'etf-sell/:symbol', element: <ETFSell /> }, // ETF 판매 페이지
+      { path: 'investmentHome', element: <InvestmentHome /> }, // 투자 카테고리 페이지
     ],
   },
 
@@ -67,8 +66,15 @@ const routes = [
 
   // PlusLayout
   {
-    path: '/InvestmentHome',
+    path: '/etf-list',
     element: <PlusLayout />,
+    children: [{ path: '', element: <ETFList /> }], // 투자 내 페이지
+  },
+
+  // ETFListLayout
+  {
+    path: '/investmentHome',
+    element: <ETFListLayout />,
     children: [{ path: '', element: <InvestmentHome /> }], // 투자 내 페이지
   },
 
@@ -77,8 +83,9 @@ const routes = [
     path: '/',
     element: <HomeLayout />,
     children: [
-      { path: 'etf-list', element: <ETFList /> }, // ETF 목록
       { path: 'etf-category/:category', element: <ETFCategoryList /> }, // 투자 카테고리별 ETF 리스트 페이지
+      { path: 'etf-buy/:symbol', element: <ETFBuy /> }, // ETF 구매 페이지
+      { path: 'etf-sell/:symbol', element: <ETFSell /> }, // ETF 판매 페이지
     ],
   },
 
@@ -87,6 +94,7 @@ const routes = [
   { path: '/donatecomplete', element: <DonateComplete /> }, //기부 완료 페이지
   { path: '/pay', element: <Pay /> }, //결제 시작 페이지
   { path: '/paycomplete', element: <PayComplete /> }, //결제 완료 페이지
+  { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
 ];
 
 export default routes;
