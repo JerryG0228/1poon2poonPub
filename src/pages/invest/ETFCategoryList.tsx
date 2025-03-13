@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ETFBox from '@/components/invest/ETFBox';
 import TopGainersChart from '@/components/invest/TopGainersChart';
-import etfData from '@/data/etfData';
 import baseAxios from '@/apis/axiosInstance';
+import etfData from '@/data/etfData';
 
 const Container = styled.div`
   padding-bottom: 2rem;
@@ -60,6 +60,10 @@ const Divider = styled.div`
   }
 `;
 
+type ETFDataType = {
+  [key: string]: string[];
+};
+
 function ETFCategoryList() {
   const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
@@ -95,12 +99,12 @@ function ETFCategoryList() {
 
     const mappedCategory = categoryMapping[category];
 
-    if (!mappedCategory || !etfData[category]) {
+    if (!mappedCategory || !(etfData as ETFDataType)[category]) {
       console.error(`etfData에서 ${category} (${mappedCategory}) 데이터 없음`);
       return;
     }
 
-    setEtfs(etfData[category]);
+    setEtfs((etfData as ETFDataType)[category]);
   }, [category]);
 
   useEffect(() => {

@@ -3,11 +3,10 @@ import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useStore from '@/store/User';
 import PointBox from '@/components/PointBox';
 import Filter from '@/components/Main/Filter';
-import { color } from 'framer-motion';
 
 const GreyBox = styled.div`
   background-color: #313845;
