@@ -54,6 +54,8 @@ const ButtonContainer = styled.div`
 
 const Button = styled.button<{ $active: boolean }>`
   color: ${({ $active }) => ($active ? 'white' : '#8f9298')};
+  background-color: transparent;
+  border: none;
 `;
 
 const OrderBookContainer = styled.div`

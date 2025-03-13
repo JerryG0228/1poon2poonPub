@@ -86,14 +86,14 @@ const CustomLink = styled(Link)<{ disabled?: boolean }>`
 
 export default function DonateGoal() {
   const { setGoalDonations, goalCategory, username } = useStore();
-  const [formattedValue, setFormattedValue] = useState<string>('');
+  const [formattedValue, setFormattedValue] = useState<number>(0);
   const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     let rawValue = event.target.value.replace(/,/g, ''); // 쉼표 제거 후 숫자로 변환
     const value = Number(rawValue); // 입력값을 숫자로 변환
-    setFormattedValue(value > 0 ? value.toLocaleString() : '');
+    setFormattedValue(value); // 숫자로 저장
     setData({ category: goalCategory, targetAmount: value, name: username });
   };
 
@@ -133,7 +133,7 @@ export default function DonateGoal() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatesetfinish" disabled={(Number(formattedValue) ?? 0) < 10000}>
+      <CustomLink to="/donatesetfinish" disabled={formattedValue < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
