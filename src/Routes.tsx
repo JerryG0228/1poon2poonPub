@@ -53,6 +53,8 @@ const routes = [
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
       { path: 'paymain', element: <PayMain /> }, //결제 페이지
       { path: 'withdraw', element: <WithDraw /> }, // 포인트 출금 페이지
+      { path: 'etf-buy/:symbol', element: <ETFBuy /> }, // ETF 구매 페이지
+      { path: 'etf-sell/:symbol', element: <ETFSell /> }, // ETF 판매 페이지
     ],
   },
 
@@ -77,8 +79,6 @@ const routes = [
     children: [
       { path: 'etf-list', element: <ETFList /> }, // ETF 목록
       { path: 'etf-category/:category', element: <ETFCategoryList /> }, // 투자 카테고리별 ETF 리스트 페이지
-      { path: 'etf-buy/:symbol', element: <ETFBuy /> }, // ETF 구매 페이지
-      { path: 'etf-sell/:symbol', element: <ETFSell /> }, // ETF 판매 페이지
     ],
   },
 

@@ -27,11 +27,11 @@ export default function PlusLayout() {
   const navigate = useNavigate();
 
   const HandleIcon = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   const HandleHomeClick = () => {
-    navigate('/investCategory'); // ✅ 홈 아이콘 클릭 시 이동
+    navigate('/investCategory');
   };
 
   return (
