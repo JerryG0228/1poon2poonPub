@@ -33,7 +33,9 @@ export default function Main() {
     totalDonations,
     goalDonations,
     currentDonations,
+    getPointCount,
     updateUser,
+    setGetPointCount,
   } = useStore();
 
   // 초기 유저 데이터 가져오기
@@ -56,6 +58,7 @@ export default function Main() {
         totalDonations: totalDonations,
         goalDonations: goalDonations,
         currentDonations: currentDonations,
+        getPointCount: getPointCount,
       });
     };
     fetchData();
