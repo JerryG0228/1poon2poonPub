@@ -30,6 +30,18 @@ interface InterestsStock {
   _id: string;
 }
 
+interface BadgeItem {
+  _id: { $oid: string };
+  badge: string;
+  donateInfo: {
+    username: string;
+    donateAmount: number;
+    content: string;
+    day: string;
+    animation: string;
+  };
+}
+
 interface UserState {
   username: string;
   cashbackStatus: { [key: string]: boolean };
@@ -38,7 +50,7 @@ interface UserState {
   dollars: number;
   pointHistory: pointHistory[];
   dollarHistory: dollarHistory[];
-  badges: string[];
+  badges: BadgeItem[];
   interests: string[];
   ownedStocks: OwnedStocks[];
   interestsStock: InterestsStock[];
@@ -56,7 +68,7 @@ interface UserState {
   updateDollars: () => void;
   addStamp: (stamp: number) => void;
   resetStamp: () => void;
-  addBadge: (badge: string) => void;
+  addBadge: (badge: BadgeItem) => void;
   setInterests: (interests: string[]) => void;
   setGoalCategory: (category: string) => void;
   getTotalDonations: (amount: number) => void;
@@ -67,4 +79,4 @@ interface UserState {
   setGetPointCount: (count: number) => void;
 }
 
-export type { pointHistory, dollarHistory, OwnedStocks, InterestsStock, UserState };
+export type { pointHistory, dollarHistory, OwnedStocks, InterestsStock, UserState, BadgeItem };

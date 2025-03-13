@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ETFBox from '@/components/invest/ETFBox';
 import TopGainersChart from '@/components/invest/TopGainersChart';
-import etfData from '@/data/etfData';
 import baseAxios from '@/apis/axiosInstance';
+import etfData from '@/data/etfData';
 
 const Container = styled.div`
   padding-bottom: 2rem;
@@ -60,16 +60,26 @@ const Divider = styled.div`
   }
 `;
 
+type ETFDataType = {
+  [key: string]: string[];
+};
+
 function ETFCategoryList() {
-  const { category } = useParams(); // URL 파라미터에서 category 가져오기
+  const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
 
   const [etfs, setEtfs] = useState<string[]>([]);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
   const [previousCloseData, setPreviousCloseData] = useState<{ [key: string]: number }>({});
-  const [topETFs, setTopETFs] = useState<{ name: string; price: number; changePercent: string }[]>(
-    [],
-  );
+  const [topETFs, setTopETFs] = useState<
+    {
+      name: string;
+      price: number;
+      previousClose: number;
+      transPrice: number;
+      changePercent: string;
+    }[]
+  >([]);
 
   // 카테고리 매핑
   const categoryMapping: { [key: string]: string } = {
@@ -89,12 +99,12 @@ function ETFCategoryList() {
 
     const mappedCategory = categoryMapping[category];
 
-    if (!mappedCategory || !etfData[category]) {
+    if (!mappedCategory || !(etfData as ETFDataType)[category]) {
       console.error(`etfData에서 ${category} (${mappedCategory}) 데이터 없음`);
       return;
     }
 
-    setEtfs(etfData[category]);
+    setEtfs((etfData as ETFDataType)[category]);
   }, [category]);
 
   useEffect(() => {
@@ -108,7 +118,6 @@ function ETFCategoryList() {
         try {
           const res = await baseAxios.get(`/invest/getData/${etf}`);
 
-          // API에서 현재가와 전일 종가 가져오기
           const marketPrice = res.data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 0;
           const previousClose = res.data?.chart?.result?.[0]?.meta?.chartPreviousClose ?? 0;
 
@@ -149,11 +158,15 @@ function ETFCategoryList() {
   return (
     <Container>
       <ChartWrapper>
-        <Header1>{categoryMapping[category] || 'ETF'} 차트 상위 5개</Header1>
+        <Header1>
+          {category && categoryMapping[category] ? categoryMapping[category] : 'ETF'}차트 상위 5개
+        </Header1>
         {topETFs.length > 0 && <TopGainersChart topETFs={topETFs} />}
       </ChartWrapper>
 
-      <Header2>{categoryMapping[category] || 'ETF'} ETF</Header2>
+      <Header2>
+        {category && categoryMapping[category] ? categoryMapping[category] : 'ETF'} ETF
+      </Header2>
       <DividerWrapper>
         <Divider />
         <Divider />

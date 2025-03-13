@@ -3,7 +3,6 @@ import PressMotion from '../PressMotion';
 import blueCheckImage from '@/assets/Main/check_blue.png';
 import greyCheckImage from '@/assets/Main/check_grey.png';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useState } from 'react';
 import { colors } from '@/styles/colors';
 
 const PointFilter = styled.div`
