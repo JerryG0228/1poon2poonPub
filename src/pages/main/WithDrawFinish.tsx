@@ -6,7 +6,6 @@ import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
 import ReactConfetti from 'react-confetti';
 import { useNavigate } from 'react-router-dom';
-import useStore from '@/store/User';
 
 const Container = styled.div`
   display: flex;
@@ -14,7 +13,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-top: 8rem;
 `;
 
 const Text = styled.div`
