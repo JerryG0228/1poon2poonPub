@@ -11,17 +11,17 @@ import DonateMainBefore from './pages/donate/DonateMainBefore';
 import InvestCategory from './pages/invest/investCategory'; // 투자 카테고리 선택
 import ETFList from '@/pages/invest/ETFList'; // ETF 목록
 import ETFDetail from '@/pages/invest/ETFDetail'; // ETF 상세 페이지
-import ETFCategoryList from '@/pages/invest/ETFCategoryList';
+import ETFCategoryList from '@/pages/invest/ETFCategoryList'; // 투자 카테고리별 ETF 리스트 페이지
 import DonateCategory from '@/pages/donate/DonateCategory';
 import DonateGoal from '@/pages/donate/DonateGoal';
 import InvestMainBefore from './pages/invest/InvestMainBefore';
 import DonateHome from '@/pages/donate/DonateHome';
-import USDExchangeRate from '@/pages/invest/USDExchangeRate';
-import KRWExchangeRate from '@/pages/invest/KRWExchangeRate';
-import ETFBuy from '@/pages/invest/ETFBuy';
-import ETFSell from '@/pages/invest/ETFSell';
+import USDExchangeRate from '@/pages/invest/USDExchangeRate'; // 달러 환전 페이지
+import KRWExchangeRate from '@/pages/invest/KRWExchangeRate'; // 원화 환전 페이지
+import ETFBuy from '@/pages/invest/ETFBuy'; // ETF 구매 페이지
+import ETFSell from '@/pages/invest/ETFSell'; // ETF 판매 페이지
 import Donate from '@/pages/donate/Donate';
-import InvestmentHome from '@/pages/invest/InvestmentHome';
+import InvestmentHome from '@/pages/invest/InvestmentHome'; // 투자 내페이지
 import DonateSetFinish from '@/pages/donate/DonateSetFinish';
 import DonateComplete from '@/pages/donate/DonateComplete';
 import Pay from '@/pages/pay/Pay';
@@ -45,10 +45,10 @@ const routes = [
       { path: 'donategoal', element: <DonateGoal /> }, //기부 목표 금액 설정 페이지
       { path: 'donate', element: <Donate /> }, //기부 포인트 적립 페이지
       { path: 'investbefore', element: <InvestMainBefore /> },
-      { path: 'etf-detail/:symbol', element: <ETFDetail /> },
+      { path: 'etf-detail/:symbol', element: <ETFDetail /> }, // ETF 상세 페이지
       { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
-      { path: 'USDExchangeRate', element: <USDExchangeRate /> },
-      { path: 'KRWExchangeRate', element: <KRWExchangeRate /> },
+      { path: 'USDExchangeRate', element: <USDExchangeRate /> }, // 달러 환전 페이지
+      { path: 'KRWExchangeRate', element: <KRWExchangeRate /> }, // 원화 환전 페이지
       { path: 'investDollarsHistory', element: <InvestDollarsHistory /> }, // 달러 내역 페이지
       { path: 'investPointsHistory', element: <InvestPointsHistory /> }, // 포인트 내역 페이지
       { path: 'paymain', element: <PayMain /> }, //결제 페이지
@@ -67,7 +67,7 @@ const routes = [
   {
     path: '/InvestmentHome',
     element: <PlusLayout />,
-    children: [{ path: '', element: <InvestmentHome /> }],
+    children: [{ path: '', element: <InvestmentHome /> }], // 투자 내 페이지
   },
 
   // HomeLayout
@@ -76,9 +76,9 @@ const routes = [
     element: <HomeLayout />,
     children: [
       { path: 'etf-list', element: <ETFList /> }, // ETF 목록
-      { path: 'etf-category/:category', element: <ETFCategoryList /> },
-      { path: 'etf-buy/:symbol', element: <ETFBuy /> },
-      { path: 'etf-sell/:symbol', element: <ETFSell /> },
+      { path: 'etf-category/:category', element: <ETFCategoryList /> }, // 투자 카테고리별 ETF 리스트 페이지
+      { path: 'etf-buy/:symbol', element: <ETFBuy /> }, // ETF 구매 페이지
+      { path: 'etf-sell/:symbol', element: <ETFSell /> }, // ETF 판매 페이지
     ],
   },
 
