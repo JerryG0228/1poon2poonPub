@@ -23,6 +23,13 @@ const DonateBox = styled.div`
   gap: 1rem;
   font-size: 1.5rem;
 `;
+const InputWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  &:focus-within label {
+    color: white;
+  }
+`;
 
 const DonateInput = styled.input<{ show: number }>`
   font-weight: bold;
@@ -37,21 +44,31 @@ const DonateInput = styled.input<{ show: number }>`
   }
 `;
 
+//input 끝에 '원' 글자 고정
+const Unit = styled.label`
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.2rem;
+  font-size: 1.55rem;
+  color: ${colors.Grey};
+`;
+
 const PointBalance = styled.div`
   font-size: 0.8rem;
   color: ${colors.Grey};
 `;
 
-const BtnWrap = styled(Link)`
+const BtnWrap = styled(Link)<{ disabled: boolean }>`
   position: fixed;
   bottom: 1rem;
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')}; // 클릭 막기
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // 비활성화 시 시각적 피드백
 `;
 
 export default function Donate() {
   const { points, goalDonations, currentDonations, username, updateCurrentDonations, setPoints } =
     useStore();
-  const [value, setValue] = useState<number>(0); // 기부 할 금액 입력
-  const [formattedValue, setFormattedValue] = useState<string>(''); //input에
+  const [formattedValue, setFormattedValue] = useState<string>('');
   const [data, setData] = useState<{ name: string; amount: number }>({ name: username, amount: 0 });
   const [bgColor, setBgColor] = useState(colors.Grey);
 
@@ -65,7 +82,6 @@ export default function Donate() {
     const maxAmount = Math.min(remainAmount, points);
     if (points === 0) {
       alert('포인트가 없습니다.');
-      setValue(0); // 입력값을 초기화
       setFormattedValue('');
       setData({ name: username, amount: 0 }); // 데이터 초기화
       event.preventDefault(); // 기본 입력 동작을 방지하여 더 이상 입력이 안 되도록
@@ -74,7 +90,6 @@ export default function Donate() {
     if (amount > maxAmount) {
       amount = maxAmount; // 초과시 최대값으로 설정
     }
-    setValue(amount);
     setFormattedValue(amount > 0 ? amount.toLocaleString() : '');
     setData({ name: username, amount: amount });
   };
@@ -92,10 +107,9 @@ export default function Donate() {
         console.error('Error:', error);
       });
   };
-
   useEffect(() => {
-    setBgColor(value == null ? colors.Grey : colors.LightBlue);
-  }, [value]); // selectedCategory가 변경될 때마다 실행
+    setBgColor(formattedValue == '' ? colors.Grey : colors.LightBlue);
+  }, [formattedValue]); // selectedCategory가 변경될 때마다 실행
 
   return (
     <Box>
@@ -104,17 +118,20 @@ export default function Donate() {
           {remainAmount.toLocaleString()}원<div></div>
         </TitleBox>
         <TitleBox title="기부 금액">
-          <DonateInput
-            disabled={points == 0}
-            type="text"
-            placeholder="기부 금액을 입력해 주세요"
-            value={formattedValue}
-            onChange={handleInput}
-          ></DonateInput>
+          <InputWrapper>
+            <DonateInput
+              disabled={points == 0}
+              type="text"
+              placeholder="금액"
+              value={formattedValue}
+              onChange={handleInput}
+            ></DonateInput>
+            <Unit htmlFor="inputAmount">원</Unit>
+          </InputWrapper>
           <PointBalance>보유 포인트 {points.toLocaleString()}원</PointBalance>
         </TitleBox>
       </DonateBox>
-      <BtnWrap to="/donateHome">
+      <BtnWrap to="/donateHome" disabled={Number(formattedValue) === 0}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>

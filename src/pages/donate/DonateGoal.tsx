@@ -80,18 +80,20 @@ const Unit = styled.label`
 const CustomLink = styled(Link)<{ disabled?: boolean }>`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
   position: fixed;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // 비활성화 시 시각적 피드백
   bottom: 1rem;
 `;
 
 export default function DonateGoal() {
   const { setGoalDonations, goalCategory, username } = useStore();
-  const [targetAmount, setTargetAmount] = useState<number | null>(null); // 목표 금액
+  const [formattedValue, setFormattedValue] = useState<string>('');
   const [data, setData] = useState<Object>({}); // 전달 데이터
   const [bgColor, setBgColor] = useState(colors.Grey);
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value); // 입력값을 숫자로 변환
-    setTargetAmount(value > 0 ? value : null); // 0보다 크면 저장, 아니면 null
+    let rawValue = event.target.value.replace(/,/g, ''); // 쉼표 제거 후 숫자로 변환
+    const value = Number(rawValue); // 입력값을 숫자로 변환
+    setFormattedValue(value > 0 ? value.toLocaleString() : '');
     setData({ category: goalCategory, targetAmount: value, name: username });
   };
 
@@ -108,8 +110,8 @@ export default function DonateGoal() {
   };
   console.log(data);
   useEffect(() => {
-    setBgColor((targetAmount ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
-  }, [targetAmount]);
+    setBgColor((Number(formattedValue) ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
+  }, [formattedValue]);
 
   return (
     <Box>
@@ -124,14 +126,14 @@ export default function DonateGoal() {
       <InputWrapper>
         <InputAmout
           id="inputAmount"
-          type="number"
-          value={targetAmount}
+          type="text"
+          value={formattedValue}
           placeholder="금액"
           onChange={handleInput}
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <CustomLink to="/donatesetfinish" disabled={(targetAmount ?? 0) < 10000}>
+      <CustomLink to="/donatesetfinish" disabled={(Number(formattedValue) ?? 0) < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
