@@ -290,9 +290,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const getRandomPoint = () => {
     const rand = Math.random() * 100; // 0 ~ 99.99~
 
-    if (rand < 30) {
+    if (rand < 33) {
       return Math.floor(Math.random() * 10) + 1; // 1~10, 85프로 확률
-    } else if (rand < 50) {
+    } else if (rand < 66) {
       return 100; // 10프로 확률
     } else {
       return 500; // 5프로 확률
