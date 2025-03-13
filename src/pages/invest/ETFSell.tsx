@@ -126,7 +126,7 @@ const ETFSellSetting = () => {
         quantity,
       });
 
-      alert(res.data.message || 'ETF 판매가 완료되었습니다.');
+      // alert(res.data.message || 'ETF 판매가 완료되었습니다.');
 
       // 💰 판매 후 달러 정보 갱신
       await updateDollars(); // ⬅️ 반드시 호출

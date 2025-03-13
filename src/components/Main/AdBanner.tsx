@@ -32,7 +32,7 @@ const SlideItem = styled.div`
   margin-right: 1rem;
 
   > img {
-    width: 22.2rem;
+    width: 22.5rem;
     height: 5rem;
     border-radius: 1rem;
   }
