@@ -13,99 +13,101 @@ import donateComplete from '@/assets/characterbox/donateComplete.json';
 import Lottie from 'lottie-react';
 import useStore from '@/store/User';
 import paper from '@/assets/characterbox/paper.json';
+import coinflip from '@/assets/characterbox/coinflip.json';
+
 const Jello = keyframes` // 모찌 리액션
-  0% { transform: scale3d(1,1,1); }
-  30% { transform: scale3d(0.65,1.15,1); }
-  40% { transform: scale3d(1.15,0.65,1); }
-  50% { transform: scale3d(0.75,1.25,1); }
-  65% { transform: scale3d(1.05,0.95,1); }
-  75% { transform: scale3d(0.95,1.05,1); }
-  100% { transform: scale3d(1,1,1); }
-`;
+    0% { transform: scale3d(1,1,1); }
+    30% { transform: scale3d(0.65,1.15,1); }
+    40% { transform: scale3d(1.15,0.65,1); }
+    50% { transform: scale3d(0.75,1.25,1); }
+    65% { transform: scale3d(1.05,0.95,1); }
+    75% { transform: scale3d(0.95,1.05,1); }
+    100% { transform: scale3d(1,1,1); }
+  `;
 
 const RunAway = keyframes` //easeInBack - 도망가는 모션 cubic-bezier(0.68, -0.55, 0.27, 1.55)
-  0% {
-    -webkit-transform: translateX(0) rotate(0deg);
-            transform: translateX(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateX(-800px) rotate(-540deg);
-            transform: translateX(-800px) rotate(-540deg);
-    opacity: 0;
-  }
-`;
+    0% {
+      -webkit-transform: translateX(0) rotate(0deg);
+              transform: translateX(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateX(-800px) rotate(-540deg);
+              transform: translateX(-800px) rotate(-540deg);
+      opacity: 0;
+    }
+  `;
 
 const Jump = keyframes` // 점프 모션
-  0% {
-    transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태 */
-  }
-  10% {
-    transform: scale3d(1, 0.6, 1) translateY(2rem); /* 앉기 시작 */
-  }
-  20% {
-    transform: scale3d(1, 0.4, 1) translateY(5rem); /* 점차적으로 앉음 */
-  }
-  30% {
-    transform: scale3d(1, 0.3, 1) translateY(7.5rem); /* 완전히 앉음 */
-  }
-  40% {
-    transform: scale3d(1, 0.5, 1) translateY(2rem); /* 점프 시작 */
-  }
-  50% {
-    transform: scale3d(0.9, 0.7, 1) translateY(-3rem); /* 점프 중반 */
-  }
-  60% {
-    transform: scale3d(0.8, 0.9, 1) translateY(-7rem); /* 점프 후반 */
-  }
-  70% {
-    transform: scale3d(0.7, 1, 1) translateY(-9rem); /* 점프 최고점 */
-  }
-  80% {
-    transform: scale3d(0.8, 1, 1) translateY(-8rem); /* 점프 하강 */
-  }
-  90% {
-    transform: scale3d(0.9, 1, 1) translateY(-4rem); /* 착지 직전 */
-  }
-  100% {
-    transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태로 돌아옴 */
-  }
-`;
+    0% {
+      transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태 */
+    }
+    10% {
+      transform: scale3d(1, 0.6, 1) translateY(2rem); /* 앉기 시작 */
+    }
+    20% {
+      transform: scale3d(1, 0.4, 1) translateY(5rem); /* 점차적으로 앉음 */
+    }
+    30% {
+      transform: scale3d(1, 0.3, 1) translateY(7.5rem); /* 완전히 앉음 */
+    }
+    40% {
+      transform: scale3d(1, 0.5, 1) translateY(2rem); /* 점프 시작 */
+    }
+    50% {
+      transform: scale3d(0.9, 0.7, 1) translateY(-3rem); /* 점프 중반 */
+    }
+    60% {
+      transform: scale3d(0.8, 0.9, 1) translateY(-7rem); /* 점프 후반 */
+    }
+    70% {
+      transform: scale3d(0.7, 1, 1) translateY(-9rem); /* 점프 최고점 */
+    }
+    80% {
+      transform: scale3d(0.8, 1, 1) translateY(-8rem); /* 점프 하강 */
+    }
+    90% {
+      transform: scale3d(0.9, 1, 1) translateY(-4rem); /* 착지 직전 */
+    }
+    100% {
+      transform: scale3d(1, 1, 1) translateY(0); /* 원래 상태로 돌아옴 */
+    }
+  `;
 
 const Shake = keyframes`
-  0%,
-  100% {
-            transform: translateX(0%);
-            transform-origin: 50% 50%;
-  }
-  15% {
-            transform: translateX(-23px) rotate(-20deg);
-  }
-  30% {
-            transform: translateX(23px) rotate(20deg);
-  }
-  45% {
-            transform: translateX(-10px) rotate(-10deg);
-  }
-  60% {
-            transform: translateX(10px) rotate(10deg);
-  }
-  75% {
-            transform: translateX(-5px) rotate(-5deg);
-  }`;
+    0%,
+    100% {
+              transform: translateX(0%);
+              transform-origin: 50% 50%;
+    }
+    15% {
+              transform: translateX(-23px) rotate(-20deg);
+    }
+    30% {
+              transform: translateX(23px) rotate(20deg);
+    }
+    45% {
+              transform: translateX(-10px) rotate(-10deg);
+    }
+    60% {
+              transform: translateX(10px) rotate(10deg);
+    }
+    75% {
+              transform: translateX(-5px) rotate(-5deg);
+    }`;
 
 const CoinMessage = keyframes`
-  0% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateY(-50px);
-            transform: translateY(-50px);
-    opacity: 0;
-  }
-`;
+    0% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateY(-50px);
+              transform: translateY(-50px);
+      opacity: 0;
+    }
+  `;
 
 const Wrapper = styled.div`
   display: flex;
@@ -122,6 +124,21 @@ const StyledLottieMore = styled(Lottie)<{ growth: number }>`
 const StyledLottieLess = styled(Lottie)<{ growth: number }>`
   width: ${(props) => props.growth * 2.2 + 'rem'};
   height: ${(props) => props.growth * 2.2 + 'rem'};
+`;
+
+const StyledLottie = styled(Lottie)`
+  width: 2rem;
+  height: 2rem;
+`;
+
+const CountBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 18rem;
+  background-color: #313845;
+  padding-right: 0.7rem;
+  border-radius: 1rem;
 `;
 
 const aniList: Record<string, Keyframes> = {
@@ -180,16 +197,27 @@ const CoinWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding-left: 1.7rem;
-  padding-bottom: 1rem;
+  padding-bottom: 1.3rem;
+
+  position: absolute;
+  top: -2.5rem;
+  left: 1rem;
 `;
 
-const GetCoin = styled.div<{ isClicked: boolean }>`
+const GetCoin = styled.div<{ isClicked: boolean; getPoint: number }>`
   display: ${(props) => (props.isClicked ? 'inline-block' : 'none')};
-  background-color: ${colors.Grey};
-  border-radius: 0.5rem;
-  width: 2rem;
+  background-color: ${(props) => {
+    return props.getPoint == 500 ? '#ffe06e' : props.getPoint == 100 ? '#e1e1e1' : 'transparent';
+  }};
+
+  border-radius: 1rem;
+  width: fit-content;
+  color: ${(props) => {
+    return props.getPoint == 500 ? colors.Navy : props.getPoint == 100 ? colors.Navy : colors.White;
+  }};
+
+  padding: 0.1rem 0.4rem;
   text-align: center;
-  padding: 0.3rem, 0.6rem;
   animation: ${CoinMessage} 1.3s ease-in-out;
 `;
 
@@ -262,9 +290,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const getRandomPoint = () => {
     const rand = Math.random() * 100; // 0 ~ 99.99~
 
-    if (rand < 50) {
+    if (rand < 30) {
       return Math.floor(Math.random() * 10) + 1; // 1~10, 85프로 확률
-    } else if (rand < 80) {
+    } else if (rand < 50) {
       return 100; // 10프로 확률
     } else {
       return 500; // 5프로 확률
@@ -327,7 +355,10 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       {goalCategory == '' || goalCategory == 'none' ? (
         <div style={{ visibility: 'hidden' }}>1</div>
       ) : (
-        <div style={{ marginLeft: '20rem' }}>{getPointCount}/5</div>
+        <CountBox>
+          <StyledLottie animationData={coinflip}></StyledLottie>
+          <div style={{ fontSize: '0.9rem' }}>{getPointCount}/5</div>
+        </CountBox>
       )}
       <div style={{ position: 'relative', marginTop: (13 % growth) + 'rem' }}>
         {per === 100 ? (
@@ -351,7 +382,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
             )}
 
             <CoinWrapper>
-              <GetCoin isClicked={isClicked}>+{getPoint}</GetCoin>
+              <GetCoin isClicked={isClicked} getPoint={getPoint}>
+                +{getPoint}
+              </GetCoin>
               <div style={{ visibility: 'hidden' }}>1</div>
             </CoinWrapper>
             <CharacterAni isActive={isActive} animate={animate} onClick={handleClick}>

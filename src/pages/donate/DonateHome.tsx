@@ -281,8 +281,10 @@ export default function DonateHome() {
         : '기부 포인트 채우기';
 
   useEffect(() => {
-    setBgColor(goalDonations > 0 ? colors.Navy : colors.LightBlue);
-  }, [goalDonations]);
+    setBgColor(
+      goalDonations > 0 && currentDonations != goalDonations ? colors.Navy : colors.LightBlue,
+    );
+  }, [goalDonations, currentDonations]);
 
   return (
     <Box>
