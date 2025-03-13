@@ -105,7 +105,7 @@ const categoryList = [
 ];
 
 export default function PayMain() {
-  const { addStamp, cashbackStamps, points } = useStore();
+  const { addStamp, cashbackStamps, points, username } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
   const [bgColor, setBgColor] = useState<string>(colors.Grey);
   const [payAmount, setPayAmount] = useState<number | null>(null); // 결제 금액
@@ -137,7 +137,7 @@ export default function PayMain() {
   };
 
   useEffect(() => {
-    setData({ name: 'tester', value: point, stampType: selectedCategory?.category });
+    setData({ name: username, value: point, stampType: selectedCategory?.category });
 
     // selectedCategory가 null이면 회색, 아니면 파란색
     setBgColor(selectedCategory !== null && payAmount !== null ? colors.LightBlue : colors.Grey);
