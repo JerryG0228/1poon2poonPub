@@ -97,7 +97,7 @@ const useStore = create<UserState>()(
         const state = useStore.getState();
 
         try {
-          const response = await baseAxios.get('/user/getPointInfo/${state.username}');
+          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
           const data = response.data;
 
           if (!data) {
@@ -117,7 +117,8 @@ const useStore = create<UserState>()(
         const state = useStore.getState();
 
         try {
-          const response = await baseAxios.get('/user/getPointInfo/${state.username}');
+          // ✅ updateDollars 수정
+          const response = await baseAxios.get(`/user/getPointInfo/${state.username}`);
           const data = response.data;
 
           if (!data) {
@@ -150,7 +151,7 @@ const useStore = create<UserState>()(
       getCurrentDonations: (amount) => set(() => ({ currentDonations: amount })), // 현재 기부 금액 조회
       updateCurrentDonations: (amount) =>
         set((state) => ({ currentDonations: state.currentDonations + amount })), // 현재 기부 금액 추가
-      setGetPointCount: (count) => set((state) => ({ getPointCount: 5 })),
+      setGetPointCount: (count) => set((state) => ({ getPointCount: state.getPointCount - count })),
     }),
     { name: 'user-store' },
   ),
