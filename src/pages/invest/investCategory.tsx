@@ -111,6 +111,7 @@ function Category() {
             imageSrc={categoryImages[category]}
             active={selectedCategories.includes(category)}
             onClick={() => toggleCategory(category)}
+            isPay={false}
           />
         ))}
       </Grid>

@@ -54,6 +54,8 @@ const ButtonContainer = styled.div`
 
 const Button = styled.button<{ $active: boolean }>`
   color: ${({ $active }) => ($active ? 'white' : '#8f9298')};
+  background-color: transparent;
+  border: none;
 `;
 
 const OrderBookContainer = styled.div`
@@ -168,7 +170,7 @@ function ETFDetail() {
   console.log('state:', location);
 
   const navigate = useNavigate();
-  const { username, interestsStock, setInterestsStock } = useStore();
+  const { username, setInterestsStock } = useStore();
   const { symbol } = useParams<{ symbol: string }>();
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState('');

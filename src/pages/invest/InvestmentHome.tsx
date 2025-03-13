@@ -60,24 +60,11 @@ const EmptyStateBox = styled.div`
   border-radius: 0.5rem;
 `;
 
-const BuyButton = styled.button`
-  background-color: #0064ff;
-  color: white;
-  font-size: 1rem;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.5rem;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-`;
-
 const InvestmentHome = () => {
   const navigate = useNavigate();
   const { interestsStock, ownedStocks } = useStore();
 
   const [activeTab, setActiveTab] = useState<'내 ETF' | '관심 ETF'>('내 ETF');
-  // const [ownedETFs, setOwnedETFs] = useState<any[]>([]);
   const [stocks, setStocks] = useState<
     { name: string; price: number; transPrice: number; changePercent: string; quantity: number }[]
   >([]);

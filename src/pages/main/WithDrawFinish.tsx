@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Lottie from 'lottie-react';
 import Btn from '@/components/Btn';
-import WithDrawImg from '@/assets/Main/Withdraw';
+import WithDrawImg from '@/assets/Main/Withdraw.json';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
 import ReactConfetti from 'react-confetti';

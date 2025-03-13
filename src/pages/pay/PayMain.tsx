@@ -98,16 +98,22 @@ const categoryList = [
   { title: '카페', category: 'cafe', image: cafe },
 ];
 
+interface CategoryItem {
+  title: string;
+  category: string;
+  image: string;
+}
+
 export default function PayMain() {
   const { addStamp, username } = useStore();
-  const [selectedCategory, setSelectedCategory] = useState<Object | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
   const [bgColor, setBgColor] = useState<string>(colors.Grey);
   const [payAmount, setPayAmount] = useState<number | null>(null); // 결제 금액
   const [point, setPoint] = useState<number>(0);
   const [data, setData] = useState<Object>({}); // 전달 데이터
 
   // 카테고리 클릭 핸들러
-  const handleClick = (item: Object) => {
+  const handleClick = (item: CategoryItem) => {
     // 한 개만 선택 가능 → 이미 선택된 경우 해제
     setSelectedCategory((prev) => (prev === item ? null : item));
   };

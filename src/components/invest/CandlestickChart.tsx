@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createChart, CrosshairMode } from 'lightweight-charts';
 import styled from 'styled-components';
 import baseAxios from '@/apis/axiosInstance';
@@ -105,7 +105,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
       const lastIndex = chartData.length - 1;
       if (lastIndex > 0) {
         const lastTime = chartData[lastIndex].time;
-        const rangeSize = getVisibleRange(timeRange, lastIndex);
+        const rangeSize = getVisibleRange(timeRange);
         const firstTime = chartData[Math.max(0, lastIndex - rangeSize)].time;
         chart.timeScale().setVisibleRange({ from: firstTime, to: lastTime });
       }
@@ -117,7 +117,7 @@ const CandlestickChart = ({ symbol, timeRange }: CandlestickChartProps) => {
   }, [chartData]);
 
   /** 기간별 표시할 캔들 개수 계산 */
-  const getVisibleRange = (range: '1d' | '1w' | '1mo' | '1y', lastIndex: number) => {
+  const getVisibleRange = (range: '1d' | '1w' | '1mo' | '1y') => {
     switch (range) {
       case '1d':
         return 2; // 최근 30개 캔들 (약 하루)

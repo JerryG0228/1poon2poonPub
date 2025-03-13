@@ -1,11 +1,5 @@
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
-import buildingImage from '@/assets/categorybox/building_image.png';
-import computerImage from '@/assets/categorybox/computer_image.png';
-import moneyImage from '@/assets/categorybox/money_image.png';
-import shoppingImage from '@/assets/categorybox/shopping_image.png';
-import earthImage from '@/assets/categorybox/earth_image.png';
-import hospitalImage from '@/assets/categorybox/hospital_image.png';
 
 const Wrapper = styled.div<{ $active: boolean }>`
   // "$active"로 변경하여 DOM 전달 방지!
@@ -42,16 +36,6 @@ const ContentTitle = styled.div`
   font-weight: bold;
   text-align: center;
 `;
-
-const categoryImages = {
-  //투자 카테고리
-  '기술 & AI 관련': computerImage,
-  '금융 & 경제 성장 관련': moneyImage,
-  '사회적 가치 & ESG 투자': earthImage,
-  '헬스케어 & 바이오': hospitalImage,
-  '리츠 & 인프라': buildingImage,
-  '소비 & 리테일': shoppingImage,
-};
 
 interface Props {
   title: string;
