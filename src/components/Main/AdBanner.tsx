@@ -1,6 +1,4 @@
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 import adImage1 from '@/assets/banner1.png';
 import adImage2 from '@/assets/banner2.png';
@@ -26,7 +24,7 @@ const SlideItem = styled.div`
   margin-right: 1rem;
 
   > img {
-    width: 22.2rem;
+    width: 22.5rem;
     height: 5rem;
     border-radius: 1rem;
   }

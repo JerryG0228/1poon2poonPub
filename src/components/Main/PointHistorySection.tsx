@@ -3,7 +3,7 @@ import NonTitleBox from '@components/NonTitleBox';
 import cashbackImage from '@/assets/Main/CashbackIcon.png';
 import { IoIosArrowForward } from 'react-icons/io';
 import PressMotion from '../PressMotion';
-import { motion, useMotionValueEvent, useSpring, useTransform } from 'framer-motion';
+import { useMotionValueEvent, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 const CashBackWrap = styled.div`
