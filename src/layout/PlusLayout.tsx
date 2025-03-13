@@ -9,6 +9,8 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem;
+  padding-bottom: 0;
 `;
 
 const Icon = styled.div`

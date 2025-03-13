@@ -2,8 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ETFBox from '@/components/invest/ETFBox';
-import TopGainersChart from '@/components/invest/TopGainersChart'; // ✅ 신규 차트 추가
-import etfData from '@/data/etfData'; // etfData 가져오기
+import TopGainersChart from '@/components/invest/TopGainersChart';
+import etfData from '@/data/etfData';
 import baseAxios from '@/apis/axiosInstance';
 
 const Container = styled.div`
@@ -12,9 +12,9 @@ const Container = styled.div`
 `;
 
 const Header1 = styled.div`
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
-  letter-spacing: 0.25rem;
+  letter-spacing: 0.2rem;
 `;
 
 const Header2 = styled.div`
