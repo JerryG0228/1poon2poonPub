@@ -74,7 +74,7 @@ const BuyButton = styled.button`
 
 const InvestmentHome = () => {
   const navigate = useNavigate();
-  const { username, interestsStock, ownedStocks, setOwnedStocks } = useStore();
+  const { interestsStock, ownedStocks } = useStore();
 
   const [activeTab, setActiveTab] = useState<'내 ETF' | '관심 ETF'>('내 ETF');
   // const [ownedETFs, setOwnedETFs] = useState<any[]>([]);
@@ -82,24 +82,6 @@ const InvestmentHome = () => {
     { name: string; price: number; transPrice: number; changePercent: string; quantity: number }[]
   >([]);
   const [topETFs, setTopETFs] = useState<any[]>([]);
-
-  // 보유 ETF 불러오기
-  useEffect(() => {
-    async function fetchOwnedETFs() {
-      try {
-        const res = await baseAxios.get(`/invest/getUser/${username}`);
-        if (res.data.ownedETFs) {
-          setOwnedStocks(res.data.ownedETFs); // zustand에 보유 ETF 저장
-        }
-      } catch (error) {
-        console.error('❌ 보유 ETF 불러오기 실패:', error);
-      }
-    }
-
-    if (username) {
-      fetchOwnedETFs();
-    }
-  }, [username]);
 
   // 보유 ETF + 관심 ETF 병합 후 데이터 요청
   useEffect(() => {
