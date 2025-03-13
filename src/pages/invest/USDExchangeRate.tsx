@@ -217,23 +217,22 @@ const USDExchangeRate = () => {
   };
 
   const handleExchange = async () => {
-    if (!usd || !rate || !won) return;
+    if (usd === null || rate === null || !won) return;
+
+    const numericWon = Number(won.replace(/,/g, ''));
 
     try {
-      await baseAxios
-        .post('/user/exchange', {
-          name: username,
-          amount: Number(won),
-          direction: 'dollars',
-        })
-        .then(() => {
-          updatePoints(); // 보유 포인트 업데이트
-          updateDollars(); // 보유 달러 업데이트
-        })
-        .then(() => {
-          setWon('');
-          setUsd(null);
-        });
+      await baseAxios.post('/user/exchange', {
+        name: username,
+        amount: numericWon,
+        direction: 'dollars',
+      });
+
+      await updatePoints(); // 보유 포인트 업데이트
+      await updateDollars(); // 보유 달러 업데이트
+
+      setWon('');
+      setUsd(null);
     } catch (err: any) {
       console.error('❌ 환전 실패:', err);
       alert(err.response?.data?.message || '환전 중 오류가 발생했습니다.');
