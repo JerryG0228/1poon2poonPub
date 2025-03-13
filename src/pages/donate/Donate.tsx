@@ -106,7 +106,6 @@ export default function Donate() {
         <TitleBox title="기부 금액">
           <DonateInput
             disabled={points == 0}
-            show={value}
             type="text"
             placeholder="기부 금액을 입력해 주세요"
             value={formattedValue}
