@@ -38,6 +38,7 @@ const backNavigationMap: Record<string, string> = {
   '/investPointsHistory': '/investmentHome',
   '/paymain': '/pay',
   '/withdraw': '/pointhistory',
+  '/investCategory': '/investmentHome',
 };
 
 export default function DefaultLayout() {
