@@ -1,7 +1,7 @@
 import baseAxios from '@/apis/axiosInstance';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { InterestsStock, UserState } from './UserType';
+import { InterestsStock, UserState, BadgeItem } from './UserType';
 
 // 이름, 포인트, 뱃지, 관심 투자 카테고리, 기부 목표 카테고리, 현재까지 누적 기부금액, 목표 기부금액, 현재 기부금액
 const useStore = create<UserState>()(
@@ -139,7 +139,7 @@ const useStore = create<UserState>()(
       }, // 스탬프 추가
       resetStamp: () => set(() => ({ cashbackStamps: [] })), // 스탬프판 초기화
 
-      addBadge: (badge) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
+      addBadge: (badge: BadgeItem) => set((state) => ({ badges: [...state.badges, badge] })), // 뱃지 추가
 
       setInterests: (interests) => set(() => ({ interests })), // 관심 투자 카테고리 설정
 
