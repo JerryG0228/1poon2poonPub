@@ -159,7 +159,7 @@ export default function PointHistory() {
   const donateLink = badges.length == 0 && goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
   //상황별 투자 페이지 이동 경로
-  const investLink = interestsStock.length === 0 ? '/donatebefore' : '/donate';
+  const investLink = interestsStock.length === 0 ? '/investbefore' : '/InvestmentHome';
 
   return (
     <>

@@ -1,6 +1,6 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { useState } from 'react';
@@ -76,27 +76,33 @@ const Unit = styled.label`
   color: ${colors.Grey};
 `;
 
-// const CustomLink = styled(Link)<{ disabled?: boolean }>`
-//   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-// `;
+const BtnWrap = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 1rem;
+`;
 
 export default function WithDraw() {
   const navigate = useNavigate();
-  const { updatePoints, setPoints, points } = useStore();
-  const [withdrawAmount, setWithdrawAmount] = useState<number>(); //출금 입력 금액
+  const { setPoints, points } = useStore();
+  const [formattedValue, setFormattedValue] = useState<string>(''); //input에
 
-  const amount = Number(withdrawAmount);
-  const isDisabled = !withdrawAmount || amount <= 0 || amount > points;
+  const [amount, setAmount] = useState(0);
+  const isDisabled = !formattedValue || amount <= 0 || amount > points;
 
   const maxPoint = Math.min(points);
 
   //input onChange 핸들러
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = Number(event.target.value);
+    let rawValue = event.target.value.replace(/,/g, ''); // 쉼표 제거 후 숫자로 변환
+
+    let value = Number(rawValue);
+
     if (value > maxPoint) {
       value = maxPoint; // 초과시 최대값으로 설정
     }
-    setWithdrawAmount(value);
+    setAmount(value);
+    setFormattedValue(value > 0 ? value.toLocaleString() : '');
   };
 
   const handleWithdraw = async () => {
@@ -124,18 +130,20 @@ export default function WithDraw() {
       <InputWrapper>
         <InputAmout
           id="inputAmount"
-          type="number"
-          value={withdrawAmount || ''}
+          type="text"
+          value={formattedValue}
           placeholder="금액"
           onChange={handleInput}
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
-        <PressMotion>
-          <div style={{ width: '21.5rem' }}>출금하기</div>
-        </PressMotion>
-      </Btn>
+      <BtnWrap>
+        <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
+          <PressMotion>
+            <div style={{ width: '21.5rem' }}>출금하기</div>
+          </PressMotion>
+        </Btn>
+      </BtnWrap>
     </Box>
   );
 }

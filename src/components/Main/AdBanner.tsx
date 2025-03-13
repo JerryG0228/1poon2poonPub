@@ -16,7 +16,6 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const SlideItem = styled.div`
-  width: 23rem;
   height: 5rem;
   display: flex;
   justify-content: center;
@@ -24,8 +23,10 @@ const SlideItem = styled.div`
   font-size: 20px;
   font-weight: bold;
   border-radius: 1rem;
-  margin-right: 10px;
+  margin-right: 1rem;
+
   > img {
+    width: 22.2rem;
     height: 5rem;
     border-radius: 1rem;
   }

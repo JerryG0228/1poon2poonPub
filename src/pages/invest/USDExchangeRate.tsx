@@ -70,17 +70,23 @@ const InputWrapper = styled.div`
   }
 `;
 
-const InputAmount = styled.input`
+const formatWithCommas = (value: string) => {
+  const num = value.replace(/[^\d]/g, '');
+  if (!num) return '';
+  return parseInt(num).toLocaleString();
+};
+
+const InputAmount = styled.input<{ $isExceeded: boolean }>`
   width: 100%;
   font-size: 1.55rem;
   color: white;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid ${({ $isExceeded }) => ($isExceeded ? colors.Blue : '#aaa')};
   padding: 0.5rem 4rem 0.5rem 0;
   &:focus {
     outline: none;
-    border-color: ${colors.LightBlue};
+    border-color: ${({ $isExceeded }) => ($isExceeded ? 'red' : colors.Blue)};
   }
 `;
 
@@ -138,10 +144,11 @@ const ResultText = styled.p`
 
 const ErrorText = styled.div`
   display: flex;
-  width: 100%;
-  color: ${colors.LightBlue};
-  justify-content: center;
+  color: ${colors.Red};
   text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22rem;
 `;
 
 const BtnWrap = styled(Link)`
@@ -196,10 +203,14 @@ const USDExchangeRate = () => {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const wonValue = e.target.value;
-    setWon(wonValue);
-    if (rate && !isNaN(Number(wonValue))) {
-      setUsd(Number(wonValue) / rate);
+    const rawValue = e.target.value.replace(/,/g, '');
+    if (!/^\d*$/.test(rawValue)) return; // 숫자만 허용
+
+    const formatted = formatWithCommas(rawValue);
+    setWon(formatted);
+
+    if (rate && !isNaN(Number(rawValue))) {
+      setUsd(Number(rawValue) / rate);
     } else {
       setUsd(null);
     }
@@ -229,8 +240,10 @@ const USDExchangeRate = () => {
     }
   };
 
+  const numericWon = Number(won.replace(/,/g, ''));
+
   // 버튼 비활성화 여부
-  const isDisabled = !usd || Number(won) > points;
+  const isDisabled = !usd || numericWon > points;
 
   return (
     <Box>
@@ -248,21 +261,24 @@ const USDExchangeRate = () => {
                 <Wrap>
                   <InputWrapper>
                     <InputAmount
-                      type="number"
+                      type="text"
                       value={won}
                       onChange={handleChange}
                       placeholder="포인트 금액 입력"
+                      $isExceeded={numericWon > points}
                     />
+
                     <Unit htmlFor="inputAmount">원</Unit>
                   </InputWrapper>
                   <OwnMoney
                     onClick={() => {
-                      setWon(String(points));
+                      const formatted = Number(points.toFixed(0)).toLocaleString();
+                      setWon(formatted);
                       if (rate) setUsd(points / rate);
                     }}
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
                   >
-                    보유 포인트: {points.toFixed(2)}원
+                    보유 포인트: {Number(points.toFixed(0)).toLocaleString()}원
                   </OwnMoney>
                 </Wrap>
 
@@ -277,22 +293,35 @@ const USDExchangeRate = () => {
                 </WonWrap>
               </InputContent>
               <ButtonContent>
-                {Number(won) > points && <ErrorText>⚠️ 보유 포인트를 초과했습니다!</ErrorText>}
+                {numericWon > points && <ErrorText>보유 포인트를 초과했습니다</ErrorText>}
 
-                <BtnWrap to={'/InvestmentHome'}>
-                  <Btn
-                    bgColor={isDisabled ? colors.Grey : colors.LightBlue}
-                    handleBtn={() => {
-                      handleExchange();
-                    }}
-                  >
-                    <PressMotion>
-                      <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
-                        환전하기
-                      </div>
-                    </PressMotion>
-                  </Btn>
-                </BtnWrap>
+                {!isDisabled ? (
+                  <BtnWrap to="/InvestmentHome">
+                    <Btn bgColor={colors.Blue} handleBtn={handleExchange}>
+                      <PressMotion>
+                        <div
+                          style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}
+                        >
+                          환전하기
+                        </div>
+                      </PressMotion>
+                    </Btn>
+                  </BtnWrap>
+                ) : (
+                  <div>
+                    <BtnWrap>
+                      <Btn bgColor={colors.Grey} handleBtn={() => {}}>
+                        <PressMotion>
+                          <div
+                            style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}
+                          >
+                            환전하기
+                          </div>
+                        </PressMotion>
+                      </Btn>
+                    </BtnWrap>
+                  </div>
+                )}
               </ButtonContent>
             </ContentWrapper>
           </Wrapper>
