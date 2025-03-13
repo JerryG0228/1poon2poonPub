@@ -70,7 +70,7 @@ export default function StampBoardSection({
   totalStamps,
 }: StampBoardSectionProps) {
   const [isFull, setIsFull] = useState(initialIsFull); // 상태로 관리
-  const { setPoints, resetStamp } = useStore();
+  const { setPoints, resetStamp, username } = useStore();
 
   //스탬프 10개 이상이면 isFull=true로 설정
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function StampBoardSection({
 
       //스탬프판 초기화 API 호출
       await baseAxios.put('/user/resetStamp', {
-        name: 'tester',
+        name: username,
       });
       resetStamp();
 
