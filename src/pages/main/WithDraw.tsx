@@ -1,6 +1,6 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { useState } from 'react';
@@ -76,13 +76,15 @@ const Unit = styled.label`
   color: ${colors.Grey};
 `;
 
-// const CustomLink = styled(Link)<{ disabled?: boolean }>`
-//   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-// `;
+const BtnWrap = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 1rem;
+`;
 
 export default function WithDraw() {
   const navigate = useNavigate();
-  const { updatePoints, setPoints, points } = useStore();
+  const { setPoints, points } = useStore();
   const [withdrawAmount, setWithdrawAmount] = useState<number>(); //출금 입력 금액
 
   const amount = Number(withdrawAmount);
@@ -131,11 +133,13 @@ export default function WithDraw() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
-        <PressMotion>
-          <div style={{ width: '21.5rem' }}>출금하기</div>
-        </PressMotion>
-      </Btn>
+      <BtnWrap>
+        <Btn bgColor={isDisabled ? colors.Grey : colors.LightBlue} handleBtn={handleWithdraw}>
+          <PressMotion>
+            <div style={{ width: '21.5rem' }}>출금하기</div>
+          </PressMotion>
+        </Btn>
+      </BtnWrap>
     </Box>
   );
 }
