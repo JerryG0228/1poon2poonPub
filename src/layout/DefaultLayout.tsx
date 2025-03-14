@@ -19,9 +19,15 @@ const Top = styled.div<{ bg: String; shadowOpacity: number }>`
     })`};
   z-index: 1000;
   background-color: ${(props) => {
-    if (props.bg == '/pointhistory' || '/investPointsHistory' || '/investDollarsHistory') {
+    console.log(props.bg);
+    if (
+      props.bg === '/pointhistory' ||
+      props.bg === '/investPointsHistory' ||
+      props.bg === '/investDollarsHistory'
+    ) {
       return '#313845';
     } else if (props.bg == '/paymain') {
+      console.log(11);
       return colors.White;
     } else {
       return colors.Navy;
