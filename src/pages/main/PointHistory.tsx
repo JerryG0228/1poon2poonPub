@@ -33,6 +33,7 @@ const Wrap = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 100vh;
+  background-color: #313845;
 `;
 
 const HistoryTop = styled.div`
@@ -202,7 +203,7 @@ export default function PointHistory() {
 
         <NavyLine />
 
-        <div style={{ padding: '1rem' }}>
+        <div style={{ padding: '1rem', backgroundColor: '#313845' }}>
           <Filter
             selectedValue={selectedValue}
             setSelectedValue={setSelectedValue}

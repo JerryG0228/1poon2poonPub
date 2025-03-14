@@ -23,12 +23,6 @@ const ExchangeContent = styled.div`
   gap: 1rem;
 `;
 
-// const ExchangeBoxContainer = styled(Link)`
-//   flex: 1; /* 두 개의 박스를 균등하게 배치 */
-//   min-width: 150px; /* 너무 작아지는 걸 방지 */
-//   display: flex;
-// `;
-
 const ExchangeBox = styled(Link)`
   display: flex;
   flex-direction: column;
