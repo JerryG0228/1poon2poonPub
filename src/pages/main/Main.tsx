@@ -24,7 +24,7 @@ export default function Main() {
 
   // 스탬프가 10개인지 확인
   const TOTAL_STAMPS = 10;
-
+  console.log(cashbackStatus, username);
   const isFull = cashbackStamps.length === TOTAL_STAMPS;
 
   return (

@@ -53,7 +53,8 @@ const useStore = create<UserState>()(
       },
 
       setInterestsStock: (stocks: InterestsStock[]) => set(() => ({ interestsStock: stocks })),
-
+      setCashbackStatus: (category: string) =>
+        set((state) => ({ cashbackStatus: { ...state.cashbackStatus, [category]: false } })),
       setPoints: async (amount, origin) => {
         const state = useStore.getState();
         if (origin === '기부') {
