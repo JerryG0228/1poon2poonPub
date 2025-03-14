@@ -3,6 +3,7 @@ import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
 import { IoChevronBackSharp } from 'react-icons/io5';
+import { CiLogout } from 'react-icons/ci';
 
 const Top = styled.div`
   display: flex;
@@ -54,12 +55,23 @@ export default function DefaultLayout() {
     }
   };
 
+  const HandleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   return (
     <div>
       <Top>
-        <Icon onClick={HandleIcon}>
-          <IoChevronBackSharp color={colors.White} size="1.5rem" />
-        </Icon>
+        {location.pathname !== '/' ? (
+          <Icon onClick={HandleIcon}>
+            <IoChevronBackSharp color={colors.White} size="1.5rem" />
+          </Icon>
+        ) : (
+          <Icon onClick={HandleLogout}>
+            <CiLogout color={colors.White} size="1.5rem" />
+          </Icon>
+        )}
       </Top>
       <Outlet />
     </div>

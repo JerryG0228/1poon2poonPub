@@ -73,7 +73,9 @@ export default function PointHistorySection({ points }: PointHistorySectionProps
           <ContentBox>
             <CashBackTextWrap>
               {/* toLocaleString : 숫자에 3자리마다 쉼표(,)를 자동으로 추가해주는 기능 */}
-              <NumberFlow value={displayPoints} duration={2} />
+              <div style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                <NumberFlow value={displayPoints} duration={2} />
+              </div>
               <Point>캐시백 포인트</Point>
             </CashBackTextWrap>
             <CashBacArrowWrap>
