@@ -3,6 +3,7 @@ import { colors } from '@/styles/colors';
 import styled from 'styled-components';
 
 import { IoChevronBackSharp } from 'react-icons/io5';
+import { CiLogout } from 'react-icons/ci';
 
 const Top = styled.div<{ bg: String }>`
   display: flex;
@@ -12,7 +13,7 @@ const Top = styled.div<{ bg: String }>`
   top: 0rem;
   padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
-  max-width: 400px
+  max-width: 400px;
   background-color: ${(props) =>
     props.bg == '/pointhistory' ? '#313845' : props.bg == '/paymain' ? colors.White : colors.Navy};
 `;
@@ -56,12 +57,23 @@ export default function DefaultLayout() {
     }
   };
 
+  const HandleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   return (
     <div>
-      <Top bg={location.pathname}>
-        <Icon onClick={HandleIcon}>
-          <IoChevronBackSharp color={colors.White} size="1.5rem" />
-        </Icon>
+      <Top>
+        {location.pathname !== '/' ? (
+          <Icon onClick={HandleIcon}>
+            <IoChevronBackSharp color={colors.White} size="1.5rem" />
+          </Icon>
+        ) : (
+          <Icon onClick={HandleLogout}>
+            <CiLogout color={colors.White} size="1.5rem" />
+          </Icon>
+        )}
       </Top>
       <Outlet />
     </div>
