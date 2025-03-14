@@ -8,17 +8,16 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0rem;
+  padding: 1rem;
+  z-index: 1000;
+  background-color: ${colors.Navy};
 `;
 
 const Icon = styled.div`
   z-index: 999;
-  padding-top: 1rem;
-  padding-left: 1rem;
-  width: 1.5rem;
-
-  margin-bottom: 1rem;
   cursor: pointer;
-
   transition: opacity 0.2s ease;
   &:active {
     opacity: 0.6;

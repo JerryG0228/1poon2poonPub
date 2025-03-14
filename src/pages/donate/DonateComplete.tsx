@@ -68,7 +68,7 @@ export default function DonateComplete() {
       <Link to="/donatehome">
         <Btn bgColor={colors.LightBlue} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '12rem', fontWeight: '700' }}>돌아가기</div>
+            <div style={{ width: '10rem', fontWeight: '700' }}>돌아가기</div>
           </PressMotion>
         </Btn>
       </Link>

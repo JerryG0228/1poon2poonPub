@@ -15,7 +15,7 @@ const Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 2.5rem;
   height: auto;
   padding: 0 1rem;
 `;
@@ -40,7 +40,7 @@ export default function DonateMainBefore() {
       <Link to="/donatecategory">
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
           <PressMotion>
-            <div style={{ width: '7rem' }}>설정하러 가기</div>
+            <div style={{ width: '10rem' }}>설정하러 가기</div>
           </PressMotion>
         </Btn>
       </Link>

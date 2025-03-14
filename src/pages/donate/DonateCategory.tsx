@@ -101,7 +101,7 @@ export default function DonateCategory() {
       <CustomLink to="/donategoal" disabled={selectedCategory == null}>
         <Btn bgColor={bgColor} handleBtn={() => {}}>
           <PressMotion>
-            <div style={{ width: '21.3rem' }}>다음</div>
+            <div>다음</div>
           </PressMotion>
         </Btn>
       </CustomLink>

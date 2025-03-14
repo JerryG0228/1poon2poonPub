@@ -316,7 +316,7 @@ export default function DonateHome() {
         <Link to={link}>
           <Btn bgColor={bgColor} handleBtn={() => {}}>
             <PressMotion>
-              <div style={{ width: '19rem' }}>{info}</div>
+              <div>{info}</div>
             </PressMotion>
           </Btn>
         </Link>

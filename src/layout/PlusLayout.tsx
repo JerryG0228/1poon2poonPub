@@ -9,14 +9,13 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  top: 0rem;
   padding: 1rem;
-  padding-bottom: 0;
+  z-index: 1000;
+  background-color: ${colors.Navy};
 `;
 
 const Icon = styled.div`
-  width: 1.5rem;
-
-  margin-bottom: 1rem;
   cursor: pointer;
 
   transition: opacity 0.2s ease;
@@ -29,7 +28,7 @@ export default function PlusLayout() {
   const navigate = useNavigate();
 
   const HandleIcon = () => {
-    navigate('/');
+    navigate('/InvestmentHome');
   };
 
   const HandleHomeClick = () => {
