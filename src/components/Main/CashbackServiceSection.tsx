@@ -30,7 +30,8 @@ const Button = styled.div`
 `;
 
 const ServiceTitle = styled.div`
-  font-size: 1em;
+  font-size: 1rem;
+  font-weight: 500;
   color: #b2b2b2;
   margin-top: 0.8rem;
 `;
@@ -57,13 +58,13 @@ const InvestProgressRate = styled.div<{ $totalReturnPercent: number }>`
 `;
 
 export default function CashbackServiceSection() {
-  const { currentDonations, goalDonations, badges, interestsStock } = useStore();
+  const { currentDonations, goalDonations, badges, interests } = useStore();
 
   //상황별 기부 페이지 이동 경로
   const donateLink = badges.length == 0 && goalDonations === 0 ? '/donatebefore' : '/donatehome';
 
   //상황별 투자 페이지 이동 경로
-  const investLink = interestsStock.length === 0 ? '/investbefore' : '/InvestmentHome';
+  const investLink = interests.length === 0 ? '/investbefore' : '/InvestmentHome';
 
   //주식 총 수익율 계산
   //주식 데이터 가져오기

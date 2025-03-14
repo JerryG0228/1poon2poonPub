@@ -3,8 +3,7 @@ import NonTitleBox from '@components/NonTitleBox';
 import cashbackImage from '@/assets/Main/CashbackIcon.png';
 import { IoIosArrowForward } from 'react-icons/io';
 import PressMotion from '../PressMotion';
-import { useMotionValueEvent, useSpring, useTransform } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import Counter from '@/components/Counter';
 
 const CashBackWrap = styled.div`
   display: flex;
@@ -41,14 +40,9 @@ const CashBackTextWrap = styled.div`
   align-items: stretch;
 `;
 
-const Balance = styled.div`
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.05rem;
-`;
-
 const Point = styled.div`
   font-size: 0.7rem;
+  font-weight: 500;
 `;
 
 const CashBacArrowWrap = styled.div`
@@ -57,24 +51,17 @@ const CashBacArrowWrap = styled.div`
   align-items: center;
 `;
 
+const StyledCounter = styled(Counter)`
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+`;
+
 interface PointHistorySectionProps {
   points: number;
 }
 
 export default function PointHistorySection({ points }: PointHistorySectionProps) {
-  const spring = useSpring(0, { mass: 0.8, stiffness: 90, damping: 15 });
-  const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
-
-  const [displayValue, setDisplayValue] = useState('0');
-
-  useMotionValueEvent(animatedValue, 'change', (latest) => {
-    setDisplayValue(latest);
-  });
-
-  useEffect(() => {
-    spring.set(points);
-  }, [points, spring]);
-
   return (
     <NonTitleBox>
       <PressMotion>
@@ -85,7 +72,7 @@ export default function PointHistorySection({ points }: PointHistorySectionProps
           <ContentBox>
             <CashBackTextWrap>
               {/* toLocaleString : 숫자에 3자리마다 쉼표(,)를 자동으로 추가해주는 기능 */}
-              <Balance>{displayValue}원</Balance>
+              <StyledCounter value={points} />
               <Point>캐시백 포인트</Point>
             </CashBackTextWrap>
             <CashBacArrowWrap>

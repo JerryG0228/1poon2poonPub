@@ -27,14 +27,14 @@ const Icon = styled.div`
 
 export default function ETFListLayout() {
   const navigate = useNavigate();
-  const { interests } = useStore(); // ✅ selectedCategories 대신 interests 사용
+  const { interests } = useStore();
 
   const HandleIcon = () => {
     navigate('/');
   };
 
   const HandleHomeClick = () => {
-    navigate('/etf-list', { state: { selectedCategories: interests } }); // ✅ 전달
+    navigate('/etf-list', { state: { selectedCategories: interests } });
   };
 
   return (
