@@ -25,9 +25,9 @@ const useStore = create<UserState>()(
       getPointCount: 5,
       setOwnedStocks: (stocks) => set(() => ({ ownedStocks: stocks })),
 
-      updateUser: async () => {
+      updateUser: async (username: string) => {
         try {
-          const response = await baseAxios.get('/user/tester');
+          const response = await baseAxios.get(`/user/${username}`);
           const data = response.data;
 
           set({

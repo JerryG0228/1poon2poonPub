@@ -62,7 +62,7 @@ interface UserState {
 
   setOwnedStocks: (stocks: OwnedStocks[]) => void;
 
-  updateUser: () => void;
+  updateUser: (username: string) => void;
   setPoints: (amount: number, origin: string) => void;
   updatePoints: () => void;
   updateDollars: () => void;
