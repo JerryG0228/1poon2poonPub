@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
+  height: 100vh;
   flex-direction: column;
   justify-content: center;
 `;
@@ -65,12 +66,12 @@ const Button = styled.button`
 `;
 
 const SignupButton = styled(Button)`
-  background-color: #28a745;
+  background-color: #93beeb;
   &:hover {
-    background-color: #218838;
+    background-color: #79b3f0;
   }
   &:active {
-    background-color: #1e7e34;
+    background-color: #4191e6;
   }
 `;
 
@@ -109,8 +110,6 @@ export default function Login() {
 
   return (
     <Container>
-      <Title>로그인</Title>
-
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <FormWrapper>
           <Form onSubmit={handleSubmit}>

@@ -68,6 +68,11 @@ const Text = styled.span`
 `;
 
 const BuyBox = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%; /* 전체 너비 사용 */
+  left: 0;
+  padding: 1rem; /* 버튼과 화면 하단 사이 여백 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,6 +81,7 @@ const BuyBox = styled.div`
 const BuyBtn = styled.div`
   background-color: #ef4452;
   width: 100%;
+  max-width: 400px;
   height: 3.5rem;
   display: flex;
   align-items: center;
@@ -85,6 +91,12 @@ const BuyBtn = styled.div`
   font-weight: bold;
   margin-top: 19rem;
   cursor: pointer;
+`;
+
+const CustomLink = styled.div`
+  display: flex; /* 내부 요소 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
 `;
 
 const ETFTradeSetting = () => {

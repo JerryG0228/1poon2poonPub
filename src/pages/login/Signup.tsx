@@ -7,7 +7,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem;
 `;
 
 const FormWrapper = styled.div`
@@ -16,7 +15,7 @@ const FormWrapper = styled.div`
   padding: 2rem;
   background: white;
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 30px rgb(70, 70, 70);
 `;
 
 const Title = styled.div`
@@ -102,8 +101,6 @@ export default function Signup() {
 
   return (
     <Container>
-      <Title>회원가입</Title>
-
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FormWrapper>
           <Form onSubmit={handleSubmit}>
