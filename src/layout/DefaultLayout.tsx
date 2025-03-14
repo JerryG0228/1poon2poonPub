@@ -10,7 +10,7 @@ const Top = styled.div`
   align-items: center;
   position: sticky;
   top: 0rem;
-  padding: 1rem; // 패딩 추가
+  padding: 1rem; 
   z-index: 1000;
   background-color: ${colors.Navy};
 `;

@@ -32,6 +32,7 @@ import InvestDollarsHistory from './pages/invest/InvestDollarsHistory'; // 달�
 import InvestPointsHistory from './pages/invest/InvestPointsHistory'; // 포인트 상세 내역 페이지
 import WithDraw from './pages/main/WithDraw';
 import WithDrawFinish from './pages/main/WithDrawFinish';
+import SignIn from './pages/Sign/SignIn';
 
 const routes = [
   // DefaultLayout
@@ -95,6 +96,7 @@ const routes = [
   { path: '/pay', element: <Pay /> }, //결제 시작 페이지
   { path: '/paycomplete', element: <PayComplete /> }, //결제 완료 페이지
   { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
+  { path: 'signin', element: <SignIn /> }, // 투자 카테고리 페이지
 ];
 
 export default routes;
