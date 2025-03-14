@@ -13,7 +13,6 @@ const Top = styled.div<{ bg: String }>`
   top: 0rem;
   padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
-  max-width: 400px;
   background-color: ${(props) =>
     props.bg == '/pointhistory' ? '#313845' : props.bg == '/paymain' ? colors.White : colors.Navy};
 `;

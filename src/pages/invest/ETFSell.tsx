@@ -68,6 +68,11 @@ const Text = styled.span`
 `;
 
 const SellBox = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%; /* 전체 너비 사용 */
+  left: 0;
+  padding: 1rem; /* 버튼과 화면 하단 사이 여백 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,6 +85,7 @@ const SellBtn = styled.div<{ $disabled: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 400px;
   border-radius: 0.6rem;
   font-size: 1.1rem;
   font-weight: bold;
