@@ -119,7 +119,7 @@ interface CategoryItem {
 }
 
 export default function PayMain() {
-  const { addStamp, username } = useStore();
+  const { addStamp, username, setCashbackStatus } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
   const [bgColor, setBgColor] = useState<string>(colors.Grey);
   const [payAmount, setPayAmount] = useState<number | null>(null); // 결제 금액
@@ -143,6 +143,7 @@ export default function PayMain() {
     await baseAxios
       .post('/user/addStamp', data)
       .then(() => {
+        setCashbackStatus(selectedCategory?.category);
         addStamp(point);
       })
       .catch((error) => {

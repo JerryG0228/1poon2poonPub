@@ -26,6 +26,7 @@ const Top = styled.div<{ bg: String; shadowOpacity: number }>`
     ) {
       return '#313845';
     } else if (props.bg == '/paymain') {
+      console.log(11);
       return colors.White;
     } else {
       return colors.Navy;
