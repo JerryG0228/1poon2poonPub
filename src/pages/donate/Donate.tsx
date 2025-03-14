@@ -129,6 +129,7 @@ export default function Donate() {
               disabled={points == 0}
               type="text"
               placeholder="금액"
+              inputmode="numeric"
               value={formattedValue}
               onChange={handleInput}
             ></DonateInput>

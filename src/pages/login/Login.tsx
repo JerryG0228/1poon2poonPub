@@ -1,30 +1,26 @@
 import baseAxios from '@/apis/axiosInstance';
 import useStore from '@/store/User';
+import { colors } from '@/styles/colors';
 import { SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  height: 100vh;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const FormWrapper = styled.div`
   width: 100%;
   max-width: 360px;
   padding: 2rem;
-  background: white;
+  background: rgb(30, 34, 42);
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 30px rgb(70, 70, 70);
   text-align: center;
-`;
-
-const Title = styled.div`
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
 `;
 
 const Form = styled.form`
@@ -37,9 +33,11 @@ const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid ${colors.Grey};
   border-radius: 8px;
   outline: none;
+  color: white;
+  background-color: #313846;
   transition: border 0.2s ease-in-out;
   &:focus {
     border-color: #007aff;
@@ -52,7 +50,7 @@ const Button = styled.button`
   font-size: 1rem;
   font-weight: bold;
   color: white;
-  background-color: #007aff;
+  background-color: rgb(0, 100, 206);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -66,9 +64,9 @@ const Button = styled.button`
 `;
 
 const SignupButton = styled(Button)`
-  background-color: #93beeb;
+  background-color: rgb(81, 130, 187);
   &:hover {
-    background-color: #79b3f0;
+    background-color: rgb(149, 193, 241);
   }
   &:active {
     background-color: #4191e6;
@@ -108,7 +106,16 @@ export default function Login() {
 
   return (
     <Container>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <div>로그인</div>
         <FormWrapper>
           <Form onSubmit={handleSubmit}>
             <Input
