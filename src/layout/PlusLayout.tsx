@@ -29,7 +29,7 @@ export default function PlusLayout() {
   const navigate = useNavigate();
 
   const HandleIcon = () => {
-    navigate('/');
+    navigate('/InvestmentHome');
   };
 
   const HandleHomeClick = () => {
