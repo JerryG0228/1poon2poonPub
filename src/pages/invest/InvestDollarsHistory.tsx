@@ -72,6 +72,13 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
+const CustomLink = styled(Link)`
+  width: 100%; /* 전체 너비 사용 */
+  display: flex; /* 내부 요소 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
+`;
+
 interface DollarHistoryProps {
   name: string;
   day: string;
@@ -147,13 +154,13 @@ export default function InvestDollarsHistory() {
             <Balance>${dollars.toFixed(2)}</Balance>
           </TopText>
           <Button>
-            <Link to={'/KRWExchangeRate'}>
+            <CustomLink to={'/KRWExchangeRate'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '21.5rem' }}>달러 환전 하기</div>
+                  <div>달러 환전 하기</div>
                 </PressMotion>
               </Btn>
-            </Link>
+            </CustomLink>
           </Button>
         </HistoryTop>
         <NavyLine />

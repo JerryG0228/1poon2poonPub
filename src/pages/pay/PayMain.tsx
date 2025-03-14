@@ -89,6 +89,20 @@ const Unit = styled.label`
   color: ${colors.Grey};
 `;
 
+const CustomLink = styled(Link)<{ disabled?: boolean }>`
+  max-width: 400px;
+  position: fixed;
+  bottom: 0;
+  background-color: ${colors.White};
+  width: 100%; /* 전체 너비 사용 */
+  display: flex; /* 내부 요소 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
+  padding: 1rem; /* 버튼과 화면 하단 사이 여백 */
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // 비활성화 시 시각적 피드백
+`;
+
 const categoryList = [
   { title: '대중교통', category: 'bus', image: bus },
   { title: '택시', category: 'taxi', image: taxi },
@@ -173,13 +187,13 @@ export default function PayMain() {
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>
       </InputWrapper>
-      <Link to="/paycomplete">
+      <CustomLink to="/paycomplete">
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
             <div>결제하기</div>
           </PressMotion>
         </Btn>
-      </Link>
+      </CustomLink>
     </Box>
   );
 }

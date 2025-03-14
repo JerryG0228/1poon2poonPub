@@ -57,6 +57,7 @@ const Balance = styled.div`
 const Button = styled.div`
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
   justify-content: space-between;
 `;
 
@@ -70,6 +71,13 @@ const PointUsage = styled.div`
 const PointDate = styled.div`
   display: flex;
   color: #c5c5c5;
+`;
+
+const CustomLink = styled(Link)`
+  width: 100%; /* 전체 너비 사용 */
+  display: flex; /* 내부 요소 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
 `;
 
 interface PointHistoryProps {
@@ -145,13 +153,13 @@ export default function InvestPointsHistory() {
             <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
-            <Link to={'/USDExchangeRate'}>
+            <CustomLink to={'/USDExchangeRate'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
                   <div>포인트 환전 하기</div>
                 </PressMotion>
               </Btn>
-            </Link>
+            </CustomLink>
           </Button>
         </HistoryTop>
         <NavyLine />
