@@ -10,6 +10,7 @@ const Top = styled.div<{ shadowOpacity: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
   top: 0rem;
   padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
