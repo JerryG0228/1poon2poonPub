@@ -56,10 +56,16 @@ const Balance = styled.div`
 
 const Button = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem; /* 버튼 사이 간격 조절 */
 `;
 
+const StyledLink = styled(Link)`
+  flex-grow: 1; /* 버튼을 동일한 크기로 확장 */
+  display: flex;
+  justify-content: center;
+`;
 const PointUsage = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,14 +78,26 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
+const ButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+`;
+
 const WithdrawBox = styled.div<{ clicked: boolean }>`
+  flex-grow: 1;
   height: 5rem;
   background-color: ${({ clicked }) => (clicked ? 'transparent' : '#313845')};
 `;
 
 const WithdrawBtn = styled(Link)`
   display: flex;
+  flex-grow: 1; /* 내부 요소가 확장되도록 설정 */
+  justify-content: center;
+  align-items: center;
   padding: 0 1rem;
+  height: 100%;
 `;
 
 interface PointHistoryProps {
@@ -165,20 +183,20 @@ export default function PointHistory() {
             <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
-            <Link to={donateLink}>
+            <StyledLink to={donateLink}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem', fontWeight: '500' }}>기부하러 가기</div>
+                  <div style={{ fontWeight: '500' }}>기부하러 가기</div>
                 </PressMotion>
               </Btn>
-            </Link>
-            <Link to={investLink}>
+            </StyledLink>
+            <StyledLink to={investLink}>
               <Btn bgColor={colors.Red} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem', fontWeight: '500' }}>투자하러 가기</div>
+                  <div style={{ fontWeight: '500' }}>투자하러 가기</div>
                 </PressMotion>
               </Btn>
-            </Link>
+            </StyledLink>
           </Button>
         </HistoryTop>
 
@@ -211,24 +229,25 @@ export default function PointHistory() {
 
         {/* 버튼 자리만큼 공간 생성 */}
         <div style={{ height: '4rem' }}></div>
-
-        <WithdrawBox clicked={clicked}>
-          <WithdrawBtn to={'/withdraw'}>
-            <Btn bgColor={colors.Blue} handleBtn={() => {}}>
-              <PressMotion>
-                <div
-                  style={{
-                    color: `${colors.White}`,
-                    fontWeight: '500',
-                    letterSpacing: '0.2em',
-                  }}
-                >
-                  출금하기
-                </div>
-              </PressMotion>
-            </Btn>
-          </WithdrawBtn>
-        </WithdrawBox>
+        <ButtonWrapper>
+          <WithdrawBox clicked={clicked}>
+            <WithdrawBtn to={'/withdraw'}>
+              <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+                <PressMotion>
+                  <div
+                    style={{
+                      color: `${colors.White}`,
+                      fontWeight: '500',
+                      letterSpacing: '0.2em',
+                    }}
+                  >
+                    출금하기
+                  </div>
+                </PressMotion>
+              </Btn>
+            </WithdrawBtn>
+          </WithdrawBox>
+        </ButtonWrapper>
       </Wrap>
     </>
   );

@@ -67,7 +67,7 @@ const Button = styled.button`
 export default function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const isSignup: boolean = false;
+  const isSignup: boolean = true;
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     console.log(isSignup ? 'Signup' : 'Login', { username, password });

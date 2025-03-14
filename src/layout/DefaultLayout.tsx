@@ -4,15 +4,17 @@ import styled from 'styled-components';
 
 import { IoChevronBackSharp } from 'react-icons/io5';
 
-const Top = styled.div`
+const Top = styled.div<{ bg: String }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0rem;
-  padding: 1rem; 
+  padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
-  background-color: ${colors.Navy};
+  max-width: 400px
+  background-color: ${(props) =>
+    props.bg == '/pointhistory' ? '#313845' : props.bg == '/paymain' ? colors.White : colors.Navy};
 `;
 
 const Icon = styled.div`
@@ -56,7 +58,7 @@ export default function DefaultLayout() {
 
   return (
     <div>
-      <Top>
+      <Top bg={location.pathname}>
         <Icon onClick={HandleIcon}>
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
         </Icon>
