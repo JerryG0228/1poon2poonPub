@@ -1,7 +1,7 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState } from 'react';
 import useStore from '@/store/User';
@@ -81,24 +81,19 @@ const PointDate = styled.div`
 
 const ButtonWrapper = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: 1rem;
   left: 0;
   width: 100%;
 `;
 
-const WithdrawBox = styled.div<{ clicked: boolean }>`
-  flex-grow: 1;
-  height: 5rem;
-  background-color: ${({ clicked }) => (clicked ? 'transparent' : '#313845')};
-`;
-
-const WithdrawBtn = styled(Link)`
+const WithdrawBtn = styled.div`
   display: flex;
   flex-grow: 1; /* 내부 요소가 확장되도록 설정 */
   justify-content: center;
   align-items: center;
   padding: 0 1rem;
-  height: 100%;
+  /* height: 100%; */
+  cursor: pointer;
 `;
 
 interface PointHistoryProps {
@@ -112,6 +107,7 @@ interface PointHistoryProps {
 
 export default function PointHistory() {
   const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
+  const navigate = useNavigate();
 
   const [selectedValue, setSelectedValue] = useState('전체');
   const [clicked, setClicked] = useState(false);
@@ -231,23 +227,21 @@ export default function PointHistory() {
         {/* 버튼 자리만큼 공간 생성 */}
         <div style={{ height: '4rem' }}></div>
         <ButtonWrapper>
-          <WithdrawBox clicked={clicked}>
-            <WithdrawBtn to={'/withdraw'}>
-              <Btn bgColor={colors.Blue} handleBtn={() => {}}>
-                <PressMotion>
-                  <div
-                    style={{
-                      color: `${colors.White}`,
-                      fontWeight: '500',
-                      letterSpacing: '0.2em',
-                    }}
-                  >
-                    출금하기
-                  </div>
-                </PressMotion>
-              </Btn>
-            </WithdrawBtn>
-          </WithdrawBox>
+          <WithdrawBtn onClick={() => navigate('/withdraw')}>
+            <Btn bgColor={clicked ? '#0066ff27' : colors.Blue} handleBtn={() => {}}>
+              <PressMotion>
+                <div
+                  style={{
+                    color: `${colors.White}`,
+                    fontWeight: '500',
+                    letterSpacing: '0.2em',
+                  }}
+                >
+                  출금하기
+                </div>
+              </PressMotion>
+            </Btn>
+          </WithdrawBtn>
         </ButtonWrapper>
       </Wrap>
     </>

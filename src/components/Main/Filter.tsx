@@ -41,21 +41,29 @@ const Overlay = styled.div<{ $clicked: boolean }>`
   top: 0;
   left: 0;
   position: fixed;
+  z-index: 10000;
 `;
 
 //필터 리스트
 const FilterList = styled.div<{ $clicked: boolean }>`
   display: ${({ $clicked }) => ($clicked ? 'flex' : 'none')};
   flex-direction: column;
-  position: fixed;
   background-color: ${colors.Navy};
-  width: 100%;
-  max-width: 92%;
+  width: 90%;
+  max-width: 400px;
   border-radius: 1.2rem;
   padding: 1rem;
-  z-index: 10;
+  z-index: 10001;
+
+  position: fixed;
   bottom: 1rem;
-  left: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @media screen and (max-width: 768px) {
+    width: 95%;
+    bottom: 0.5rem;
+  }
 `;
 
 const SelectTitle = styled.div`
@@ -114,7 +122,7 @@ export default function Filter({
   };
 
   return (
-    <>
+    <div>
       <PointFilter>
         <PointNav onClick={handleClick}>
           <PressMotion>
@@ -126,6 +134,7 @@ export default function Filter({
         </PointNav>
       </PointFilter>
       <Overlay $clicked={clicked} onClick={closeFilter} />
+
       <FilterList $clicked={clicked}>
         <SelectTitle>내역 선택</SelectTitle>
         <SelectMenu>
@@ -143,6 +152,6 @@ export default function Filter({
           })}
         </SelectMenu>
       </FilterList>
-    </>
+    </div>
   );
 }
