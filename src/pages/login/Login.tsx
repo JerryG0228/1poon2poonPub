@@ -81,13 +81,11 @@ export default function Login() {
   const { updateUser } = useStore();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignup, setIsSignup] = useState(false);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const endpoint = isSignup ? '/user/signup' : '/user/login';
-      const response = await baseAxios.post(endpoint, {
+      const response = await baseAxios.post('/user/login', {
         name: username,
         password,
       });

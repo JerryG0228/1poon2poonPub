@@ -33,6 +33,7 @@ const Wrap = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 100vh;
+  background-color: #313845;
 `;
 
 const HistoryTop = styled.div`
@@ -165,7 +166,7 @@ export default function InvestDollarsHistory() {
         </HistoryTop>
         <NavyLine />
 
-        <div style={{ padding: '1rem' }}>
+        <div style={{ padding: '1rem', backgroundColor: '#313845' }}>
           <USDFilter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (
