@@ -35,6 +35,15 @@ const Container = styled.div`
   height: 100%;
   overflow-y: auto;
   position: relative;
+
+  /* 웹킷 브라우저용 스크롤바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* IE, Edge, Firefox용 스크롤바 숨기기 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 const Content = styled.div`
