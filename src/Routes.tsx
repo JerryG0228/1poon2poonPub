@@ -32,6 +32,9 @@ import InvestDollarsHistory from './pages/invest/InvestDollarsHistory'; // 달�
 import InvestPointsHistory from './pages/invest/InvestPointsHistory'; // 포인트 상세 내역 페이지
 import WithDraw from './pages/main/WithDraw';
 import WithDrawFinish from './pages/main/WithDrawFinish';
+import LoginLayout from './layout/LoginLayout';
+import Login from './pages/login/Login';
+import Signup from './pages/login/Signup';
 import SignIn from './pages/Sign/SignIn';
 
 const routes = [
@@ -40,7 +43,7 @@ const routes = [
     path: '/',
     element: <DefaultLayout />,
     children: [
-      { path: '/', element: <Main /> }, // 메인 페이지
+      { path: '', element: <Main /> }, // 메인 페이지
       { path: 'pointhistory', element: <PointHistory /> }, // 포인트 내역
       { path: 'donatebefore', element: <DonateMainBefore /> }, //기부 처음 시작 페이지
       { path: 'donatecategory', element: <DonateCategory /> }, //기부 카테고리 선택 페이지
@@ -55,6 +58,16 @@ const routes = [
       { path: 'paymain', element: <PayMain /> }, //결제 페이지
       { path: 'withdraw', element: <WithDraw /> }, // 포인트 출금 페이지
       { path: 'investmentHome', element: <InvestmentHome /> }, // 투자 카테고리 페이지
+    ],
+  },
+
+  // LoginLayout
+  {
+    path: '/',
+    element: <LoginLayout />,
+    children: [
+      { path: 'login', element: <Login /> }, // 로그인 페이지
+      { path: 'signup', element: <Signup /> }, // 회원가입 페이지
     ],
   },
 

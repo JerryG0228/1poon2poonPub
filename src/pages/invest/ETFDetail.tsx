@@ -163,6 +163,7 @@ const FavoriteButton = styled.button`
   position: absolute;
   top: 1rem;
   right: 1.2rem;
+  z-index: 1001;
 `;
 
 function ETFDetail() {
