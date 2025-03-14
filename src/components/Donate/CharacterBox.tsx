@@ -131,11 +131,17 @@ const StyledLottie = styled(Lottie)`
   height: 2rem;
 `;
 
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
 const CountBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 18rem;
+
   background-color: #313845;
   padding-right: 0.7rem;
   border-radius: 1rem;
@@ -355,10 +361,13 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       {goalCategory == '' || goalCategory == 'none' ? (
         <div style={{ visibility: 'hidden' }}>1</div>
       ) : (
-        <CountBox>
-          <StyledLottie animationData={coinflip}></StyledLottie>
-          <div style={{ fontSize: '0.9rem' }}>{getPointCount}/5</div>
-        </CountBox>
+        <ContentWrapper>
+          <div></div>
+          <CountBox>
+            <StyledLottie animationData={coinflip}></StyledLottie>
+            <div style={{ fontSize: '0.9rem' }}>{getPointCount}/5</div>
+          </CountBox>
+        </ContentWrapper>
       )}
       <div style={{ position: 'relative', marginTop: (13 % growth) + 'rem' }}>
         {per === 100 ? (

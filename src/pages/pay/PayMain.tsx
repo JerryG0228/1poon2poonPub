@@ -176,7 +176,7 @@ export default function PayMain() {
       <Link to="/paycomplete">
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '21.3rem' }}>결제하기</div>
+            <div>결제하기</div>
           </PressMotion>
         </Btn>
       </Link>

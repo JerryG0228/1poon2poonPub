@@ -73,18 +73,13 @@ const PointDate = styled.div`
 `;
 
 const WithdrawBox = styled.div<{ clicked: boolean }>`
-  width: 100%;
   height: 5rem;
-  position: fixed;
-  bottom: 0;
   background-color: ${({ clicked }) => (clicked ? 'transparent' : '#313845')};
 `;
 
 const WithdrawBtn = styled(Link)`
   display: flex;
   padding: 0 1rem;
-  position: fixed;
-  bottom: 1rem;
 `;
 
 interface PointHistoryProps {
@@ -223,7 +218,6 @@ export default function PointHistory() {
               <PressMotion>
                 <div
                   style={{
-                    width: '21.5rem',
                     color: `${colors.White}`,
                     fontWeight: '500',
                     letterSpacing: '0.2em',

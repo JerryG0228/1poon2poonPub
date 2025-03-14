@@ -16,7 +16,7 @@ const Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 2.5rem;
   height: auto;
 `;
 
@@ -53,7 +53,7 @@ export default function InvestMainBefore() {
       <Link to="/investCategory">
         <Btn bgColor={colors.LightBlue} handleBtn={() => {}}>
           <PressMotion>
-            <div style={{ width: '7rem' }}>선택하러 가기</div>
+            <div style={{ width: '10rem' }}>선택하러 가기</div>
           </PressMotion>
         </Btn>
       </Link>

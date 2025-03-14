@@ -152,8 +152,8 @@ const ErrorText = styled.div`
 `;
 
 const BtnWrap = styled(Link)`
-  position: fixed;
-  bottom: 1rem;
+  margin-top: 20rem;
+  margin-bottom: 1rem;
 `;
 
 const bankersRound = (value: number, decimalPlaces = 2): number => {
@@ -298,28 +298,18 @@ const USDExchangeRate = () => {
                   <BtnWrap to="/InvestmentHome">
                     <Btn bgColor={colors.Blue} handleBtn={handleExchange}>
                       <PressMotion>
-                        <div
-                          style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}
-                        >
-                          환전하기
-                        </div>
+                        <div style={{ fontWeight: '500', letterSpacing: '0.2em' }}>환전하기</div>
                       </PressMotion>
                     </Btn>
                   </BtnWrap>
                 ) : (
-                  <div>
-                    <BtnWrap>
-                      <Btn bgColor={colors.Grey} handleBtn={() => {}}>
-                        <PressMotion>
-                          <div
-                            style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}
-                          >
-                            환전하기
-                          </div>
-                        </PressMotion>
-                      </Btn>
-                    </BtnWrap>
-                  </div>
+                  <BtnWrap>
+                    <Btn bgColor={colors.Grey} handleBtn={() => {}}>
+                      <PressMotion>
+                        <div style={{ fontWeight: '500', letterSpacing: '0.2em' }}>환전하기</div>
+                      </PressMotion>
+                    </Btn>
+                  </BtnWrap>
                 )}
               </ButtonContent>
             </ContentWrapper>
