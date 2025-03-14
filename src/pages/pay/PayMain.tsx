@@ -27,7 +27,7 @@ const Box = styled.div`
   gap: 1rem;
   font-weight: bold;
   padding: 0 1rem;
-  margin-top: 7rem;
+  margin-top: 5rem;
 `;
 
 const Title = styled.div`
@@ -47,6 +47,7 @@ const PayCategoryBox = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   display: inline-block;
+  width: 100%;
   &:focus-within label {
     color: ${colors.Black};
   }
@@ -92,17 +93,12 @@ const Unit = styled.label`
 const CustomButton = styled.button`
   all: unset;
   cursor: pointer;
-
-  max-width: 400px;
-  position: fixed;
-  bottom: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 2rem);
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem 0;
+
   border: none;
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
@@ -194,26 +190,30 @@ export default function PayMain() {
           />
         ))}
       </PayCategoryBox>
-      <InputWrapper>
-        <InputAmout
-          id="inputAmount"
-          type="number"
-          value={payAmount}
-          placeholder="금액"
-          onChange={handleInput}
-        ></InputAmout>
-        <Unit htmlFor="inputAmount">원</Unit>
-      </InputWrapper>
-      <CustomButton
-        onClick={handlePayment}
-        disabled={selectedCategory === null || payAmount === null}
-      >
-        <Btn bgColor={bgColor} handleBtn={() => {}}>
-          <PressMotion>
-            <PayCompleteText>결제하기</PayCompleteText>
-          </PressMotion>
-        </Btn>
-      </CustomButton>
+
+      <div style={{ width: '100%' }}>
+        <InputWrapper>
+          <InputAmout
+            id="inputAmount"
+            type="number"
+            value={payAmount}
+            placeholder="금액"
+            onChange={handleInput}
+          />
+          <Unit htmlFor="inputAmount">원</Unit>
+        </InputWrapper>
+
+        <CustomButton
+          onClick={handlePayment}
+          disabled={selectedCategory === null || payAmount === null}
+        >
+          <Btn bgColor={bgColor} handleBtn={() => {}}>
+            <PressMotion>
+              <PayCompleteText>결제하기</PayCompleteText>
+            </PressMotion>
+          </Btn>
+        </CustomButton>
+      </div>
     </Box>
   );
 }
