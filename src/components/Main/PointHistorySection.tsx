@@ -52,12 +52,6 @@ const CashBacArrowWrap = styled.div`
   align-items: center;
 `;
 
-// const StyledCounter = styled(Counter)`
-//   font-size: 1.1rem;
-//   font-weight: 600;
-//   letter-spacing: 0.05rem;
-// `;
-
 interface PointHistorySectionProps {
   points: number;
 }
