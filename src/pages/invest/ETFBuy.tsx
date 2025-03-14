@@ -93,12 +93,6 @@ const BuyBtn = styled.div`
   cursor: pointer;
 `;
 
-const CustomLink = styled.div`
-  display: flex; /* 내부 요소 정렬 */
-  justify-content: center; /* 가운데 정렬 */
-  align-items: center;
-`;
-
 const ETFTradeSetting = () => {
   const { symbol } = useParams();
   const [searchParams] = useSearchParams();

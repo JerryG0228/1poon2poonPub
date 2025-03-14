@@ -73,7 +73,7 @@ function Category() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    updateUser(); // 상태 업데이트 요청만 함
+    updateUser(username); // 상태 업데이트 요청만 함
   }, []);
 
   useEffect(() => {
@@ -127,7 +127,7 @@ function Category() {
                   categories: selectedCategories,
                 });
 
-                await updateUser();
+                await updateUser(username);
                 setInterests(selectedCategories);
                 console.log('카테고리 등록 성공:', response.data);
                 navigate('/etf-list', { state: { selectedCategories } });

@@ -18,13 +18,6 @@ const FormWrapper = styled.div`
   box-shadow: 0px 4px 30px rgb(70, 70, 70);
 `;
 
-const Title = styled.div`
-  margin-top: 3rem;
-  margin-bottom: 10rem;
-  font-size: 3rem;
-  font-weight: 700;
-`;
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
