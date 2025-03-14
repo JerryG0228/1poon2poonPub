@@ -60,6 +60,15 @@ const EmptyStateBox = styled.div`
   border-radius: 0.5rem;
 `;
 
+const EmptyStateText = styled.p`
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+`;
+
 const InvestmentHome = () => {
   const navigate = useNavigate();
   const { interestsStock, ownedStocks } = useStore();
@@ -144,7 +153,9 @@ const InvestmentHome = () => {
           <EmptyStateBox>
             <Btn bgColor={colors.Blue} handleBtn={navigateBtn}>
               <PressMotion>
-                <div style={{ width: '12rem', fontWeight: '700' }}>내 첫 주식을 가져볼까요?</div>
+                <div style={{ width: '12rem', fontSize: '0.9rem', fontWeight: '600' }}>
+                  내 첫 주식을 가져볼까요?
+                </div>
               </PressMotion>
             </Btn>
           </EmptyStateBox>
@@ -202,7 +213,7 @@ const InvestmentHome = () => {
         </StockList>
       ) : (
         <EmptyStateBox>
-          <p style={{ color: 'white' }}>관심 ETF를 추가해보세요!</p>
+          <EmptyStateText>관심 ETF를 추가해보세요!</EmptyStateText>
         </EmptyStateBox>
       )}
     </Container>
