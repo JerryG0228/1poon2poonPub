@@ -144,7 +144,7 @@ const InvestmentHome = () => {
           <EmptyStateBox>
             <Btn bgColor={colors.Blue} handleBtn={navigateBtn}>
               <PressMotion>
-                <div style={{ width: '12rem', fontWeight: '700' }}>내 첫 주식을 가져볼까요?</div>
+                <div style={{ fontWeight: '700' }}>내 첫 주식을 가져볼까요?</div>
               </PressMotion>
             </Btn>
           </EmptyStateBox>

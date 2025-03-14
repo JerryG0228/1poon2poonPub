@@ -34,7 +34,7 @@ const Info = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   display: inline-block;
-  margin-bottom: 17rem;
+  margin-bottom: 19rem;
   &:focus-within label {
     color: white;
   }
@@ -79,7 +79,6 @@ const Unit = styled.label`
 
 const CustomLink = styled(Link)<{ disabled?: boolean }>`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  position: fixed;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // 비활성화 시 시각적 피드백
   bottom: 1rem;
 `;
@@ -139,9 +138,7 @@ export default function DonateGoal() {
       <CustomLink to="/donatesetfinish" disabled={formattedValue < 10000}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
-              설정하기
-            </div>
+            <div style={{ fontWeight: '500', letterSpacing: '0.2em' }}>설정하기</div>
           </PressMotion>
         </Btn>
       </CustomLink>

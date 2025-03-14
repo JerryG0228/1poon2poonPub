@@ -358,7 +358,7 @@ function ETFDetail() {
           }
         >
           <PressMotion>
-            <div style={{ width: '10rem' }}>구매하기</div>
+            <div>구매하기</div>
           </PressMotion>
         </Btn>
 
@@ -371,7 +371,7 @@ function ETFDetail() {
           }
         >
           <PressMotion>
-            <div style={{ width: '10rem' }}>판매하기</div>
+            <div>판매하기</div>
           </PressMotion>
         </Btn>
       </BtnBox>

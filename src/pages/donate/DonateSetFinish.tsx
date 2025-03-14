@@ -11,9 +11,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 
-  height: 100%;
   padding-top: 10rem;
-  gap: 2.5rem;
+  gap: 3rem;
 `;
 
 const Text = styled.div`

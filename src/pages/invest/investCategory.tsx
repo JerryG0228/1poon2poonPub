@@ -141,7 +141,7 @@ function Category() {
           }}
         >
           <PressMotion>
-            <div style={{ width: '21.5rem' }}>다음</div>
+            <div>다음</div>
           </PressMotion>
         </Btn>
       </NextButtonBox>

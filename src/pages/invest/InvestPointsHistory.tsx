@@ -148,7 +148,7 @@ export default function InvestPointsHistory() {
             <Link to={'/USDExchangeRate'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '21.5rem' }}>포인트 환전 하기</div>
+                  <div>포인트 환전 하기</div>
                 </PressMotion>
               </Btn>
             </Link>

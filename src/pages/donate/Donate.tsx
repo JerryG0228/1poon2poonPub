@@ -59,8 +59,7 @@ const PointBalance = styled.div`
 `;
 
 const BtnWrap = styled(Link)<{ disabled: boolean }>`
-  position: fixed;
-  bottom: 1rem;
+  margin-top: 20rem;
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')}; // 클릭 막기
   opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // 비활성화 시 시각적 피드백
 `;
@@ -134,9 +133,7 @@ export default function Donate() {
       <BtnWrap to="/donateHome" disabled={Number(formattedValue) === 0}>
         <Btn bgColor={bgColor} handleBtn={fetchData}>
           <PressMotion>
-            <div style={{ width: '21.5rem', fontWeight: '500', letterSpacing: '0.2em' }}>
-              기부 하기
-            </div>
+            <div style={{ fontWeight: '500', letterSpacing: '0.2em' }}>기부 하기</div>
           </PressMotion>
         </Btn>
       </BtnWrap>
