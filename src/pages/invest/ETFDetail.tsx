@@ -2,7 +2,6 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CandlestickChart from '@/components/invest/CandlestickChart';
-import { FaHeart } from 'react-icons/fa';
 import Btn from '@/components/Btn';
 import { colors } from '@/styles/colors';
 import PressMotion from '@/components/PressMotion';
@@ -155,16 +154,6 @@ const BtnBox = styled.div`
   margin-top: 2.5rem;
 `;
 
-const FavoriteButton = styled.button`
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  position: absolute;
-  top: 1rem;
-  right: 1.2rem;
-`;
-
 function ETFDetail() {
   const location = useLocation();
   console.log('state:', location);
@@ -177,7 +166,6 @@ function ETFDetail() {
   const [buyVolume] = useState(7500);
   const [sellVolume] = useState(3500);
   const [timeRange, setTimeRange] = useState<'1d' | '1w' | '1mo' | '1y'>('1d');
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
     if (!symbol) return;
@@ -200,41 +188,12 @@ function ETFDetail() {
         .then((res) => {
           const list = res.data || [];
           setInterestsStock(list);
-          setIsFavorite(list.some((etf: any) => etf.name === symbol));
         })
         .catch((err) => {
           console.error('관심 ETF 불러오기 실패:', err);
         });
     }
   }, [symbol, username]);
-
-  const toggleFavorite = async () => {
-    const meta = data?.chart?.result?.[0]?.meta;
-    const currentPrice = meta?.regularMarketPrice ?? 0;
-    const previousClose = meta?.chartPreviousClose ?? 0;
-    const changeRate =
-      previousClose && previousClose !== 0
-        ? ((currentPrice - previousClose) / previousClose) * 100
-        : 0;
-
-    try {
-      const url = '/invest/setInterestEtf';
-
-      await baseAxios.post(url, {
-        name: username,
-        etfName: symbol,
-        price: currentPrice,
-        changeRate,
-      });
-
-      const updated = await baseAxios.get(`/invest/getInterestEtf/${username}`);
-      setInterestsStock(updated.data);
-      setIsFavorite(updated.data.some((etf: any) => etf.name === symbol));
-    } catch (err) {
-      console.error('관심 ETF 등록/해제 실패:', err);
-      alert('관심 ETF 등록/해제 중 오류가 발생했습니다.');
-    }
-  };
 
   if (error) {
     return (
@@ -266,10 +225,6 @@ function ETFDetail() {
 
   return (
     <Container>
-      <FavoriteButton onClick={toggleFavorite}>
-        <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} />
-      </FavoriteButton>
-
       <EtfTile>{symbol} ETF</EtfTile>
       <CurPrice>{currentPrice} USD</CurPrice>
       <ChangeBox>

@@ -6,9 +6,9 @@ const Wrapper = styled.div<{ bgColor: string }>`
   align-items: center;
   text-align: center;
   padding: 0.5rem 0.5rem;
+  max-width: 400px;
   flex-grow: 1;
   border-radius: 1rem;
-
   background-color: ${(props) => props.bgColor};
 `;
 

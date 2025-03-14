@@ -1,10 +1,7 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
-import useStore from '@/store/User';
 import { useRef, useState } from 'react';
-
-import { IoMenu } from 'react-icons/io5';
 import { IoChevronBackSharp } from 'react-icons/io5';
 
 const Top = styled.div<{ shadowOpacity: number }>`
@@ -14,18 +11,18 @@ const Top = styled.div<{ shadowOpacity: number }>`
   position: sticky;
   top: 0rem;
   padding: 0.8rem 1rem 0.7rem;
+
   z-index: 1000;
   box-shadow: ${({ shadowOpacity }) =>
     `0 3px 6px rgba(0, 0, 0, ${shadowOpacity * 0.16}), 0 3px 6px rgba(0, 0, 0, ${
       shadowOpacity * 0.23
     })`};
   background-color: ${colors.Navy};
-  transition: box-shadow 0.2s ease;
 `;
 
 const Icon = styled.div`
+  z-index: 999;
   cursor: pointer;
-
   transition: opacity 0.2s ease;
   &:active {
     opacity: 0.6;
@@ -51,19 +48,15 @@ const Content = styled.div`
   height: 100%;
 `;
 
-export default function ETFListLayout() {
+const backNavigationMap: Record<string, string> = {
+  '/signup': '/login',
+};
+
+export default function LoginLayout() {
   const navigate = useNavigate();
-  const { interests } = useStore();
+  const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [shadowOpacity, setShadowOpacity] = useState(0);
-
-  const HandleIcon = () => {
-    navigate('/');
-  };
-
-  const HandleHomeClick = () => {
-    navigate('/etf-list', { state: { selectedCategories: interests } });
-  };
 
   const handleScroll = () => {
     if (containerRef.current) {
@@ -72,15 +65,24 @@ export default function ETFListLayout() {
       setShadowOpacity(opacity);
     }
   };
+  const HandleIcon = () => {
+    const currentPath = location.pathname;
+
+    if (backNavigationMap[currentPath]) {
+      navigate(backNavigationMap[currentPath]);
+    } else {
+      navigate(-1);
+    }
+  };
 
   return (
     <Container ref={containerRef} onScroll={handleScroll}>
       <Top shadowOpacity={shadowOpacity}>
-        <Icon onClick={HandleIcon}>
+        <Icon
+          onClick={HandleIcon}
+          style={{ display: location.pathname === '/login' ? 'none' : 'block' }}
+        >
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
-        </Icon>
-        <Icon onClick={HandleHomeClick}>
-          <IoMenu color={colors.White} size="1.6rem" />
         </Icon>
       </Top>
       <Content>

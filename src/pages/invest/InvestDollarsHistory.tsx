@@ -33,6 +33,7 @@ const Wrap = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 100vh;
+  background-color: #313845;
 `;
 
 const HistoryTop = styled.div`
@@ -70,6 +71,13 @@ const PointUsage = styled.div`
 const PointDate = styled.div`
   display: flex;
   color: #c5c5c5;
+`;
+
+const CustomLink = styled(Link)`
+  width: 100%; /* 전체 너비 사용 */
+  display: flex; /* 내부 요소 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
 `;
 
 interface DollarHistoryProps {
@@ -147,18 +155,18 @@ export default function InvestDollarsHistory() {
             <Balance>${dollars.toFixed(2)}</Balance>
           </TopText>
           <Button>
-            <Link to={'/KRWExchangeRate'}>
+            <CustomLink to={'/KRWExchangeRate'}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '21.5rem' }}>달러 환전 하기</div>
+                  <div>달러 환전 하기</div>
                 </PressMotion>
               </Btn>
-            </Link>
+            </CustomLink>
           </Button>
         </HistoryTop>
         <NavyLine />
 
-        <div style={{ padding: '1rem' }}>
+        <div style={{ padding: '1rem', backgroundColor: '#313845' }}>
           <USDFilter selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
           <PointUsage>
             {Object.keys(groupedHistory).map((date) => (

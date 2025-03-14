@@ -2,7 +2,7 @@ import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CategoryBox from '@/components/invest/CategoryBox';
 import baseAxios from '@/apis/axiosInstance';
@@ -27,6 +27,7 @@ const Box = styled.div`
   gap: 1rem;
   font-weight: bold;
   padding: 0 1rem;
+  margin-top: 5rem;
 `;
 
 const Title = styled.div`
@@ -39,14 +40,14 @@ const PayCategoryBox = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin-top: 5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 4.5rem;
   row-gap: 1rem;
 `;
 
 const InputWrapper = styled.div`
   position: relative;
   display: inline-block;
-  margin-bottom: 1rem;
+  width: 100%;
   &:focus-within label {
     color: ${colors.Black};
   }
@@ -89,6 +90,26 @@ const Unit = styled.label`
   color: ${colors.Grey};
 `;
 
+const CustomButton = styled.button`
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem 0;
+
+  border: none;
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const PayCompleteText = styled.div`
+  font-size: 1rem;
+  color: white;
+  font-weight: 600;
+`;
+
 const categoryList = [
   { title: '대중교통', category: 'bus', image: bus },
   { title: '택시', category: 'taxi', image: taxi },
@@ -105,12 +126,13 @@ interface CategoryItem {
 }
 
 export default function PayMain() {
-  const { addStamp, username } = useStore();
+  const { addStamp, username, setCashbackStatus } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
   const [bgColor, setBgColor] = useState<string>(colors.Grey);
   const [payAmount, setPayAmount] = useState<number | null>(null); // 결제 금액
   const [point, setPoint] = useState<number>(0);
   const [data, setData] = useState<Object>({}); // 전달 데이터
+  const navigate = useNavigate();
 
   // 카테고리 클릭 핸들러
   const handleClick = (item: CategoryItem) => {
@@ -129,6 +151,9 @@ export default function PayMain() {
     await baseAxios
       .post('/user/addStamp', data)
       .then(() => {
+        if (selectedCategory?.category) {
+          setCashbackStatus(selectedCategory.category);
+        }
         addStamp(point);
       })
       .catch((error) => {
@@ -142,6 +167,11 @@ export default function PayMain() {
     // selectedCategory가 null이면 회색, 아니면 파란색
     setBgColor(selectedCategory !== null && payAmount !== null ? colors.LightBlue : colors.Grey);
   }, [selectedCategory, payAmount]); // selectedCategory가 변경될 때마다 실행
+
+  const handlePayment = async () => {
+    await fetchData();
+    navigate('/paycomplete');
+  };
 
   return (
     <Box>
@@ -163,23 +193,30 @@ export default function PayMain() {
           />
         ))}
       </PayCategoryBox>
-      <InputWrapper>
-        <InputAmout
-          id="inputAmount"
-          type="number"
-          value={payAmount}
-          placeholder="금액"
-          onChange={handleInput}
-        ></InputAmout>
-        <Unit htmlFor="inputAmount">원</Unit>
-      </InputWrapper>
-      <Link to="/paycomplete">
-        <Btn bgColor={bgColor} handleBtn={fetchData}>
-          <PressMotion>
-            <div>결제하기</div>
-          </PressMotion>
-        </Btn>
-      </Link>
+
+      <div style={{ width: '100%' }}>
+        <InputWrapper>
+          <InputAmout
+            id="inputAmount"
+            type="number"
+            value={payAmount}
+            placeholder="금액"
+            onChange={handleInput}
+          />
+          <Unit htmlFor="inputAmount">원</Unit>
+        </InputWrapper>
+
+        <CustomButton
+          onClick={handlePayment}
+          disabled={selectedCategory === null || payAmount === null}
+        >
+          <Btn bgColor={bgColor} handleBtn={() => {}}>
+            <PressMotion>
+              <PayCompleteText>결제하기</PayCompleteText>
+            </PressMotion>
+          </Btn>
+        </CustomButton>
+      </div>
     </Box>
   );
 }

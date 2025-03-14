@@ -1,17 +1,23 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import styled from 'styled-components';
+import { useRef, useState } from 'react';
 
 import { IoChevronBackSharp } from 'react-icons/io5';
 import { MdHomeFilled } from 'react-icons/md';
 
-const Top = styled.div`
+const Top = styled.div<{ shadowOpacity: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
   top: 0rem;
-  padding: 1rem;
+  padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
+  box-shadow: ${({ shadowOpacity }) =>
+    `0 3px 6px rgba(0, 0, 0, ${shadowOpacity * 0.16}), 0 3px 6px rgba(0, 0, 0, ${
+      shadowOpacity * 0.23
+    })`};
   background-color: ${colors.Navy};
 `;
 
@@ -24,11 +30,40 @@ const Icon = styled.div`
   }
 `;
 
+const Container = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+
+  /* 웹킷 브라우저용 스크롤바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* IE, Edge, Firefox용 스크롤바 숨기기 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;
+
+const Content = styled.div`
+  height: 100%;
+`;
+
 const backNavigationMap: Record<string, string> = {};
 
 export default function HomeLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [shadowOpacity, setShadowOpacity] = useState(0);
+
+  const handleScroll = () => {
+    if (containerRef.current) {
+      const scrollTop = containerRef.current.scrollTop;
+      const opacity = Math.min(scrollTop / 50, 1);
+      setShadowOpacity(opacity);
+    }
+  };
 
   const HandleBackClick = () => {
     const currentPath = location.pathname;
@@ -45,8 +80,8 @@ export default function HomeLayout() {
   };
 
   return (
-    <div>
-      <Top>
+    <Container ref={containerRef} onScroll={handleScroll}>
+      <Top shadowOpacity={shadowOpacity}>
         <Icon onClick={HandleBackClick}>
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
         </Icon>
@@ -55,7 +90,9 @@ export default function HomeLayout() {
           <MdHomeFilled color={colors.White} size="1.5rem" />
         </Icon>
       </Top>
-      <Outlet />
-    </div>
+      <Content>
+        <Outlet />
+      </Content>
+    </Container>
   );
 }

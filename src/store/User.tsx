@@ -25,9 +25,9 @@ const useStore = create<UserState>()(
       getPointCount: 5,
       setOwnedStocks: (stocks) => set(() => ({ ownedStocks: stocks })),
 
-      updateUser: async () => {
+      updateUser: async (username: string) => {
         try {
-          const response = await baseAxios.get('/user/tester');
+          const response = await baseAxios.get(`/user/${username}`);
           const data = response.data;
 
           set({
@@ -53,7 +53,8 @@ const useStore = create<UserState>()(
       },
 
       setInterestsStock: (stocks: InterestsStock[]) => set(() => ({ interestsStock: stocks })),
-
+      setCashbackStatus: (category: string) =>
+        set((state) => ({ cashbackStatus: { ...state.cashbackStatus, [category]: false } })),
       setPoints: async (amount, origin) => {
         const state = useStore.getState();
         if (origin === '기부') {

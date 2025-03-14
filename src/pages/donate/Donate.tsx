@@ -58,7 +58,14 @@ const PointBalance = styled.div`
 `;
 
 const BtnWrap = styled(Link)<{ disabled: boolean }>`
-  margin-top: 20rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* 전체 너비 사용 */
+  display: flex; /* 내부 요소 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
+  padding: 1rem; /* 버튼과 화면 하단 사이 여백 */
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')}; // 클릭 막기
   opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // 비활성화 시 시각적 피드백
 `;

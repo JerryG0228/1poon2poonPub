@@ -1,7 +1,7 @@
 import Btn from '@/components/Btn';
 import PressMotion from '@/components/PressMotion';
 import { colors } from '@/styles/colors';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState } from 'react';
 import useStore from '@/store/User';
@@ -33,6 +33,7 @@ const Wrap = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 100vh;
+  background-color: #313845;
 `;
 
 const HistoryTop = styled.div`
@@ -56,10 +57,16 @@ const Balance = styled.div`
 
 const Button = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem; /* 버튼 사이 간격 조절 */
 `;
 
+const StyledLink = styled(Link)`
+  flex-grow: 1; /* 버튼을 동일한 크기로 확장 */
+  display: flex;
+  justify-content: center;
+`;
 const PointUsage = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,14 +79,21 @@ const PointDate = styled.div`
   color: #c5c5c5;
 `;
 
-const WithdrawBox = styled.div<{ clicked: boolean }>`
-  height: 5rem;
-  background-color: ${({ clicked }) => (clicked ? 'transparent' : '#313845')};
+const ButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 1rem;
+  left: 0;
+  width: 100%;
 `;
 
-const WithdrawBtn = styled(Link)`
+const WithdrawBtn = styled.div`
   display: flex;
+  flex-grow: 1; /* 내부 요소가 확장되도록 설정 */
+  justify-content: center;
+  align-items: center;
   padding: 0 1rem;
+  /* height: 100%; */
+  cursor: pointer;
 `;
 
 interface PointHistoryProps {
@@ -93,6 +107,7 @@ interface PointHistoryProps {
 
 export default function PointHistory() {
   const { points, pointHistory, badges, goalDonations, interestsStock } = useStore();
+  const navigate = useNavigate();
 
   const [selectedValue, setSelectedValue] = useState('전체');
   const [clicked, setClicked] = useState(false);
@@ -165,26 +180,26 @@ export default function PointHistory() {
             <Balance>{points.toLocaleString()}원</Balance>
           </TopText>
           <Button>
-            <Link to={donateLink}>
+            <StyledLink to={donateLink}>
               <Btn bgColor={colors.Blue} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem', fontWeight: '500' }}>기부하러 가기</div>
+                  <div style={{ fontWeight: '500' }}>기부하러 가기</div>
                 </PressMotion>
               </Btn>
-            </Link>
-            <Link to={investLink}>
+            </StyledLink>
+            <StyledLink to={investLink}>
               <Btn bgColor={colors.Red} handleBtn={() => {}}>
                 <PressMotion>
-                  <div style={{ width: '10rem', fontWeight: '500' }}>투자하러 가기</div>
+                  <div style={{ fontWeight: '500' }}>투자하러 가기</div>
                 </PressMotion>
               </Btn>
-            </Link>
+            </StyledLink>
           </Button>
         </HistoryTop>
 
         <NavyLine />
 
-        <div style={{ padding: '1rem' }}>
+        <div style={{ padding: '1rem', backgroundColor: '#313845' }}>
           <Filter
             selectedValue={selectedValue}
             setSelectedValue={setSelectedValue}
@@ -211,10 +226,9 @@ export default function PointHistory() {
 
         {/* 버튼 자리만큼 공간 생성 */}
         <div style={{ height: '4rem' }}></div>
-
-        <WithdrawBox clicked={clicked}>
-          <WithdrawBtn to={'/withdraw'}>
-            <Btn bgColor={colors.Blue} handleBtn={() => {}}>
+        <ButtonWrapper>
+          <WithdrawBtn onClick={() => navigate('/withdraw')}>
+            <Btn bgColor={clicked ? '#0066ff27' : colors.Blue} handleBtn={() => {}}>
               <PressMotion>
                 <div
                   style={{
@@ -228,7 +242,7 @@ export default function PointHistory() {
               </PressMotion>
             </Btn>
           </WithdrawBtn>
-        </WithdrawBox>
+        </ButtonWrapper>
       </Wrap>
     </>
   );

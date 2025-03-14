@@ -1,4 +1,4 @@
-import { motion, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { colors } from '@/styles/colors';
 import styled, { keyframes, css } from 'styled-components';
@@ -14,6 +14,7 @@ import Lottie from 'lottie-react';
 import useStore from '@/store/User';
 import paper from '@/assets/characterbox/paper.json';
 import coinflip from '@/assets/characterbox/coinflip.json';
+import NumberFlow from '@number-flow/react';
 
 const Jello = keyframes` // 모찌 리액션
     0% { transform: scale3d(1,1,1); }
@@ -267,8 +268,6 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
   const [isLottieVisible, setIsLottieVisible] = useState(false); //동전 로티 효과
   const [isClicked, setIsClicked] = useState(false);
   const [getPoint, setGetPoint] = useState(0);
-  const spring = useSpring(0, { mass: 0.8, stiffness: 75, damping: 15 });
-  const animatedValue = useTransform(spring, (current) => Math.round(current).toLocaleString());
 
   //랜덤 애니메이션 설정
   const weightedRandomAnimation = () => {
@@ -332,10 +331,6 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       setIsClicked(false);
     }, 1000); // 1.3초 후 애니메이션 후 상태 초기화
   };
-
-  useEffect(() => {
-    spring.set(currDonate);
-  }, [currDonate, spring]);
 
   const per = Math.round((currDonate / targetDonate) * 100);
   useEffect(() => {
@@ -406,7 +401,9 @@ export default function CharacterBox({ currDonate, targetDonate }: Props) {
       <TextBox>
         {goalDonations > 0 ? (
           <>
-            <Donate>{animatedValue}</Donate>
+            <Donate>
+              <NumberFlow value={currDonate} duration={5} />
+            </Donate>
             <Target>/</Target>
             <Target>{goalDonations.toLocaleString()}</Target>
           </>

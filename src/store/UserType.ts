@@ -62,7 +62,7 @@ interface UserState {
 
   setOwnedStocks: (stocks: OwnedStocks[]) => void;
 
-  updateUser: () => void;
+  updateUser: (username: string) => void;
   setPoints: (amount: number, origin: string) => void;
   updatePoints: () => void;
   updateDollars: () => void;
@@ -78,6 +78,7 @@ interface UserState {
   getCurrentDonations: (amount: number) => void;
   updateCurrentDonations: (amount: number) => void;
   setGetPointCount: (count: number) => void;
+  setCashbackStatus: (category: string) => void;
 }
 
 export type { pointHistory, dollarHistory, OwnedStocks, InterestsStock, UserState, BadgeItem };

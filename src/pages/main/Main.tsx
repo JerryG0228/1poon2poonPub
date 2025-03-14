@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import CashbackSection from '@/components/Main/CashbackSection';
 import StampBoardSection from '@/components/Main/StampBoardSection';
 import PointHistorySection from '@/components/Main/PointHistorySection';
@@ -17,55 +16,15 @@ const MainWrap = styled.div`
 
 export default function Main() {
   // 전역 상태 관리
-  const {
-    username,
-    cashbackStatus,
-    cashbackStamps,
-    points,
-    dollars,
-    pointHistory,
-    dollarHistory,
-    badges,
-    interests,
-    ownedStocks,
-    interestsStock,
-    goalCategory,
-    totalDonations,
-    goalDonations,
-    currentDonations,
-    getPointCount,
-    updateUser,
-  } = useStore();
+  const { cashbackStamps, cashbackStatus, points, username } = useStore();
 
-  // 초기 유저 데이터 가져오기
-  useEffect(() => {
-    const fetchData = async () => {
-      await updateUser();
-      console.log({
-        name: username,
-        cashbackStatus: cashbackStatus,
-        cashbackStamps: cashbackStamps,
-        points: points,
-        dollars: dollars,
-        pointHistory: pointHistory,
-        dollarHistory: dollarHistory,
-        badges: badges,
-        interests: interests,
-        ownedETFs: ownedStocks,
-        interestsStock: interestsStock,
-        goalCategory: goalCategory,
-        totalDonations: totalDonations,
-        goalDonations: goalDonations,
-        currentDonations: currentDonations,
-        getPointCount: getPointCount,
-      });
-    };
-    fetchData();
-  }, []);
+  if (!username) {
+    return <Navigate to="/login" replace />;
+  }
 
   // 스탬프가 10개인지 확인
   const TOTAL_STAMPS = 10;
-
+  console.log(cashbackStatus, username);
   const isFull = cashbackStamps.length === TOTAL_STAMPS;
 
   return (
