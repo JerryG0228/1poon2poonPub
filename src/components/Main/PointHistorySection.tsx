@@ -3,7 +3,8 @@ import NonTitleBox from '@components/NonTitleBox';
 import cashbackImage from '@/assets/Main/CashbackIcon.png';
 import { IoIosArrowForward } from 'react-icons/io';
 import PressMotion from '../PressMotion';
-import Counter from '@/components/Counter';
+import NumberFlow from '@number-flow/react';
+import { useEffect, useState } from 'react';
 
 const CashBackWrap = styled.div`
   display: flex;
@@ -51,17 +52,23 @@ const CashBacArrowWrap = styled.div`
   align-items: center;
 `;
 
-const StyledCounter = styled(Counter)`
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.05rem;
-`;
+// const StyledCounter = styled(Counter)`
+//   font-size: 1.1rem;
+//   font-weight: 600;
+//   letter-spacing: 0.05rem;
+// `;
 
 interface PointHistorySectionProps {
   points: number;
 }
 
 export default function PointHistorySection({ points }: PointHistorySectionProps) {
+  const [displayPoints, setDisplayPoints] = useState(points);
+
+  useEffect(() => {
+    setDisplayPoints(points);
+  }, [points]);
+
   return (
     <NonTitleBox>
       <PressMotion>
@@ -72,7 +79,7 @@ export default function PointHistorySection({ points }: PointHistorySectionProps
           <ContentBox>
             <CashBackTextWrap>
               {/* toLocaleString : 숫자에 3자리마다 쉼표(,)를 자동으로 추가해주는 기능 */}
-              <StyledCounter value={points} />
+              <NumberFlow value={displayPoints} duration={2} />
               <Point>캐시백 포인트</Point>
             </CashBackTextWrap>
             <CashBacArrowWrap>
