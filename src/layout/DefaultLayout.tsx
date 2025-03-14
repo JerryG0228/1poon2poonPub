@@ -18,8 +18,15 @@ const Top = styled.div<{ bg: String; shadowOpacity: number }>`
       shadowOpacity * 0.23
     })`};
   z-index: 1000;
-  background-color: ${(props) =>
-    props.bg == '/pointhistory' ? '#313845' : props.bg == '/paymain' ? colors.White : colors.Navy};
+  background-color: ${(props) => {
+    if (props.bg == '/pointhistory' || '/investPointsHistory' || '/investDollarsHistory') {
+      return '#313845';
+    } else if (props.bg == '/paymain') {
+      return colors.White;
+    } else {
+      return colors.Navy;
+    }
+  }};
   transition: box-shadow 0.2s ease;
 `;
 
