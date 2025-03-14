@@ -21,12 +21,6 @@ const FormWrapper = styled.div`
   text-align: center;
 `;
 
-const Title = styled.div`
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
