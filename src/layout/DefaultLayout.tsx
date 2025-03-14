@@ -14,7 +14,7 @@ const Top = styled.div<{ bg: String }>`
   padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
   background-color: ${(props) =>
-    props.bg == '/pointhistory' ? '#313845' : props.bg == '/paymain' ? colors.White : colors.Navy};
+    props.bg === '/pointhistory' ? '#313845' : props.bg == '/paymain' ? colors.White : colors.Navy};
 `;
 
 const Icon = styled.div`

@@ -13,9 +13,7 @@ const Top = styled.div`
   padding: 0.8rem 1rem 0.7rem;
 
   z-index: 1000;
-  box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.16),
-    0 3px 6px rgba(0, 0, 0, 0.23);
+
   background-color: ${colors.Navy};
 `;
 

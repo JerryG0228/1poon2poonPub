@@ -36,7 +36,6 @@ import LoginLayout from './layout/LoginLayout';
 import Login from './pages/login/Login';
 import Signup from './pages/login/Signup';
 import HeartLayout from './layout/HeartLayout';
-import SignIn from './pages/Sign/SignIn';
 
 const routes = [
   // DefaultLayout
@@ -116,7 +115,6 @@ const routes = [
   { path: '/pay', element: <Pay /> }, //결제 시작 페이지
   { path: '/paycomplete', element: <PayComplete /> }, //결제 완료 페이지
   { path: 'investCategory', element: <InvestCategory /> }, // 투자 카테고리 페이지
-  { path: 'signin', element: <SignIn /> }, // 투자 카테고리 페이지
 ];
 
 export default routes;
