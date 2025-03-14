@@ -4,21 +4,24 @@ import styled from 'styled-components';
 
 import { IoChevronBackSharp } from 'react-icons/io5';
 import { FaHeart } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useStore from '@/store/User';
 import baseAxios from '@/apis/axiosInstance';
 
-const Top = styled.div`
+const Top = styled.div<{ shadowOpacity: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
   top: 0rem;
   padding: 0.8rem 1rem 0.7rem;
   z-index: 1000;
-  box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.16),
-    0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: ${({ shadowOpacity }) =>
+    `0 3px 6px rgba(0, 0, 0, ${shadowOpacity * 0.16}), 0 3px 6px rgba(0, 0, 0, ${
+      shadowOpacity * 0.23
+    })`};
   background-color: ${colors.Navy};
+  transition: box-shadow 0.2s ease;
 `;
 
 const Icon = styled.div`
@@ -30,6 +33,16 @@ const Icon = styled.div`
   }
 `;
 
+const Container = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+`;
+
+const Content = styled.div`
+  height: 100%;
+`;
+
 const backNavigationMap: Record<string, string> = {};
 
 export default function HeartLayout() {
@@ -39,6 +52,16 @@ export default function HeartLayout() {
   const { username, setInterestsStock } = useStore();
   const { symbol } = useParams<{ symbol: string }>();
   const [data, setData] = useState<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [shadowOpacity, setShadowOpacity] = useState(0);
+
+  const handleScroll = () => {
+    if (containerRef.current) {
+      const scrollTop = containerRef.current.scrollTop;
+      const opacity = Math.min(scrollTop / 50, 1);
+      setShadowOpacity(opacity);
+    }
+  };
 
   useEffect(() => {
     if (!symbol) return;
@@ -106,8 +129,8 @@ export default function HeartLayout() {
   };
 
   return (
-    <div>
-      <Top>
+    <Container ref={containerRef} onScroll={handleScroll}>
+      <Top shadowOpacity={shadowOpacity}>
         <Icon onClick={HandleBackClick}>
           <IoChevronBackSharp color={colors.White} size="1.5rem" />
         </Icon>
@@ -115,7 +138,9 @@ export default function HeartLayout() {
           <FaHeart color={isFavorite ? '#FF0000' : '#CCCCCC'} size="1.5rem" />
         </Icon>
       </Top>
-      <Outlet />
-    </div>
+      <Content>
+        <Outlet />
+      </Content>
+    </Container>
   );
 }
