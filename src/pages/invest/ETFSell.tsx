@@ -25,6 +25,9 @@ const InputWrapper = styled.div`
   flex-direction: column;
   gap: 0.6rem;
   height: 7rem;
+
+  z-index: 100;
+  position: relative;
 `;
 
 const Label = styled.p`
@@ -47,7 +50,7 @@ const InputAmount = styled.input<{ $hasValue: boolean }>`
   font-size: 1.2rem;
   font-weight: bold;
   color: ${({ $hasValue }) => ($hasValue ? 'white' : '#bbbbbb')};
-  background: transparent;
+  background: rgba(0, 0, 0, 0);
   border: none;
   width: 100%;
   text-align: left;
