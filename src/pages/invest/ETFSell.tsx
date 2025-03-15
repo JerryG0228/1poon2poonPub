@@ -188,8 +188,11 @@ const ETFSellSetting = () => {
         <Text>보유 수량 {ownedQuantity > 0 ? `${ownedQuantity}주` : '(판매 불가)'}</Text>
       </InputWrapper>
 
-      <SellBox onClick={ownedQuantity > 0 ? handleSell : undefined}>
-        <SellBtn $disabled={ownedQuantity === 0}>
+      <SellBox>
+        <SellBtn
+          $disabled={ownedQuantity === 0}
+          onClick={ownedQuantity > 0 ? handleSell : undefined}
+        >
           {ownedQuantity > 0 ? '판매하기' : '판매 불가'}
         </SellBtn>
       </SellBox>
