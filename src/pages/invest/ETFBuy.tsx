@@ -189,8 +189,8 @@ const ETFTradeSetting = () => {
         </Text>
       </InputWrapper>
 
-      <BuyBox onClick={handleBtn}>
-        <BuyBtn>구매하기</BuyBtn>
+      <BuyBox>
+        <BuyBtn onClick={handleBtn}>구매하기</BuyBtn>
       </BuyBox>
     </Box>
   );
