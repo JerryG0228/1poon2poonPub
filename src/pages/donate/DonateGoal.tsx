@@ -117,7 +117,6 @@ export default function DonateGoal() {
         console.error('Error:', error);
       });
   };
-  console.log(data);
   useEffect(() => {
     setBgColor((Number(formattedValue) ?? 0) < 10000 ? colors.Grey : colors.LightBlue);
   }, [formattedValue]);
@@ -139,6 +138,7 @@ export default function DonateGoal() {
           value={formattedValue}
           format={formattedNum}
           placeholder="금액"
+          inputmode="numeric"
           onChange={handleInput}
         ></InputAmout>
         <Unit htmlFor="inputAmount">원</Unit>

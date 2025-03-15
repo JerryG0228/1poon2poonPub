@@ -67,7 +67,6 @@ const backNavigationMap: Record<string, string> = {
   '/': '/',
   '/pointhistory': '/',
   '/donatebefore': '/',
-  '/donategoal': '/donatecategory',
   '/donate': '/donatehome',
   '/investbefore': '/',
   '/USDExchangeRate': '/investPointsHistory',

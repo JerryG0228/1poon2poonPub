@@ -153,6 +153,7 @@ const useStore = create<UserState>()(
       updateCurrentDonations: (amount) =>
         set((state) => ({ currentDonations: state.currentDonations + amount })), // 현재 기부 금액 추가
       setGetPointCount: (count) => set((state) => ({ getPointCount: state.getPointCount - count })),
+      updateGetPointCount: () => set(() => ({ getPointCount: 5 })),
     }),
     { name: 'user-store' },
   ),
