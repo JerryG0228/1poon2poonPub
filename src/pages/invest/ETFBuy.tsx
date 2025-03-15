@@ -10,9 +10,6 @@ const Box = styled.div`
   margin-top: 1.5rem;
   font-weight: bold;
   padding: 1rem;
-  padding-bottom: 6rem; /* 하단 여백 증가 */
-  min-height: calc(100vh - 6rem); /* 전체 높이에서 버튼 영역 제외 */
-  position: relative; /* 추가 */
 `;
 
 const Title = styled.div`
@@ -28,8 +25,9 @@ const InputWrapper = styled.div`
   flex-direction: column;
   gap: 0.6rem;
   height: 7rem;
-  position: relative; /* 추가 */
-  z-index: 1; /* 추가 */
+
+  z-index: 100; /* ✅ 추가 */
+  position: relative; /* ✅ 추가 */
 `;
 
 const Label = styled.p`
@@ -52,12 +50,10 @@ const InputAmount = styled.input<{ $hasValue: boolean }>`
   font-size: 1.2rem;
   font-weight: bold;
   color: ${({ $hasValue }) => ($hasValue ? 'white' : '#bbbbbb')};
-  background: transparent;
+  background: rgba(0, 0, 0, 0);
   border: none;
   width: 100%;
   text-align: left;
-  position: relative; /* 추가 */
-  z-index: 2; /* 추가 */
   &:focus {
     outline: none;
   }
@@ -77,10 +73,12 @@ const Text = styled.span`
 const BuyBox = styled.div`
   position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 100%; /* 전체 너비 사용 */
   left: 0;
-  padding: 1rem;
-  z-index: 1000; /* z-index 증가 */
+  padding: 1rem; /* 버튼과 화면 하단 사이 여백 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const BuyBtn = styled.div`
