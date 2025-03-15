@@ -79,6 +79,7 @@ interface UserState {
   updateCurrentDonations: (amount: number) => void;
   setGetPointCount: (count: number) => void;
   setCashbackStatus: (category: string) => void;
+  updateGetPointCount: () => void;
 }
 
 export type { pointHistory, dollarHistory, OwnedStocks, InterestsStock, UserState, BadgeItem };

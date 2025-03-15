@@ -151,8 +151,8 @@ export default function PayMain() {
     await baseAxios
       .post('/user/addStamp', data)
       .then(() => {
-        if (selectedCategory?.category) {
-          setCashbackStatus(selectedCategory.category);
+        if (selectedCategory != null) {
+          setCashbackStatus(selectedCategory?.category);
         }
         addStamp(point);
       })

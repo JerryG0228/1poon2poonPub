@@ -1,9 +1,11 @@
 import baseAxios from '@/apis/axiosInstance';
+import { colors } from '@/styles/colors';
 import { SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,7 +15,8 @@ const FormWrapper = styled.div`
   width: 100%;
   max-width: 360px;
   padding: 2rem;
-  background: white;
+  background: rgb(30, 34, 42);
+
   border-radius: 12px;
   box-shadow: 0px 4px 30px rgb(70, 70, 70);
 `;
@@ -28,9 +31,11 @@ const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid ${colors.Grey};
   border-radius: 8px;
   outline: none;
+  background-color: #313846;
+  color: white;
   transition: border 0.2s ease-in-out;
   &:focus {
     border-color: #007aff;
@@ -43,7 +48,7 @@ const Button = styled.button`
   font-size: 1rem;
   font-weight: bold;
   color: white;
-  background-color: #007aff;
+  background-color: rgb(0, 100, 206);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -94,7 +99,8 @@ export default function Signup() {
 
   return (
     <Container>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div>회원가입</div>
         <FormWrapper>
           <Form onSubmit={handleSubmit}>
             <Input
