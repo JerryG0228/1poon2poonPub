@@ -26,8 +26,8 @@ const InputWrapper = styled.div`
   gap: 0.6rem;
   height: 7rem;
 
-  z-index: 100; /* ✅ 추가 */
-  position: relative; /* ✅ 추가 */
+  z-index: 100;
+  position: relative;
 `;
 
 const Label = styled.p`
