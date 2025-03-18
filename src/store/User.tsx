@@ -64,7 +64,7 @@ const useStore = create<UserState>()(
               console.log('point:', response.data);
               useStore.setState({
                 points: response.data.points,
-                pointHistory: response.data.history,
+                pointHistory: response.data.pointHistory,
               });
             })
             .catch((error) => {
